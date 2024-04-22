@@ -494,10 +494,10 @@ game.newLoop('myGame', function () {
 
 
 
-      fooExplosion(element, element.bombRight);
-      fooExplosion(element, element.bombLeft);
-      fooExplosion(element, element.bombTop);
-      fooExplosion(element, element.bombBottom);
+      fooExplosion(element.bombRight);
+      fooExplosion(element.bombLeft);
+      fooExplosion(element.bombTop);
+      fooExplosion(element.bombBottom);
 
 
     }
@@ -515,7 +515,7 @@ if (gameStarted) {
 }
 
 
-function fooExplosion(element, arrow) {
+function fooExplosion(arrow) {
   if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p != 0) {
     level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p = 0;
     blocks.splice(blocks.indexOf(arrow.isArrIntersect(blocks)), 1);
