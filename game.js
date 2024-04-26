@@ -87,13 +87,8 @@ for (var i = 0; i < level.length; i++) {
 
 
 
-let playerBody = game.newRectObject({
-  x: 0,
-  y: 0,
-  w: sizeOneBlock,
-  h: sizeOneBlock,
-  fillColor: "green",
-})
+
+
 
 let playerTop = game.newRectObject({
   x: sizeOneBlock / 12,
@@ -132,11 +127,20 @@ let playerCenter = game.newRectObject({
   fillColor: "red",
 })
 
+let playerNumAnim = 0;
+let playerBody = game.newAnimationObject({
+  animation: tiles.newImage("assets/player.png").getAnimation(0,playerNumAnim,32,32,6),
+  x: 0,
+  y: 0,
+  w: sizeOneBlock,
+  h: sizeOneBlock,
+})
+
 let player = game.newMesh({
   x: sizeOneBlock,
   y: sizeOneBlock,
   angle: 0,
-  add: [playerBody, playerTop, playerBottom, playerLeft, playerRight, playerCenter]
+  add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
 });
 
 player.speed = sizeOneBlock / 40;
@@ -147,6 +151,7 @@ player.canBombsNum = 3;
 player.currentBombNum = 0;
 player.boomPower = 1;
 playerCanWalkOnBomb = false;
+
 
 player.bombsMas = [
   {
@@ -403,9 +408,29 @@ game.newLoop('myGame', function () {
     }
   }
 
+  
+  if (key.isPress("D") || key.isPress("RIGHT")) {
+    animPlayer (playerBody, 128);
+    playerBody.flip.x = 0;
+  }
+  else if (key.isPress("A") || key.isPress("LEFT")) {
+    animPlayer (playerBody, 128);
+    playerBody.flip.x = 1;
+  }
+  else if (key.isPress("W") || key.isPress("UP")) {
+    animPlayer (playerBody, 160);
+  }
+  else if (key.isPress("S") || key.isPress("DOWN")) {
+    animPlayer (playerBody, 96);
+  }
+  if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
+    animPlayer (playerBody, 0);
+    player.moving = false;
+  }
 
-
-
+  
+  
+  
 
   if (key.isDown("D") || key.isDown("RIGHT")) {
     player.moving = true;
@@ -536,4 +561,11 @@ function fooExplosion(arrow) {
     boom(arrow.isArrIntersect(blocksBomb).num);
   }
 
+}
+
+function animPlayer (pers, vertTile) {
+  pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0,vertTile,32,32,6));
+  pers.w = sizeOneBlock;
+  pers.h = sizeOneBlock;
+  console.log(pers);
 }
