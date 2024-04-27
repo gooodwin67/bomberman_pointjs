@@ -51,6 +51,7 @@ let blocksBomb = [];
 let sizeOneBlock = 20;
 let timeBomb = 2000;
 let enemies = [];
+let enemyType = 1;
 
 let whiteBlocks = [];
 
@@ -84,24 +85,11 @@ for (var i = 0; i < level.length; i++) {
         fillColor: "gray",
       }));
     }
-    if (level[i][j].e == 1) {
-      enemies.push(game.newRectObject({
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        fillColor: "blue",
-        userData: {
-          typeEnemy: 1,
-          arrowRand: 0,
-          moving: false,
-        }
-      }));
-    }
+    
   }
 }
 
-for (var i = 0; i < 54; i++) {
+for (var i = 0; i < 100/*54*/; i++) {
   var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
   level[blockk[0]][blockk[1]].p = 2;
@@ -119,7 +107,9 @@ for (var i = 0; i < 54; i++) {
 for (var i = 0; i < 6; i++) {
   var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
-  level[blockk[0]][blockk[1]].e = 1;
+  enemyType = getRandomNum(1,3);
+
+  level[blockk[0]][blockk[1]].e = enemyType;
   whiteBlocks.splice(blockk, 1);
 
   enemies.push(game.newRectObject({
@@ -127,12 +117,15 @@ for (var i = 0; i < 6; i++) {
     y: sizeOneBlock * enemyBlock[0],
     w: sizeOneBlock,
     h: sizeOneBlock,
-    fillColor: "blue",
+    fillColor: enemyType == 1 ? "blue" : enemyType == 2 ? "green" : enemyType == 3 ? 'orange' :'black',
     userData: {
-      typeEnemy: 1,
+      typeEnemy: enemyType,
       arrowRand: 0,
       moving: false,
-      speed: 1,
+      speed: enemyType == 1 || enemyType == 3 ? 1 : enemyType == 2 ? 2 : 0,
+      canPath: enemyType == 3 ? true : false,
+      pathActive: enemyType == 3 ? true : false,
+      result: [],
     }
   }));
 }
@@ -140,32 +133,7 @@ for (var i = 0; i < 6; i++) {
 
 
 
-// for (var i = 0; i < level.length; i++) {
-//   for (var j = 0; j < level[i].length; j++) {
-//     if (level[i][j].b == 1 || level[i][j].b == 9) {
-//       levelGraph[i][j] = 0;
 
-//     } else if (level[i + 1][j].b == 1 || level[i + 1][j].b == 2 || level[i + 1][j].b == 9) {
-//       levelGraph[i][j] = 1;
-//     }
-//     else if (level[i][j - 1].b == 1) {
-//       for (var k = i - 1; k < level.length; k++) {
-//         levelGraph[k][j] = 2;
-//       }
-//     }
-//     else if (level[i][j + 1].b == 1) {
-//       for (var k = i - 1; k < level.length; k++) {
-//         levelGraph[k][j] = 2;
-//       }
-//     }
-
-//     else {
-//       //levelGraph[i][j] = 0;
-//     }
-//   }
-// }
-
-//let masLevelGraph = new Graph(levelGraph);
 
 
 
@@ -226,11 +194,11 @@ let player = game.newMesh({
   add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
 });
 
-player.speed = sizeOneBlock / 40;
+player.speed = sizeOneBlock / 20;
 player.nowX = 1;
 player.nowY = 1;
 player.plantBomb = false;
-player.canBombsNum = 3;
+player.canBombsNum = 1;
 player.currentBombNum = 0;
 player.boomPower = 0.8;
 playerCanWalkOnBomb = false;
@@ -471,6 +439,36 @@ game.newLoop('myGame', function () {
 
   /*//////////////////////////////////////////////////////////////*/
 
+  blocks = [];
+
+  for (var i = 0; i < level.length; i++) {
+    for (var j = 0; j < level[i].length; j++) {
+  
+      if (level[i][j].b == 9) {
+        blocks.push(game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+          fillColor: "black",
+        }));
+      }
+      else if (level[i][j].p != 0) {
+        blocks.push(game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+          fillColor: "gray",
+        }));
+      }
+      
+    }
+  }
+
+
+  /*//////////////////////////////////////////////////////////////*/
+
   enemies.forEach(element => {
     element.draw();
 
@@ -482,8 +480,12 @@ game.newLoop('myGame', function () {
     
 
 
-
-    enemyGo(element, element.arrowRand);
+    if (!element.pathActive) {
+      enemyGo(element, element.arrowRand);
+    }
+    else {
+      enemyPathGo(element, element.arrowRand);
+    }
 
 
 
@@ -674,20 +676,19 @@ if (gameStarted) {
 function fooExplosion(arrow) {
   if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p != 0) {
     level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p = 0;
-    blocks.splice(blocks.indexOf(arrow.isArrIntersect(blocks)), 1);
   }
-  if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 2) {
-    level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 2;
-  }
-  else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 3) {
-    level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 3;
-  }
-  else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 4) {
-    level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 4;
-  }
-  else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 9) {
-    level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 9;
-  }
+  // if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 2) {
+  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 2;
+  // }
+  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 3) {
+  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 3;
+  // }
+  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 4) {
+  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 4;
+  // }
+  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 9) {
+  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 9;
+  // }
   if (arrow.isArrIntersect(blocksBomb) /*&& arrow.isArrIntersect(blocksBomb).num != element.num*/) {
     boom(arrow.isArrIntersect(blocksBomb).num);
   }
@@ -713,7 +714,7 @@ function enemyGo(element, arrow) {
     if (getRandomNum(0, 8) == 1) element.arrowRand = getRandomNum(0, 3);
     element.moving = true;
   }
-  
+
   let arrowX = 0;
   let arrowY = 0;
   if (arrow == 0) {
@@ -730,23 +731,109 @@ function enemyGo(element, arrow) {
   }
 
 
+  if (element.typeEnemy == 1 || element.typeEnemy == 3) {
+    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
+      element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
 
-  if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
-    element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
-
-    if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
-      element.moving = false;
-      element.setPosition(pjs.vector.point(element.nowX * sizeOneBlock, element.nowY * sizeOneBlock));
-      level[element.moveY][element.moveX].e = 0;
-      level[element.moveY + arrowY][element.moveX + arrowX].e = element.typeEnemy;
+      if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
+        element.moving = false;
+        element.setPosition(pjs.vector.point(element.nowX * sizeOneBlock, element.nowY * sizeOneBlock));
+        level[element.moveY][element.moveX].e = 0;
+        level[element.moveY + arrowY][element.moveX + arrowX].e = element.typeEnemy;
+        if (element.canPath) element.pathActive = true;
+      }
+    }
+    else {
+      element.arrowRand = getRandomNum(0, 3);
     }
   }
   else {
-    element.arrowRand = getRandomNum(0, 3);
+    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
+      element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
+
+      if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
+        element.moving = false;
+        element.setPosition(pjs.vector.point(element.nowX * sizeOneBlock, element.nowY * sizeOneBlock));
+        level[element.moveY][element.moveX].e = 0;
+        level[element.moveY + arrowY][element.moveX + arrowX].e = element.typeEnemy;
+        if (element.canPath) element.pathActive = true;
+      }
+    }
+    else {
+      element.arrowRand = getRandomNum(0, 3);
+    }
   }
 
 }
 
+
+function enemyPathGo(element, arrow) {
+  
+  if (!element.moving) {
+
+
+
+
+    let levelGraph = new Array(level.length).fill(0).map(el => new Array(level[0].length).fill(0));
+
+    for (var i = 0; i < level.length; i++) {
+      for (var j = 0; j < level[i].length; j++) {
+
+        if (level[i][j].b == 9 || level[i][j].p != 0) {
+          levelGraph[i][j] = 0;
+        } else  {
+          levelGraph[i][j] = 1;
+        }
+      }
+    }
+    
+    let masLevelGraph = new Graph(levelGraph);
+    
+    let start = masLevelGraph.grid[element.nowY][element.nowX];
+    let end = masLevelGraph.grid[player.nowY][player.nowX];
+    element.result = astar.search(masLevelGraph, start, end);
+    
+
+    
+    
+    
+  }
+
+  if (element.result.length == 0 || element.getDistance(playerCenter.getPosition()) > sizeOneBlock * 8) {
+    //console.log(element.result.length);
+    element.moving = false;
+    element.pathActive = false;
+  }
+  else {
+    //console.log(element.result[0]);
+    element.moveTo(pjs.vector.point(element.result[0].y * sizeOneBlock, element.result[0].x * sizeOneBlock), element.speed);
+    element.moving = true;
+    if (Math.abs(element.y - element.result[0].x * sizeOneBlock) < 1 && Math.abs(element.x - element.result[0].y * sizeOneBlock) < 1) {
+      element.moving = false;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*///////////////////////////////////////////////////////////////////////////////// */
 function getRandomNum(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
