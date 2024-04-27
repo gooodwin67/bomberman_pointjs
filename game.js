@@ -48,7 +48,7 @@ level = [
 
 let blocks = [];
 let blocksBomb = [];
-let sizeOneBlock = 50;
+let sizeOneBlock = 20;
 let timeBomb = 2000;
 let enemies = [];
 
@@ -132,6 +132,7 @@ for (var i = 0; i < 6; i++) {
       typeEnemy: 1,
       arrowRand: 0,
       moving: false,
+      speed: 1,
     }
   }));
 }
@@ -452,7 +453,7 @@ let gameStarted = true;
 
 game.newLoop('myGame', function () {
 
-  pjs.camera.follow(playerCenter, 10);
+  //pjs.camera.follow(playerCenter, 10);
 
   player.draw();
 
@@ -478,13 +479,7 @@ game.newLoop('myGame', function () {
     element.nowY = Math.round(element.y / sizeOneBlock);
 
 
-    if (!element.moving) {
-
-      element.moveX = element.nowX
-      element.moveY = element.nowY
-      if (getRandomNum(0, 8) == 1) element.arrowRand = getRandomNum(0, 3);
-      element.moving = true;
-    }
+    
 
 
 
@@ -711,6 +706,14 @@ function animPlayer(pers, vertTile) {
 }
 
 function enemyGo(element, arrow) {
+  if (!element.moving) {
+
+    element.moveX = element.nowX
+    element.moveY = element.nowY
+    if (getRandomNum(0, 8) == 1) element.arrowRand = getRandomNum(0, 3);
+    element.moving = true;
+  }
+  
   let arrowX = 0;
   let arrowY = 0;
   if (arrow == 0) {
@@ -729,7 +732,7 @@ function enemyGo(element, arrow) {
 
 
   if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
-    element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), 1.2);
+    element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
 
     if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
       element.moving = false;
