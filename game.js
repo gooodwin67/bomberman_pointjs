@@ -16,34 +16,57 @@ var key = pjs.keyControl.initControl();
 
 let level = [
   [{ b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
+  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 9, e: 0, p: 0 }],
   [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
+  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
+  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
+  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 1, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
   [{ b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
 ]
+level = [
+  [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+  [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
+]
+
+//31*13 карта
+//54 блоки
+//6 враги
+
 
 //let levelGraph = new Array(level.length).fill(0).map(el => new Array(level[0].length).fill(0));
 
 let blocks = [];
 let blocksBomb = [];
-let sizeOneBlock = 64;
-let timeBomb = 5000;
+let sizeOneBlock = 50;
+let timeBomb = 2000;
+let enemies = [];
+
+let whiteBlocks = [];
+
 
 for (var i = 0; i < level.length; i++) {
   for (var j = 0; j < level[i].length; j++) {
 
-    if (level[i][j].b == 9) {
-      blocks.push(game.newRectObject({
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        fillColor: "grey",
-      }));
+
+    if (level[i][j].e == undefined) level[i][j].e = 0;
+    if (level[i][j].p == undefined) level[i][j].p = 0;
+
+    if (level[i][j].b == 0) {
+      whiteBlocks.push([i, j])
     }
-    else if (level[i][j].p != 0) {
+
+    if (level[i][j].b == 9) {
       blocks.push(game.newRectObject({
         x: sizeOneBlock * j,
         y: sizeOneBlock * i,
@@ -52,8 +75,67 @@ for (var i = 0; i < level.length; i++) {
         fillColor: "black",
       }));
     }
+    else if (level[i][j].p != 0) {
+      blocks.push(game.newRectObject({
+        x: sizeOneBlock * j,
+        y: sizeOneBlock * i,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        fillColor: "gray",
+      }));
+    }
+    if (level[i][j].e == 1) {
+      enemies.push(game.newRectObject({
+        x: sizeOneBlock * j,
+        y: sizeOneBlock * i,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        fillColor: "blue",
+        userData: {
+          typeEnemy: 1,
+          arrowRand: 0,
+          moving: false,
+        }
+      }));
+    }
   }
 }
+
+for (var i = 0; i < 54; i++) {
+  var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
+
+  level[blockk[0]][blockk[1]].p = 2;
+  whiteBlocks.splice(blockk, 1);
+
+  blocks.push(game.newRectObject({
+    x: sizeOneBlock * blockk[1],
+    y: sizeOneBlock * blockk[0],
+    w: sizeOneBlock,
+    h: sizeOneBlock,
+    fillColor: "gray",
+  }));
+}
+
+for (var i = 0; i < 6; i++) {
+  var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
+
+  level[blockk[0]][blockk[1]].e = 1;
+  whiteBlocks.splice(blockk, 1);
+
+  enemies.push(game.newRectObject({
+    x: sizeOneBlock * enemyBlock[1],
+    y: sizeOneBlock * enemyBlock[0],
+    w: sizeOneBlock,
+    h: sizeOneBlock,
+    fillColor: "blue",
+    userData: {
+      typeEnemy: 1,
+      arrowRand: 0,
+      moving: false,
+    }
+  }));
+}
+
 
 
 
@@ -129,7 +211,7 @@ let playerCenter = game.newRectObject({
 
 let playerNumAnim = 0;
 let playerBody = game.newAnimationObject({
-  animation: tiles.newImage("assets/player.png").getAnimation(0,playerNumAnim,32,32,6),
+  animation: tiles.newImage("assets/player.png").getAnimation(0, playerNumAnim, 32, 32, 6),
   x: 0,
   y: 0,
   w: sizeOneBlock,
@@ -149,7 +231,7 @@ player.nowY = 1;
 player.plantBomb = false;
 player.canBombsNum = 3;
 player.currentBombNum = 0;
-player.boomPower = 1;
+player.boomPower = 0.8;
 playerCanWalkOnBomb = false;
 
 
@@ -328,8 +410,19 @@ player.plantingBombMas = [];
 
 /*//////////////////////////////////////////////////////////////////////////*/
 
+
+
+
+
+
+
+
+
+/*//////////////////////////////////////////////////////////////////////////*/
+
 function boom(numBomb) {
   if (player.bombsMas[numBomb].planting) {
+    level[Math.round(player.bombsMas[numBomb].bomb.y / sizeOneBlock)][Math.round(player.bombsMas[numBomb].bomb.x / sizeOneBlock)].bomb = false;
     player.bombsMas[numBomb].explosion = true;
     player.bombsMas[numBomb].timerExplosion().restart();
     blocksBomb.splice(0, 1);
@@ -359,7 +452,7 @@ let gameStarted = true;
 
 game.newLoop('myGame', function () {
 
-  //pjs.camera.follow(player, 10);
+  pjs.camera.follow(playerCenter, 10);
 
   player.draw();
 
@@ -375,11 +468,41 @@ game.newLoop('myGame', function () {
     playerCanWalkOnBomb = false;
   }
 
+  /*//////////////////////////////////////////////////////////////*/
+
+  enemies.forEach(element => {
+    element.draw();
+
+
+    element.nowX = Math.round(element.x / sizeOneBlock);
+    element.nowY = Math.round(element.y / sizeOneBlock);
+
+
+    if (!element.moving) {
+
+      element.moveX = element.nowX
+      element.moveY = element.nowY
+      if (getRandomNum(0, 8) == 1) element.arrowRand = getRandomNum(0, 3);
+      element.moving = true;
+    }
+
+
+
+    enemyGo(element, element.arrowRand);
 
 
 
 
 
+
+
+
+
+
+
+  })
+
+  /*//////////////////////////////////////////////////////////////*/
 
 
 
@@ -392,7 +515,7 @@ game.newLoop('myGame', function () {
           y: sizeOneBlock * i,
           w: sizeOneBlock,
           h: sizeOneBlock,
-          fillColor: "grey",
+          fillColor: "black",
         }).draw();
       }
       else if (level[i][j].p != 0) {
@@ -401,36 +524,45 @@ game.newLoop('myGame', function () {
           y: sizeOneBlock * i,
           w: sizeOneBlock,
           h: sizeOneBlock,
-          fillColor: "black",
+          fillColor: "gray",
         }).draw();
       }
+      // if (level[i][j].e == 1) {
+      //   game.newRectObject({
+      //     x: sizeOneBlock * j + 2,
+      //     y: sizeOneBlock * i + 2,
+      //     w: sizeOneBlock * 1.5,
+      //     h: sizeOneBlock * 1.5,
+      //     fillColor: "green",
+      //   }).draw();
+      // }
 
     }
   }
 
-  
+
   if (key.isPress("D") || key.isPress("RIGHT")) {
-    animPlayer (playerBody, 128);
+    animPlayer(playerBody, 128);
     playerBody.flip.x = 0;
   }
   else if (key.isPress("A") || key.isPress("LEFT")) {
-    animPlayer (playerBody, 128);
+    animPlayer(playerBody, 128);
     playerBody.flip.x = 1;
   }
   else if (key.isPress("W") || key.isPress("UP")) {
-    animPlayer (playerBody, 160);
+    animPlayer(playerBody, 160);
   }
   else if (key.isPress("S") || key.isPress("DOWN")) {
-    animPlayer (playerBody, 96);
+    animPlayer(playerBody, 96);
   }
   if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
-    animPlayer (playerBody, 0);
+    animPlayer(playerBody, 0);
     player.moving = false;
   }
 
-  
-  
-  
+
+
+
 
   if (key.isDown("D") || key.isDown("RIGHT")) {
     player.moving = true;
@@ -469,10 +601,11 @@ game.newLoop('myGame', function () {
     if (player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
 
       player.canBombMas[0].planting = true;
+
       playerCanWalkOnBomb = true;
       player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock + sizeOneBlock / 4, player.nowY * sizeOneBlock + sizeOneBlock / 4));
       blocksBomb.push(player.canBombMas[0].bomb);
-      //console.log(player.canBombMas[0].bomb);
+      level[Math.round(player.canBombMas[0].bomb.y / sizeOneBlock)][Math.round(player.canBombMas[0].bomb.x / sizeOneBlock)].bomb = true;
 
       player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
       player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
@@ -488,11 +621,14 @@ game.newLoop('myGame', function () {
 
   }
 
+
+
   player.bombsMas.forEach(element => {
     if (element.planting && !element.explosion) {
       element.bomb.draw();
     }
     if (element.explosion) {
+
 
       if (element.bombRight.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && !element.bombRight.isArrIntersect(blocks)) {
         element.bombRight.w += sizeOneBlock / 10;
@@ -561,11 +697,53 @@ function fooExplosion(arrow) {
     boom(arrow.isArrIntersect(blocksBomb).num);
   }
 
+  if (arrow.isArrIntersect(enemies)) {
+    enemies.splice(enemies.indexOf(arrow.isArrIntersect(enemies)), 1);
+    console.log(11111);
+  }
+
 }
 
-function animPlayer (pers, vertTile) {
-  pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0,vertTile,32,32,6));
+function animPlayer(pers, vertTile) {
+  pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0, vertTile, 32, 32, 6));
   pers.w = sizeOneBlock;
   pers.h = sizeOneBlock;
-  console.log(pers);
+}
+
+function enemyGo(element, arrow) {
+  let arrowX = 0;
+  let arrowY = 0;
+  if (arrow == 0) {
+    arrowX = 1
+  }
+  else if (arrow == 1) {
+    arrowX = -1
+  }
+  else if (arrow == 2) {
+    arrowY = 1
+  }
+  else if (arrow == 3) {
+    arrowY = -1
+  }
+
+
+
+  if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
+    element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), 1.2);
+
+    if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
+      element.moving = false;
+      element.setPosition(pjs.vector.point(element.nowX * sizeOneBlock, element.nowY * sizeOneBlock));
+      level[element.moveY][element.moveX].e = 0;
+      level[element.moveY + arrowY][element.moveX + arrowX].e = element.typeEnemy;
+    }
+  }
+  else {
+    element.arrowRand = getRandomNum(0, 3);
+  }
+
+}
+
+function getRandomNum(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
 }
