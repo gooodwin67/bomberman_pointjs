@@ -48,7 +48,7 @@ level = [
 
 let blocks = [];
 let blocksBomb = [];
-let sizeOneBlock = 20;
+let sizeOneBlock = 36;
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
@@ -104,7 +104,7 @@ for (var i = 0; i < 100/*54*/; i++) {
   }));
 }
 
-for (var i = 0; i < 6; i++) {
+for (var i = 0; i < 1; i++) {
   var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
   enemyType = getRandomNum(1,3);
@@ -220,19 +220,26 @@ player.bombsMas = [
         explosionBoom(num);
       });
     },
-    bombRight: game.newRectObject({
+    bombRight: game.newAnimationObject({
+      animation: tiles.newImage("assets/explosion.png").getAnimation(0, 0, 32, 32, 4),
       x: 0,
       y: 0,
       w: 2,
       h: sizeOneBlock / 2,
-      fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
+
     bombLeft: game.newRectObject({
       x: 0,
       y: 0,
       w: 2,
       h: sizeOneBlock / 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombTop: game.newRectObject({
       x: 0,
@@ -240,6 +247,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombBottom: game.newRectObject({
       x: 0,
@@ -247,6 +257,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombX: 0,
     bombY: 0,
@@ -280,6 +293,9 @@ player.bombsMas = [
       w: 2,
       h: sizeOneBlock / 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombLeft: game.newRectObject({
       x: 0,
@@ -287,6 +303,9 @@ player.bombsMas = [
       w: 2,
       h: sizeOneBlock / 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombTop: game.newRectObject({
       x: 0,
@@ -294,6 +313,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombBottom: game.newRectObject({
       x: 0,
@@ -301,6 +323,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombX: 0,
     bombY: 0,
@@ -334,6 +359,9 @@ player.bombsMas = [
       w: 2,
       h: sizeOneBlock / 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombLeft: game.newRectObject({
       x: 0,
@@ -341,6 +369,9 @@ player.bombsMas = [
       w: 2,
       h: sizeOneBlock / 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombTop: game.newRectObject({
       x: 0,
@@ -348,6 +379,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombBottom: game.newRectObject({
       x: 0,
@@ -355,6 +389,9 @@ player.bombsMas = [
       w: sizeOneBlock / 2,
       h: 2,
       fillColor: "blue",
+      userData: {
+        show: false,
+      }
     }),
     bombX: 0,
     bombY: 0,
@@ -395,6 +432,13 @@ function boom(numBomb) {
     player.bombsMas[numBomb].explosion = true;
     player.bombsMas[numBomb].timerExplosion().restart();
     blocksBomb.splice(0, 1);
+
+    
+
+    player.bombsMas[numBomb].bombRight.show = true;
+    player.bombsMas[numBomb].bombLeft.show = true;
+    player.bombsMas[numBomb].bombTop.show = true;
+    player.bombsMas[numBomb].bombBottom.show = true;
   }
 }
 
@@ -627,35 +671,34 @@ game.newLoop('myGame', function () {
     if (element.explosion) {
 
 
-      if (element.bombRight.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && !element.bombRight.isArrIntersect(blocks)) {
+      if (element.bombRight.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombRight.show && !element.bombRight.isArrIntersect(blocks)) {
         element.bombRight.w += sizeOneBlock / 10;
+        fooExplosion(element.bombRight);
         element.bombRight.draw();
       }
 
-      if (element.bombLeft.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && !element.bombLeft.isArrIntersect(blocks)) {
+
+      if (element.bombLeft.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombLeft.show && !element.bombLeft.isArrIntersect(blocks)) {
         element.bombLeft.w += sizeOneBlock / 10;
         element.bombLeft.x -= sizeOneBlock / 10;
+        fooExplosion(element.bombLeft);
         element.bombLeft.draw();
       }
 
-      if (element.bombTop.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && !element.bombTop.isArrIntersect(blocks)) {
+
+      if (element.bombTop.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombTop.show && !element.bombTop.isArrIntersect(blocks)) {
         element.bombTop.h += sizeOneBlock / 10;
         element.bombTop.y -= sizeOneBlock / 10;
+        fooExplosion(element.bombTop);
         element.bombTop.draw();
       }
 
-      if (element.bombBottom.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && !element.bombBottom.isArrIntersect(blocks)) {
+
+      if (element.bombBottom.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombBottom.show && !element.bombBottom.isArrIntersect(blocks)) {
         element.bombBottom.h += sizeOneBlock / 10;
+        fooExplosion(element.bombBottom);
         element.bombBottom.draw();
       }
-
-
-
-
-      fooExplosion(element.bombRight);
-      fooExplosion(element.bombLeft);
-      fooExplosion(element.bombTop);
-      fooExplosion(element.bombBottom);
 
 
     }
@@ -676,6 +719,7 @@ if (gameStarted) {
 function fooExplosion(arrow) {
   if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p != 0) {
     level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p = 0;
+    arrow.show = false;
   }
   // if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 2) {
   //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 2;
@@ -695,7 +739,6 @@ function fooExplosion(arrow) {
 
   if (arrow.isArrIntersect(enemies)) {
     enemies.splice(enemies.indexOf(arrow.isArrIntersect(enemies)), 1);
-    console.log(11111);
   }
 
 }
