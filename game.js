@@ -48,7 +48,7 @@ level = [
 
 let blocks = [];
 let blocksBomb = [];
-let sizeOneBlock = 36;
+let sizeOneBlock = 64;
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
@@ -85,7 +85,7 @@ for (var i = 0; i < level.length; i++) {
         fillColor: "gray",
       }));
     }
-    
+
   }
 }
 
@@ -107,7 +107,7 @@ for (var i = 0; i < 100/*54*/; i++) {
 for (var i = 0; i < 1; i++) {
   var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
-  enemyType = getRandomNum(1,3);
+  enemyType = getRandomNum(1, 3);
 
   level[blockk[0]][blockk[1]].e = enemyType;
   whiteBlocks.splice(blockk, 1);
@@ -117,7 +117,7 @@ for (var i = 0; i < 1; i++) {
     y: sizeOneBlock * enemyBlock[0],
     w: sizeOneBlock,
     h: sizeOneBlock,
-    fillColor: enemyType == 1 ? "blue" : enemyType == 2 ? "green" : enemyType == 3 ? 'orange' :'black',
+    fillColor: enemyType == 1 ? "blue" : enemyType == 2 ? "green" : enemyType == 3 ? 'orange' : 'black',
     userData: {
       typeEnemy: enemyType,
       arrowRand: 0,
@@ -181,8 +181,10 @@ let playerCenter = game.newRectObject({
 let playerNumAnim = 0;
 let playerBody = game.newAnimationObject({
   animation: tiles.newImage("assets/player.png").getAnimation(0, playerNumAnim, 32, 32, 6),
-  x: 0,
-  y: 0,
+
+
+  //animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+
   w: sizeOneBlock,
   h: sizeOneBlock,
 })
@@ -200,7 +202,7 @@ player.nowY = 1;
 player.plantBomb = false;
 player.canBombsNum = 1;
 player.currentBombNum = 0;
-player.boomPower = 0.8;
+player.boomPower = 2;
 playerCanWalkOnBomb = false;
 
 
@@ -221,42 +223,42 @@ player.bombsMas = [
       });
     },
     bombRight: game.newAnimationObject({
-      animation: tiles.newImage("assets/explosion.png").getAnimation(0, 0, 32, 32, 4),
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
       x: 0,
       y: 0,
       w: 2,
-      h: sizeOneBlock / 2,
+      h: sizeOneBlock / 1.5,
       userData: {
         show: false,
       }
     }),
 
-    bombLeft: game.newRectObject({
+    bombLeft: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
       x: 0,
       y: 0,
       w: 2,
-      h: sizeOneBlock / 2,
-      fillColor: "blue",
+      h: sizeOneBlock / 1.5,
       userData: {
         show: false,
       }
     }),
-    bombTop: game.newRectObject({
+    bombTop: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4),
       x: 0,
       y: 0,
-      w: sizeOneBlock / 2,
+      w: sizeOneBlock / 1.5,
       h: 2,
-      fillColor: "blue",
       userData: {
         show: false,
       }
     }),
-    bombBottom: game.newRectObject({
+    bombBottom: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4),
       x: 0,
       y: 0,
-      w: sizeOneBlock / 2,
+      w: sizeOneBlock / 1.5,
       h: 2,
-      fillColor: "blue",
       userData: {
         show: false,
       }
@@ -433,7 +435,7 @@ function boom(numBomb) {
     player.bombsMas[numBomb].timerExplosion().restart();
     blocksBomb.splice(0, 1);
 
-    
+
 
     player.bombsMas[numBomb].bombRight.show = true;
     player.bombsMas[numBomb].bombLeft.show = true;
@@ -487,7 +489,7 @@ game.newLoop('myGame', function () {
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
-  
+
       if (level[i][j].b == 9) {
         blocks.push(game.newRectObject({
           x: sizeOneBlock * j,
@@ -506,7 +508,7 @@ game.newLoop('myGame', function () {
           fillColor: "gray",
         }));
       }
-      
+
     }
   }
 
@@ -521,7 +523,7 @@ game.newLoop('myGame', function () {
     element.nowY = Math.round(element.y / sizeOneBlock);
 
 
-    
+
 
 
     if (!element.pathActive) {
@@ -671,31 +673,32 @@ game.newLoop('myGame', function () {
     if (element.explosion) {
 
 
-      if (element.bombRight.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombRight.show && !element.bombRight.isArrIntersect(blocks)) {
-        element.bombRight.w += sizeOneBlock / 10;
+      if (element.bombRight.show && !element.bombRight.isArrIntersect(blocks)) {
+        console.log(element.bombRight);
+        element.bombRight.w = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
         fooExplosion(element.bombRight);
         element.bombRight.draw();
       }
 
 
-      if (element.bombLeft.w < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombLeft.show && !element.bombLeft.isArrIntersect(blocks)) {
-        element.bombLeft.w += sizeOneBlock / 10;
-        element.bombLeft.x -= sizeOneBlock / 10;
+      if (element.bombLeft.show && !element.bombLeft.isArrIntersect(blocks)) {
+        element.bombLeft.w = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
+        element.bombLeft.x = element.bomb.x - (player.boomPower * sizeOneBlock) - sizeOneBlock / 5;
         fooExplosion(element.bombLeft);
         element.bombLeft.draw();
       }
 
 
-      if (element.bombTop.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombTop.show && !element.bombTop.isArrIntersect(blocks)) {
-        element.bombTop.h += sizeOneBlock / 10;
-        element.bombTop.y -= sizeOneBlock / 10;
+      if (element.bombTop.show && !element.bombTop.isArrIntersect(blocks)) {
+        element.bombTop.h = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
+        element.bombTop.y = element.bomb.y - (player.boomPower * sizeOneBlock) - sizeOneBlock / 5;
         fooExplosion(element.bombTop);
         element.bombTop.draw();
       }
 
 
-      if (element.bombBottom.h < (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10 && element.bombBottom.show && !element.bombBottom.isArrIntersect(blocks)) {
-        element.bombBottom.h += sizeOneBlock / 10;
+      if (element.bombBottom.show && !element.bombBottom.isArrIntersect(blocks)) {
+        element.bombBottom.h = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
         fooExplosion(element.bombBottom);
         element.bombBottom.draw();
       }
@@ -811,7 +814,7 @@ function enemyGo(element, arrow) {
 
 
 function enemyPathGo(element, arrow) {
-  
+
   if (!element.moving) {
 
 
@@ -824,22 +827,22 @@ function enemyPathGo(element, arrow) {
 
         if (level[i][j].b == 9 || level[i][j].p != 0) {
           levelGraph[i][j] = 0;
-        } else  {
+        } else {
           levelGraph[i][j] = 1;
         }
       }
     }
-    
+
     let masLevelGraph = new Graph(levelGraph);
-    
+
     let start = masLevelGraph.grid[element.nowY][element.nowX];
     let end = masLevelGraph.grid[player.nowY][player.nowX];
     element.result = astar.search(masLevelGraph, start, end);
-    
 
-    
-    
-    
+
+
+
+
   }
 
   if (element.result.length == 0 || element.getDistance(playerCenter.getPosition()) > sizeOneBlock * 8) {
