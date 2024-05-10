@@ -200,7 +200,7 @@ player.speed = sizeOneBlock / 20;
 player.nowX = 1;
 player.nowY = 1;
 player.plantBomb = false;
-player.canBombsNum = 2;
+player.canBombsNum = 3;
 player.currentBombNum = 0;
 player.boomPower = 2;
 playerCanWalkOnBomb = false;
@@ -217,6 +217,9 @@ player.bombsMas = [
       fillColor: "red",
       userData: {
         showRight: false,
+        showLeft: false,
+        showTop: false,
+        showBottom: false,
       }
     }),
     timerExplosion: function () {
@@ -225,47 +228,6 @@ player.bombsMas = [
         explosionBoom(num);
       });
     },
-    bombRight: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 1.5,
-      userData: {
-        show: false,
-      }
-    }),
-
-    bombLeft: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 1.5,
-      userData: {
-        show: false,
-      }
-    }),
-    bombTop: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4),
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 1.5,
-      h: 2,
-      userData: {
-        show: false,
-      }
-    }),
-    bombBottom: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4),
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 1.5,
-      h: 2,
-      userData: {
-        show: false,
-      }
-    }),
     bombX: 0,
     bombY: 0,
     bombsExplosionMas: [],
@@ -288,54 +250,17 @@ player.bombsMas = [
       fillColor: "red",
       userData: {
         showRight: false,
+        showLeft: false,
+        showTop: false,
+        showBottom: false,
       }
     }),
     timerExplosion: function () {
       var num = this.num;
-      return pjs.OOP.newTimer(500, function () {
+      return pjs.OOP.newTimer(1000, function () {
         explosionBoom(num);
       });
     },
-    bombRight: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombLeft: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombTop: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 2,
-      h: 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombBottom: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 2,
-      h: 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
     bombX: 0,
     bombY: 0,
     bombsExplosionMas: [],
@@ -358,54 +283,17 @@ player.bombsMas = [
       fillColor: "red",
       userData: {
         showRight: false,
+        showLeft: false,
+        showTop: false,
+        showBottom: false,
       }
     }),
     timerExplosion: function () {
       var num = this.num;
-      return pjs.OOP.newTimer(500, function () {
+      return pjs.OOP.newTimer(1000, function () {
         explosionBoom(num);
       });
     },
-    bombRight: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombLeft: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: 2,
-      h: sizeOneBlock / 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombTop: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 2,
-      h: 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
-    bombBottom: game.newRectObject({
-      x: 0,
-      y: 0,
-      w: sizeOneBlock / 2,
-      h: 2,
-      fillColor: "blue",
-      userData: {
-        show: false,
-      }
-    }),
     bombX: 0,
     bombY: 0,
     bombsExplosionMas: [],
@@ -446,28 +334,26 @@ function boom(numBomb) {
     player.bombsMas[numBomb].explosion = true;
     player.bombsMas[numBomb].timerExplosion().restart();
     blocksBomb.splice(0, 1);
-
     player.bombsMas[numBomb].bomb.showRight = true;
+    player.bombsMas[numBomb].bomb.showLeft = true;
+    player.bombsMas[numBomb].bomb.showTop = true;
+    player.bombsMas[numBomb].bomb.showBottom = true;
 
 
-    player.bombsMas[numBomb].bombRight.show = true;
-    player.bombsMas[numBomb].bombLeft.show = true;
-    player.bombsMas[numBomb].bombTop.show = true;
-    player.bombsMas[numBomb].bombBottom.show = true;
   }
 }
 
 function explosionBoom(numBomb) {
   player.bombsMas[numBomb].bomb.showRight = false;
+  player.bombsMas[numBomb].bomb.showLeft = false;
+  player.bombsMas[numBomb].bomb.showTop = false;
+  player.bombsMas[numBomb].bomb.showBottom = false;
   player.bombsMas[numBomb].bombsExplosionMas = [];
 
   if (player.bombsMas[numBomb].explosion == true) {
     player.bombsMas[numBomb].explosion = false;
     player.bombsMas[numBomb].planting = false;
-    player.bombsMas[numBomb].bombRight.w = 2;
-    player.bombsMas[numBomb].bombLeft.w = 2;
-    player.bombsMas[numBomb].bombTop.h = 2;
-    player.bombsMas[numBomb].bombBottom.h = 2;
+
   }
 }
 
@@ -668,11 +554,6 @@ game.newLoop('myGame', function () {
       player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
       player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
 
-      player.canBombMas[0].bombRight.setPosition(pjs.vector.point(player.canBombMas[0].bombX + sizeOneBlock / 2, player.canBombMas[0].bombY));
-      player.canBombMas[0].bombLeft.setPosition(pjs.vector.point(player.canBombMas[0].bombX + sizeOneBlock / 2, player.canBombMas[0].bombY));
-      player.canBombMas[0].bombTop.setPosition(pjs.vector.point(player.canBombMas[0].bombX + sizeOneBlock / 4, player.canBombMas[0].bombY + sizeOneBlock / 4));
-      player.canBombMas[0].bombBottom.setPosition(pjs.vector.point(player.canBombMas[0].bombX + sizeOneBlock / 4, player.canBombMas[0].bombY + sizeOneBlock / 4));
-
       player.canBombMas[0].timer().restart();
 
     }
@@ -688,69 +569,22 @@ game.newLoop('myGame', function () {
     if (element.explosion) {
 
       element.bombsExplosionMas.forEach(function (el) {
-        console.log(element.bombsExplosionMas);
+        if (el.isArrIntersect(blocksBomb) /*&& arrow.isArrIntersect(blocksBomb).num != element.num*/) {
+          boom(el.isArrIntersect(blocksBomb).num);
+        }
 
+        if (el.isArrIntersect(enemies)) {
+          enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
+        }
         el.drawFrames(0, 1);
       })
 
-      for (var i = 1; i <= player.boomPower; i++) {
-        if (level[Math.round(element.bomb.y / sizeOneBlock)][Math.round(element.bomb.x / sizeOneBlock) + i].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)][Math.round(element.bomb.x / sizeOneBlock) + i].b != 9 && element.bomb.showRight) {
+      fooExplosion(0, 1, element, 'showRight');
+      fooExplosion(0, -1, element, 'showLeft');
+      fooExplosion(1, 0, element, 'showTop');
+      fooExplosion(-1, 0, element, 'showBottom');
 
-          element.bombsExplosionMas.push(
-            game.newAnimationObject({
-              animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-              x: element.bomb.x + i * sizeOneBlock - element.bomb.w / 2,
-              y: element.bomb.y,
-              w: sizeOneBlock,
-              h: sizeOneBlock / 1.5,
-            }),
-          );
-        }
-        else if (level[Math.round(element.bomb.y / sizeOneBlock)][Math.round(element.bomb.x / sizeOneBlock) + i].b == 9) {
-          element.bomb.showRight = false;
-          break;
-        }
-        else if (level[Math.round(element.bomb.y / sizeOneBlock)][Math.round(element.bomb.x / sizeOneBlock) + i].p == 2 && element.bomb.showRight) {
-          level[Math.round(element.bomb.y / sizeOneBlock)][Math.round(element.bomb.x / sizeOneBlock) + i].p = 0;
-          element.bomb.showRight = false;
-          break;
-        }
-      }
-      element.bomb.showRight = false;
-
-
-
-
-
-      // if (element.bombRight.show && !element.bombRight.isArrIntersect(blocks)) {
-      //   element.bombRight.w = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
-      //   fooExplosion(element.bombRight);
-      //   element.bombRight.draw();
-      // }
-
-
-      // if (element.bombLeft.show && !element.bombLeft.isArrIntersect(blocks)) {
-      //   element.bombLeft.w = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
-      //   element.bombLeft.x = element.bomb.x - (player.boomPower * sizeOneBlock) - sizeOneBlock / 5;
-      //   fooExplosion(element.bombLeft);
-      //   element.bombLeft.draw();
-      // }
-
-
-      // if (element.bombTop.show && !element.bombTop.isArrIntersect(blocks)) {
-      //   element.bombTop.h = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
-      //   element.bombTop.y = element.bomb.y - (player.boomPower * sizeOneBlock) - sizeOneBlock / 5;
-      //   fooExplosion(element.bombTop);
-      //   element.bombTop.draw();
-      // }
-
-
-      // if (element.bombBottom.show && !element.bombBottom.isArrIntersect(blocks)) {
-      //   element.bombBottom.h = (sizeOneBlock / 2 + player.boomPower * sizeOneBlock) - sizeOneBlock / 10;
-      //   fooExplosion(element.bombBottom);
-      //   element.bombBottom.draw();
-      // }
-
+      
 
     }
   });
@@ -766,33 +600,131 @@ if (gameStarted) {
   game.start();
 }
 
+function fooExplosion(x, y, element, arrow) {
+  if (arrow == 'showRight') {
+    for (var i = 1; i <= player.boomPower; i++) {
+      let explosionArrow;
+      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showRight) {
 
-function fooExplosion(arrow) {
-  if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p != 0) {
-    level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p = 0;
-    arrow.show = false;
-  }
-  // if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 2) {
-  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 2;
-  // }
-  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 3) {
-  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 3;
-  // }
-  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 4) {
-  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 4;
-  // }
-  // else if (arrow.isArrIntersect(blocks) && level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].p == 9) {
-  //   level[arrow.isArrIntersect(blocks).y / sizeOneBlock][arrow.isArrIntersect(blocks).x / sizeOneBlock].z = 9;
-  // }
-  if (arrow.isArrIntersect(blocksBomb) /*&& arrow.isArrIntersect(blocksBomb).num != element.num*/) {
-    boom(arrow.isArrIntersect(blocksBomb).num);
+        explosionArrow = game.newAnimationObject({
+            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
+            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
+            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
+            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
+          });
+
+          element.bombsExplosionMas.push(explosionArrow);
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+        element.bomb.showRight = false;
+        break;
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showRight) {
+        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
+        
+        element.bomb.showRight = false;
+        break;
+      }
+    }
+    element.bomb.showRight = false;
   }
 
-  if (arrow.isArrIntersect(enemies)) {
-    enemies.splice(enemies.indexOf(arrow.isArrIntersect(enemies)), 1);
+
+  if (arrow == 'showLeft') {
+    for (var i = 1; i <= player.boomPower; i++) {
+      let explosionArrow;
+      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showLeft) {
+
+        explosionArrow = game.newAnimationObject({
+            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
+            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
+            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
+            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
+          });
+
+          element.bombsExplosionMas.push(explosionArrow);
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+        element.bomb.showLeft = false;
+        break;
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showLeft) {
+        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
+        
+        element.bomb.showLeft = false;
+        break;
+      }
+    }
+    element.bomb.showLeft = false;
   }
 
+
+  if (arrow == 'showTop') {
+    for (var i = 1; i <= player.boomPower; i++) {
+      let explosionArrow;
+      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showTop) {
+
+        explosionArrow = game.newAnimationObject({
+            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
+            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
+            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
+            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
+          });
+
+          element.bombsExplosionMas.push(explosionArrow);
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+        element.bomb.showTop = false;
+        break;
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showTop) {
+        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
+        
+        element.bomb.showTop = false;
+        break;
+      }
+    }
+    element.bomb.showTop = false;
+  }
+
+
+  if (arrow == 'showBottom') {
+    for (var i = 1; i <= player.boomPower; i++) {
+      let explosionArrow;
+      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showBottom) {
+
+        explosionArrow = game.newAnimationObject({
+            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
+            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
+            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
+            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
+          });
+
+          element.bombsExplosionMas.push(explosionArrow);
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+        element.bomb.showBottom = false;
+        break;
+      }
+      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showBottom) {
+        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
+        
+        element.bomb.showBottom = false;
+        break;
+      }
+    }
+    element.bomb.showBottom = false;
+  }
+
+  
+  
 }
+
+
 
 function animPlayer(pers, vertTile) {
   pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0, vertTile, 32, 32, 6));
