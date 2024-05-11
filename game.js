@@ -48,13 +48,51 @@ level = [
 
 let blocks = [];
 let blocksBomb = [];
-let sizeOneBlock = 64;
+let sizeOneBlock = 48;
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
 
+let levelNum = 2;
+
 let whiteBlocks = [];
 
+let door = game.newAnimationObject({
+  animation: tiles.newImage("assets/big_dyna.png").getAnimation(240, 16 * 3, 16, 16, 1),
+  x: 0,
+  y: 0,
+  w: sizeOneBlock,
+  h: sizeOneBlock,
+  visible: true,
+  alpha: 1,
+});
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+let prize = game.newAnimationObject({
+  animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+  x: 0,
+  y: 0,
+  w: sizeOneBlock,
+  h: sizeOneBlock,
+  visible: true,
+  alpha: 1,
+});
+
+let prizeMas = [
+  {
+    numPrize: 1,
+    namePrize: 'Сила',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+  },
+  {
+    numPrize: 2,
+    namePrize: 'Бомбы',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(16, 16 * 3, 16, 16, 1),
+  }
+]
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 for (var i = 0; i < level.length; i++) {
   for (var j = 0; j < level[i].length; j++) {
@@ -92,16 +130,20 @@ for (var i = 0; i < level.length; i++) {
 for (var i = 0; i < 100/*54*/; i++) {
   var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
+
   level[blockk[0]][blockk[1]].p = 2;
   whiteBlocks.splice(blockk, 1);
 
-  blocks.push(game.newRectObject({
-    x: sizeOneBlock * blockk[1],
-    y: sizeOneBlock * blockk[0],
-    w: sizeOneBlock,
-    h: sizeOneBlock,
-    fillColor: "gray",
-  }));
+  if (i == 0) {
+    level[blockk[0]][blockk[1]].door = true;
+    door.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
+  }
+  if (i == 3) {
+    level[blockk[0]][blockk[1]].prize = true;
+    prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
+    prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
+  }
+
 }
 
 for (var i = 0; i < 1; i++) {
@@ -178,16 +220,13 @@ let playerCenter = game.newRectObject({
   fillColor: "red",
 })
 
-let playerNumAnim = 0;
 let playerBody = game.newAnimationObject({
-  animation: tiles.newImage("assets/player.png").getAnimation(0, playerNumAnim, 32, 32, 6),
-
-
-  //animation: tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-
-  w: sizeOneBlock,
-  h: sizeOneBlock,
-})
+  animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 1),
+  x: 0,
+  y: 0,
+  w: sizeOneBlock / 1.1,
+  h: sizeOneBlock / 1.1,
+});
 
 let player = game.newMesh({
   x: sizeOneBlock,
@@ -204,17 +243,20 @@ player.canBombsNum = 3;
 player.currentBombNum = 0;
 player.boomPower = 2;
 playerCanWalkOnBomb = false;
+player.damageBlocksMas = [];
+player.seeDoor = false;
+player.seePrize = false;
 
 
 player.bombsMas = [
   {
     num: 0,
-    bomb: game.newRectObject({
+    bomb: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
       x: 0,
       y: 0,
-      w: sizeOneBlock / 2,
-      h: sizeOneBlock / 2,
-      fillColor: "red",
+      w: sizeOneBlock,
+      h: sizeOneBlock,
       userData: {
         showRight: false,
         showLeft: false,
@@ -242,12 +284,12 @@ player.bombsMas = [
   },
   {
     num: 1,
-    bomb: game.newRectObject({
+    bomb: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
       x: 0,
       y: 0,
-      w: sizeOneBlock / 2,
-      h: sizeOneBlock / 2,
-      fillColor: "red",
+      w: sizeOneBlock,
+      h: sizeOneBlock,
       userData: {
         showRight: false,
         showLeft: false,
@@ -275,12 +317,12 @@ player.bombsMas = [
   },
   {
     num: 2,
-    bomb: game.newRectObject({
+    bomb: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
       x: 0,
       y: 0,
-      w: sizeOneBlock / 2,
-      h: sizeOneBlock / 2,
-      fillColor: "red",
+      w: sizeOneBlock,
+      h: sizeOneBlock,
       userData: {
         showRight: false,
         showLeft: false,
@@ -326,6 +368,7 @@ player.plantingBombMas = [];
 
 
 
+
 /*//////////////////////////////////////////////////////////////////////////*/
 
 function boom(numBomb) {
@@ -338,7 +381,8 @@ function boom(numBomb) {
     player.bombsMas[numBomb].bomb.showLeft = true;
     player.bombsMas[numBomb].bomb.showTop = true;
     player.bombsMas[numBomb].bomb.showBottom = true;
-
+    player.bombsMas[numBomb].planting = false;
+    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 4));
 
   }
 }
@@ -351,8 +395,8 @@ function explosionBoom(numBomb) {
   player.bombsMas[numBomb].bombsExplosionMas = [];
 
   if (player.bombsMas[numBomb].explosion == true) {
+    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
     player.bombsMas[numBomb].explosion = false;
-    player.bombsMas[numBomb].planting = false;
 
   }
 }
@@ -401,13 +445,16 @@ game.newLoop('myGame', function () {
         }));
       }
       else if (level[i][j].p != 0) {
-        blocks.push(game.newRectObject({
+        blocks.push(game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7),
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
           h: sizeOneBlock,
-          fillColor: "gray",
-        }));
+          userData: {
+            numBlock: { i, j },
+          }
+        }))
       }
 
     }
@@ -435,15 +482,6 @@ game.newLoop('myGame', function () {
     }
 
 
-
-
-
-
-
-
-
-
-
   })
 
   /*//////////////////////////////////////////////////////////////*/
@@ -454,23 +492,52 @@ game.newLoop('myGame', function () {
     for (var j = 0; j < level[i].length; j++) {
 
       if (level[i][j].b == 9) {
-        game.newRectObject({
+        game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1),
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
           h: sizeOneBlock,
-          fillColor: "black",
-        }).draw();
+        }).drawFrame(0);
       }
       else if (level[i][j].p != 0) {
-        game.newRectObject({
+        game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7),
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
           h: sizeOneBlock,
-          fillColor: "gray",
-        }).draw();
+        }).drawFrame(0);
       }
+      if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
+        game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock / 5,
+          h: sizeOneBlock / 5,
+          fillColor: 'yellow',
+        }).draw()
+      }
+
+      if (level[i][j].p != 0 && level[i][j].prize) {  // Где приз
+        game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock / 5,
+          h: sizeOneBlock / 5,
+          fillColor: 'green',
+        }).draw()
+      }
+
+      if (level[i][j].door && level[i][j].p == 0) {
+        door.draw();
+        player.seeDoor = true;
+      }
+      if (level[i][j].prize && level[i][j].p == 0) {
+        prize.draw();
+        player.seePrize = true;
+      }
+
       // if (level[i][j].e == 1) {
       //   game.newRectObject({
       //     x: sizeOneBlock * j + 2,
@@ -484,23 +551,27 @@ game.newLoop('myGame', function () {
     }
   }
 
+  player.damageBlocksMas.forEach(element => {
+    element.drawToFrame(6);
+  });
+
 
   if (key.isPress("D") || key.isPress("RIGHT")) {
-    animPlayer(playerBody, 128);
-    playerBody.flip.x = 0;
+    animPlayer(playerBody, 'right');
+    //playerBody.flip.x = 0;
   }
   else if (key.isPress("A") || key.isPress("LEFT")) {
-    animPlayer(playerBody, 128);
-    playerBody.flip.x = 1;
+    animPlayer(playerBody, 'left');
+    //playerBody.flip.x = 1;
   }
   else if (key.isPress("W") || key.isPress("UP")) {
-    animPlayer(playerBody, 160);
+    animPlayer(playerBody, 'top');
   }
   else if (key.isPress("S") || key.isPress("DOWN")) {
-    animPlayer(playerBody, 96);
+    animPlayer(playerBody, 'bottom');
   }
   if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
-    animPlayer(playerBody, 0);
+    animPlayer(playerBody, 'stay');
     player.moving = false;
   }
 
@@ -541,14 +612,16 @@ game.newLoop('myGame', function () {
 
   if (key.isPress("Z")) {
 
-
     if (player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
 
       player.canBombMas[0].planting = true;
 
       playerCanWalkOnBomb = true;
-      player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock + sizeOneBlock / 4, player.nowY * sizeOneBlock + sizeOneBlock / 4));
+
+      player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
+
       blocksBomb.push(player.canBombMas[0].bomb);
+      player.canBombMas[0].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
       level[Math.round(player.canBombMas[0].bomb.y / sizeOneBlock)][Math.round(player.canBombMas[0].bomb.x / sizeOneBlock)].bomb = true;
 
       player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
@@ -563,11 +636,11 @@ game.newLoop('myGame', function () {
 
 
   player.bombsMas.forEach(element => {
-    if (element.planting && !element.explosion) {
+    if (element.planting || element.explosion) {
       element.bomb.draw();
     }
-    if (element.explosion) {
 
+    if (element.explosion) {
       element.bombsExplosionMas.forEach(function (el) {
         if (el.isArrIntersect(blocksBomb) /*&& arrow.isArrIntersect(blocksBomb).num != element.num*/) {
           boom(el.isArrIntersect(blocksBomb).num);
@@ -576,7 +649,7 @@ game.newLoop('myGame', function () {
         if (el.isArrIntersect(enemies)) {
           enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
         }
-        el.drawFrames(0, 1);
+        el.draw();
       })
 
       fooExplosion(0, 1, element, 'showRight');
@@ -584,7 +657,7 @@ game.newLoop('myGame', function () {
       fooExplosion(1, 0, element, 'showTop');
       fooExplosion(-1, 0, element, 'showBottom');
 
-      
+
 
     }
   });
@@ -604,25 +677,45 @@ function fooExplosion(x, y, element, arrow) {
   if (arrow == 'showRight') {
     for (var i = 1; i <= player.boomPower; i++) {
       let explosionArrow;
-      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showRight) {
+      if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b != 9 && element.bomb.showRight) {
 
         explosionArrow = game.newAnimationObject({
-            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
-            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
-            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
-            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
-          });
+          animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+          x: element.bomb.x + i * sizeOneBlock,
+          y: element.bomb.y,
+          w: sizeOneBlock - sizeOneBlock / 10,
+          h: sizeOneBlock,
+        });
 
-          element.bombsExplosionMas.push(explosionArrow);
+        element.bombsExplosionMas.push(explosionArrow);
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b == 9) {
         element.bomb.showRight = false;
         break;
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showRight) {
-        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
-        
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 2 && element.bomb.showRight) {
+        let damageBlock = blocks.filter((el) => {
+          if (el.numBlock != undefined && el.numBlock.i == Math.round(element.bomb.y / sizeOneBlock) + (i * x) && el.numBlock.j == Math.round(element.bomb.x / sizeOneBlock) + (i * y))
+            return el;
+        });
+
+        let block = game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          x: damageBlock[0].x,
+          y: damageBlock[0].y,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        })
+
+        player.damageBlocksMas.push(block);
+        setTimeout(() => {
+          player.damageBlocksMas.splice(player.damageBlocksMas.indexOf(block), 1);
+        }, 500)
+
+
+        level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p = 0;
+
+
         element.bomb.showRight = false;
         break;
       }
@@ -634,25 +727,42 @@ function fooExplosion(x, y, element, arrow) {
   if (arrow == 'showLeft') {
     for (var i = 1; i <= player.boomPower; i++) {
       let explosionArrow;
-      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showLeft) {
+      if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b != 9 && element.bomb.showLeft) {
 
         explosionArrow = game.newAnimationObject({
-            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
-            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
-            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
-            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
-          });
+          animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+          x: element.bomb.x - i * sizeOneBlock,
+          y: element.bomb.y,
+          w: sizeOneBlock - sizeOneBlock / 10,
+          h: sizeOneBlock,
+        });
 
-          element.bombsExplosionMas.push(explosionArrow);
+        element.bombsExplosionMas.push(explosionArrow);
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b == 9) {
         element.bomb.showLeft = false;
         break;
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showLeft) {
-        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
-        
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 2 && element.bomb.showLeft) {
+        let damageBlock = blocks.filter((el) => {
+          if (el.numBlock != undefined && el.numBlock.i == Math.round(element.bomb.y / sizeOneBlock) + (i * x) && el.numBlock.j == Math.round(element.bomb.x / sizeOneBlock) + (i * y))
+            return el;
+        });
+
+        let block = game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          x: damageBlock[0].x,
+          y: damageBlock[0].y,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        })
+
+        player.damageBlocksMas.push(block);
+        setTimeout(() => {
+          player.damageBlocksMas.splice(player.damageBlocksMas.indexOf(block), 1);
+        }, 500)
+        level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p = 0;
+
         element.bomb.showLeft = false;
         break;
       }
@@ -664,25 +774,42 @@ function fooExplosion(x, y, element, arrow) {
   if (arrow == 'showTop') {
     for (var i = 1; i <= player.boomPower; i++) {
       let explosionArrow;
-      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showTop) {
+      if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b != 9 && element.bomb.showTop) {
 
         explosionArrow = game.newAnimationObject({
-            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
-            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
-            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
-            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
-          });
+          animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+          x: element.bomb.x,
+          y: element.bomb.y + i * sizeOneBlock,
+          w: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 10,
+        });
 
-          element.bombsExplosionMas.push(explosionArrow);
+        element.bombsExplosionMas.push(explosionArrow);
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b == 9) {
         element.bomb.showTop = false;
         break;
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showTop) {
-        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
-        
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 2 && element.bomb.showTop) {
+        let damageBlock = blocks.filter((el) => {
+          if (el.numBlock != undefined && el.numBlock.i == Math.round(element.bomb.y / sizeOneBlock) + (i * x) && el.numBlock.j == Math.round(element.bomb.x / sizeOneBlock) + (i * y))
+            return el;
+        });
+
+        let block = game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          x: damageBlock[0].x,
+          y: damageBlock[0].y,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        })
+
+        player.damageBlocksMas.push(block);
+        setTimeout(() => {
+          player.damageBlocksMas.splice(player.damageBlocksMas.indexOf(block), 1);
+        }, 500)
+        level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p = 0;
+
         element.bomb.showTop = false;
         break;
       }
@@ -694,25 +821,42 @@ function fooExplosion(x, y, element, arrow) {
   if (arrow == 'showBottom') {
     for (var i = 1; i <= player.boomPower; i++) {
       let explosionArrow;
-      if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock)+(i*y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) + (i*y)].b != 9 && element.bomb.showBottom) {
+      if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 0 && level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b != 9 && element.bomb.showBottom) {
 
         explosionArrow = game.newAnimationObject({
-            animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-            x: y == 0 ? element.bomb.x - element.bomb.w/5 + (i * sizeOneBlock - element.bomb.w / 2)*y : element.bomb.x + (i * sizeOneBlock)*y - element.bomb.w/2,
-            y: y == 0 ? element.bomb.y + (i * sizeOneBlock)*x - element.bomb.h / 2 : element.bomb.y - element.bomb.h/5 + (i * sizeOneBlock - element.bomb.h / 2)*x,
-            w: y == 0 ? sizeOneBlock / 1.5 : sizeOneBlock,
-            h: y == 0 ? sizeOneBlock : sizeOneBlock / 1.5,
-          });
+          animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
+          x: element.bomb.x,
+          y: element.bomb.y - i * sizeOneBlock,
+          w: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 10,
+        });
 
-          element.bombsExplosionMas.push(explosionArrow);
+        element.bombsExplosionMas.push(explosionArrow);
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].b == 9) {
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].b == 9) {
         element.bomb.showBottom = false;
         break;
       }
-      else if (level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p == 2 && element.bomb.showBottom) {
-        level[Math.round(element.bomb.y / sizeOneBlock)+(i*x)][Math.round(element.bomb.x / sizeOneBlock) +(i*y)].p = 0;
-        
+      else if (level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p == 2 && element.bomb.showBottom) {
+        let damageBlock = blocks.filter((el) => {
+          if (el.numBlock != undefined && el.numBlock.i == Math.round(element.bomb.y / sizeOneBlock) + (i * x) && el.numBlock.j == Math.round(element.bomb.x / sizeOneBlock) + (i * y))
+            return el;
+        });
+
+        let block = game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          x: damageBlock[0].x,
+          y: damageBlock[0].y,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        })
+
+        player.damageBlocksMas.push(block);
+        setTimeout(() => {
+          player.damageBlocksMas.splice(player.damageBlocksMas.indexOf(block), 1);
+        }, 500)
+        level[Math.round(element.bomb.y / sizeOneBlock) + (i * x)][Math.round(element.bomb.x / sizeOneBlock) + (i * y)].p = 0;
+
         element.bomb.showBottom = false;
         break;
       }
@@ -720,16 +864,22 @@ function fooExplosion(x, y, element, arrow) {
     element.bomb.showBottom = false;
   }
 
-  
-  
+
+
 }
 
 
 
-function animPlayer(pers, vertTile) {
-  pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0, vertTile, 32, 32, 6));
-  pers.w = sizeOneBlock;
-  pers.h = sizeOneBlock;
+function animPlayer(pers, arrow) {
+  // pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0, vertTile, 32, 32, 6));
+  // pers.w = sizeOneBlock;
+  // pers.h = sizeOneBlock;
+  if (arrow == 'right') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(69, 0, 23, 23, 3));
+  else if (arrow == 'left') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(138, 0, 23, 23, 3));
+  else if (arrow == 'top') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(217, 0, 23, 23, 3));
+  else if (arrow == 'bottom') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 3));
+
+  if (arrow == 'stay') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 1));
 }
 
 function enemyGo(element, arrow) {
