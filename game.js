@@ -145,32 +145,63 @@ for (var i = 0; i < 100/*54*/; i++) {
   }
 
 }
+///////////////////////////////////////////////////////////////////////////
+
+let enemyTypes = [
+  game.newAnimationObject({
+    animation: tiles.newImage("assets/big_dyna.png").getAnimation(426, 215, 16, 18, 3),
+    x: 0,
+    y: 0,
+    w: sizeOneBlock,
+    h: sizeOneBlock,
+    userData: {
+      typeEnemy: 1,
+      nameEnemy: 'Первый',
+      arrowRand: 0,
+      moving: false,
+      speed: 1,
+      canPath: false,
+      pathActive: false,
+      result: [],
+    }
+  }),
+  game.newAnimationObject({
+    animation: tiles.newImage("assets/big_dyna.png").getAnimation(506, 215, 16, 18, 4),
+    x: 0,
+    y: 0,
+    w: sizeOneBlock,
+    h: sizeOneBlock,
+    userData: {
+      typeEnemy: 2,
+      nameEnemy: 'второй',
+      arrowRand: 0,
+      moving: false,
+      speed: 1,
+      canPath: false,
+      pathActive: false,
+      result: [],
+    }
+  }),
+]
 
 for (var i = 0; i < 1; i++) {
   var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
-  enemyType = getRandomNum(1, 3);
+  //enemyType = getRandomNum(1, 3);
 
   level[blockk[0]][blockk[1]].e = enemyType;
   whiteBlocks.splice(blockk, 1);
 
-  enemies.push(game.newRectObject({
-    x: sizeOneBlock * enemyBlock[1],
-    y: sizeOneBlock * enemyBlock[0],
-    w: sizeOneBlock,
-    h: sizeOneBlock,
-    fillColor: enemyType == 1 ? "blue" : enemyType == 2 ? "green" : enemyType == 3 ? 'orange' : 'black',
-    userData: {
-      typeEnemy: enemyType,
-      arrowRand: 0,
-      moving: false,
-      speed: enemyType == 1 || enemyType == 3 ? 1 : enemyType == 2 ? 2 : 0,
-      canPath: enemyType == 3 ? true : false,
-      pathActive: enemyType == 3 ? true : false,
-      result: [],
-    }
-  }));
+  enemyTypes[0].x = sizeOneBlock * enemyBlock[1],
+  enemyTypes[0].y = sizeOneBlock * enemyBlock[0],
+
+  enemyTypes[1].x = sizeOneBlock * enemyBlock[1],
+  enemyTypes[1].y = sizeOneBlock * enemyBlock[0],
+
+  enemies.push(enemyTypes[1]);
 }
+
+
 
 
 
