@@ -48,6 +48,14 @@ level = [
 
 let gameStarted = false;
 
+
+
+document.querySelector('#start_game_button').addEventListener('click', function(){
+  document.querySelector('.main_menu').style.display = 'none';
+  gameStarted = true;
+  game.start();
+});
+
 let blocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
