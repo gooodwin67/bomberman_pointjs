@@ -46,6 +46,8 @@ level = [
 
 //let levelGraph = new Array(level.length).fill(0).map(el => new Array(level[0].length).fill(0));
 
+let gameStarted = false;
+
 let blocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
@@ -413,7 +415,7 @@ function boom(numBomb) {
     player.bombsMas[numBomb].bomb.showTop = true;
     player.bombsMas[numBomb].bomb.showBottom = true;
     player.bombsMas[numBomb].planting = false;
-    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 4));
+    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 3));
 
   }
 }
@@ -435,7 +437,7 @@ function explosionBoom(numBomb) {
 
 
 
-let gameStarted = true;
+
 
 
 
@@ -668,7 +670,7 @@ game.newLoop('myGame', function () {
 
   player.bombsMas.forEach(element => {
     if (element.planting || element.explosion) {
-      element.bomb.draw();
+      element.bomb.drawFrames(1,2);
     }
 
     if (element.explosion) {
@@ -680,7 +682,7 @@ game.newLoop('myGame', function () {
         if (el.isArrIntersect(enemies)) {
           enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
         }
-        el.draw();
+        el.drawFrames(2, 3);
       })
 
       fooExplosion(0, 1, element, 'showRight');
@@ -714,7 +716,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x + i * sizeOneBlock,
           y: element.bomb.y,
-          w: sizeOneBlock - sizeOneBlock / 10,
+          w: sizeOneBlock,
           h: sizeOneBlock,
         });
 
@@ -764,7 +766,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x - i * sizeOneBlock,
           y: element.bomb.y,
-          w: sizeOneBlock - sizeOneBlock / 10,
+          w: sizeOneBlock,
           h: sizeOneBlock,
         });
 
@@ -812,7 +814,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x,
           y: element.bomb.y + i * sizeOneBlock,
           w: sizeOneBlock,
-          h: sizeOneBlock - sizeOneBlock / 10,
+          h: sizeOneBlock,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
@@ -859,7 +861,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x,
           y: element.bomb.y - i * sizeOneBlock,
           w: sizeOneBlock,
-          h: sizeOneBlock - sizeOneBlock / 10,
+          h: sizeOneBlock,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
