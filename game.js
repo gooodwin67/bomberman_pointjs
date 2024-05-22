@@ -14,16 +14,8 @@ var key = pjs.keyControl.initControl();
 
 
 
+
 let level = [
-  [{ b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 1, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 0, e: 0, p: 2 }, { b: 0, e: 1, p: 0 }, { b: 0, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-  [{ b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }, { b: 9, e: 0, p: 0 }],
-]
-level = [
   [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
   [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
   [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
@@ -48,13 +40,10 @@ level = [
 
 let gameStarted = false;
 
+let fieldLevel = document.querySelector('.level');
 
 
-document.querySelector('#start_game_button').addEventListener('click', function(){
-  document.querySelector('.main_menu').style.display = 'none';
-  gameStarted = true;
-  game.start();
-});
+
 
 let blocks = [];
 let blocksBomb = [];
@@ -63,7 +52,8 @@ let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
 
-let levelNum = 2;
+let levelNum = 1;
+fieldLevel.textContent = levelNum;
 
 let whiteBlocks = [];
 
@@ -102,61 +92,6 @@ let prizeMas = [
   }
 ]
 
-////////////////////////////////////////////////////////////////////////////////////////////
-
-for (var i = 0; i < level.length; i++) {
-  for (var j = 0; j < level[i].length; j++) {
-
-
-    if (level[i][j].e == undefined) level[i][j].e = 0;
-    if (level[i][j].p == undefined) level[i][j].p = 0;
-
-    if (level[i][j].b == 0) {
-      whiteBlocks.push([i, j])
-    }
-
-    if (level[i][j].b == 9) {
-      blocks.push(game.newRectObject({
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        fillColor: "black",
-      }));
-    }
-    else if (level[i][j].p != 0) {
-      blocks.push(game.newRectObject({
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        fillColor: "gray",
-      }));
-    }
-
-  }
-}
-
-for (var i = 0; i < 100/*54*/; i++) {
-  var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
-
-
-  level[blockk[0]][blockk[1]].p = 2;
-  whiteBlocks.splice(blockk, 1);
-
-  if (i == 0) {
-    level[blockk[0]][blockk[1]].door = true;
-    door.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
-  }
-  if (i == 3) {
-    level[blockk[0]][blockk[1]].prize = true;
-    prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
-    prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
-  }
-
-}
-///////////////////////////////////////////////////////////////////////////
-
 let enemyTypes = [
   game.newAnimationObject({
     animation: tiles.newImage("assets/big_dyna.png").getAnimation(426, 215, 16, 18, 3),
@@ -193,34 +128,6 @@ let enemyTypes = [
     }
   }),
 ]
-
-for (var i = 0; i < 1; i++) {
-  var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
-
-  //enemyType = getRandomNum(1, 3);
-
-  level[blockk[0]][blockk[1]].e = enemyType;
-  whiteBlocks.splice(blockk, 1);
-
-  enemyTypes[0].x = sizeOneBlock * enemyBlock[1],
-  enemyTypes[0].y = sizeOneBlock * enemyBlock[0],
-
-  enemyTypes[1].x = sizeOneBlock * enemyBlock[1],
-  enemyTypes[1].y = sizeOneBlock * enemyBlock[0],
-
-  enemies.push(enemyTypes[1]);
-}
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -399,6 +306,97 @@ player.bombsMas[2].bomb.num = 2;
 player.canBombMas = player.bombsMas;
 player.plantingBombMas = [];
 
+////////////////////////////////////////////////////////////////////////////////////////////
+
+function init() {
+  
+
+  for (var i = 0; i < level.length; i++) {
+    for (var j = 0; j < level[i].length; j++) {
+  
+  
+      if (level[i][j].e == undefined) level[i][j].e = 0;
+      if (level[i][j].p == undefined) level[i][j].p = 0;
+  
+      if (level[i][j].b == 0) {
+        whiteBlocks.push([i, j])
+      }
+  
+      if (level[i][j].b == 9) {
+        blocks.push(game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+          fillColor: "black",
+        }));
+      }
+      else if (level[i][j].p != 0) {
+        blocks.push(game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+          fillColor: "gray",
+        }));
+      }
+  
+    }
+  }
+
+  for (var i = 0; i < 100/*54*/; i++) {
+    var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
+  
+  
+    level[blockk[0]][blockk[1]].p = 2;
+    whiteBlocks.splice(blockk, 1);
+  
+    if (i == 0) {
+      level[blockk[0]][blockk[1]].door = true;
+      door.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
+    }
+    if (i == 3) {
+      level[blockk[0]][blockk[1]].prize = true;
+      prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
+      prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
+    }
+  
+  }
+
+  for (var i = 0; i < 1; i++) {
+    var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
+  
+    //enemyType = getRandomNum(1, 3);
+  
+    level[blockk[0]][blockk[1]].e = enemyType;
+    whiteBlocks.splice(blockk, 1);
+  
+    enemyTypes[0].x = sizeOneBlock * enemyBlock[1],
+    enemyTypes[0].y = sizeOneBlock * enemyBlock[0],
+  
+    enemyTypes[1].x = sizeOneBlock * enemyBlock[1],
+    enemyTypes[1].y = sizeOneBlock * enemyBlock[0],
+  
+    enemies.push(enemyTypes[1]);
+  }
+
+
+}
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
 /*//////////////////////////////////////////////////////////////////////////*/
 
 
@@ -445,6 +443,15 @@ function explosionBoom(numBomb) {
 
 
 
+document.querySelector('#start_game_button').addEventListener('click', function(){
+  document.querySelector('.main_menu').style.display = 'none';
+  document.querySelector('.game_field').style.display = 'block';
+  
+  gameStarted = true;
+  init();
+  game.start();
+});
+
 
 
 
@@ -454,6 +461,7 @@ function explosionBoom(numBomb) {
 game.newLoop('myGame', function () {
 
   //pjs.camera.follow(playerCenter, 10);
+  console.log(123123);
 
   player.draw();
 
@@ -468,6 +476,12 @@ game.newLoop('myGame', function () {
   if (!playerCenter.isArrIntersect(blocksBomb)) {
     playerCanWalkOnBomb = false;
   }
+  if (playerCenter.isIntersect(door)) {
+    document.querySelector('.main_menu').style.display = 'block';
+    document.querySelector('.game_field').style.display = 'none';
+    gameStarted = false;
+  }
+
 
   /*//////////////////////////////////////////////////////////////*/
 
