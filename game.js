@@ -9,12 +9,6 @@ var key = pjs.keyControl.initControl();
 
 
 
-
-
-
-
-
-
 let level = [
   [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
   [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
@@ -36,15 +30,19 @@ let level = [
 //6 враги
 
 
-//let levelGraph = new Array(level.length).fill(0).map(el => new Array(level[0].length).fill(0));
-
 let gameStarted = false;
-
 let fieldLevel = document.querySelector('.level');
+let fieldLevelMenu = document.querySelector('.level_num');
 
 
+let playerTop;
+let playerBottom;
+let playerLeft;
+let playerRight;
+let playerCenter;
+let playerBody;
 
-
+let player;
 let blocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
@@ -55,9 +53,11 @@ let enemyType = 1;
 let levelNum = 1;
 fieldLevel.textContent = levelNum;
 
+let enemyTypes;
+
 let whiteBlocks = [];
 
-let door = game.newAnimationObject({
+const door = game.newAnimationObject({
   animation: tiles.newImage("assets/big_dyna.png").getAnimation(240, 16 * 3, 16, 16, 1),
   x: 0,
   y: 0,
@@ -69,7 +69,7 @@ let door = game.newAnimationObject({
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-let prize = game.newAnimationObject({
+const prize = game.newAnimationObject({
   animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
   x: 0,
   y: 0,
@@ -92,236 +92,235 @@ let prizeMas = [
   }
 ]
 
-let enemyTypes = [
-  game.newAnimationObject({
-    animation: tiles.newImage("assets/big_dyna.png").getAnimation(426, 215, 16, 18, 3),
-    x: 0,
-    y: 0,
-    w: sizeOneBlock,
-    h: sizeOneBlock,
-    userData: {
-      typeEnemy: 1,
-      nameEnemy: 'Первый',
-      arrowRand: 0,
-      moving: false,
-      speed: 1,
-      canPath: false,
-      pathActive: false,
-      result: [],
-    }
-  }),
-  game.newAnimationObject({
-    animation: tiles.newImage("assets/big_dyna.png").getAnimation(506, 215, 16, 18, 4),
-    x: 0,
-    y: 0,
-    w: sizeOneBlock,
-    h: sizeOneBlock,
-    userData: {
-      typeEnemy: 2,
-      nameEnemy: 'второй',
-      arrowRand: 0,
-      moving: false,
-      speed: 1,
-      canPath: false,
-      pathActive: false,
-      result: [],
-    }
-  }),
-]
 
 
 
-let playerTop = game.newRectObject({
-  x: sizeOneBlock / 12,
-  y: 0,
-  w: sizeOneBlock / 1.2,
-  h: 2,
-  fillColor: "red",
-})
-let playerBottom = game.newRectObject({
-  x: sizeOneBlock / 12,
-  y: sizeOneBlock - 2,
-  w: sizeOneBlock / 1.2,
-  h: 2,
-  fillColor: "red",
-})
-let playerLeft = game.newRectObject({
-  x: 0,
-  y: sizeOneBlock / 12,
-  w: 2,
-  h: sizeOneBlock / 1.2,
-  fillColor: "red",
-})
-let playerRight = game.newRectObject({
-  x: sizeOneBlock - 2,
-  y: sizeOneBlock / 12,
-  w: 2,
-  h: sizeOneBlock / 1.2,
-  fillColor: "red",
-})
-
-let playerCenter = game.newRectObject({
-  x: sizeOneBlock / 2 - sizeOneBlock / 2.5 / 2,
-  y: sizeOneBlock / 2 - sizeOneBlock / 2.5 / 2,
-  w: sizeOneBlock / 2.5,
-  h: sizeOneBlock / 2.5,
-  fillColor: "red",
-})
-
-let playerBody = game.newAnimationObject({
-  animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 1),
-  x: 0,
-  y: 0,
-  w: sizeOneBlock / 1.1,
-  h: sizeOneBlock / 1.1,
-});
-
-let player = game.newMesh({
-  x: sizeOneBlock,
-  y: sizeOneBlock,
-  angle: 0,
-  add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
-});
-
-player.speed = sizeOneBlock / 20;
-player.nowX = 1;
-player.nowY = 1;
-player.plantBomb = false;
-player.canBombsNum = 3;
-player.currentBombNum = 0;
-player.boomPower = 2;
-playerCanWalkOnBomb = false;
-player.damageBlocksMas = [];
-player.seeDoor = false;
-player.seePrize = false;
 
 
-player.bombsMas = [
-  {
-    num: 0,
-    bomb: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-      x: 0,
-      y: 0,
-      w: sizeOneBlock,
-      h: sizeOneBlock,
-      userData: {
-        showRight: false,
-        showLeft: false,
-        showTop: false,
-        showBottom: false,
-      }
-    }),
-    timerExplosion: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(1000, function () {
-        explosionBoom(num);
-      });
-    },
-    bombX: 0,
-    bombY: 0,
-    bombsExplosionMas: [],
-    planting: false,
-    explosion: false,
-    timer: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(timeBomb, function () {
-        boom(num);
-      });
-    },
-  },
-  {
-    num: 1,
-    bomb: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-      x: 0,
-      y: 0,
-      w: sizeOneBlock,
-      h: sizeOneBlock,
-      userData: {
-        showRight: false,
-        showLeft: false,
-        showTop: false,
-        showBottom: false,
-      }
-    }),
-    timerExplosion: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(1000, function () {
-        explosionBoom(num);
-      });
-    },
-    bombX: 0,
-    bombY: 0,
-    bombsExplosionMas: [],
-    planting: false,
-    explosion: false,
-    timer: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(timeBomb, function () {
-        boom(num);
-      });
-    },
-  },
-  {
-    num: 2,
-    bomb: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-      x: 0,
-      y: 0,
-      w: sizeOneBlock,
-      h: sizeOneBlock,
-      userData: {
-        showRight: false,
-        showLeft: false,
-        showTop: false,
-        showBottom: false,
-      }
-    }),
-    timerExplosion: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(1000, function () {
-        explosionBoom(num);
-      });
-    },
-    bombX: 0,
-    bombY: 0,
-    bombsExplosionMas: [],
-    planting: false,
-    explosion: false,
-    timer: function () {
-      var num = this.num;
-      return pjs.OOP.newTimer(timeBomb, function () {
-        boom(num);
-      });
-    },
 
-  },
-];
 
-player.bombsMas[0].bomb.num = 0;
-player.bombsMas[1].bomb.num = 1;
-player.bombsMas[2].bomb.num = 2;
-
-player.canBombMas = player.bombsMas;
-player.plantingBombMas = [];
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 function init() {
-  
+
+
+  fieldLevel.textContent = levelNum;
+  fieldLevelMenu.textContent = levelNum;
+
+  level = [
+    [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 0 }, { b: 9 }],
+    [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
+  ]
+
+  blocks = [];
+  blocksBomb = [];
+  sizeOneBlock = 48;
+  timeBomb = 2000;
+  enemies = [];
+  enemyType = 1;
+
+  whiteBlocks = [];
+
+  playerTop = game.newRectObject({
+    x: sizeOneBlock / 12,
+    y: 0,
+    w: sizeOneBlock / 1.2,
+    h: 2,
+    fillColor: "red",
+  })
+  playerBottom = game.newRectObject({
+    x: sizeOneBlock / 12,
+    y: sizeOneBlock - 2,
+    w: sizeOneBlock / 1.2,
+    h: 2,
+    fillColor: "red",
+  })
+  playerLeft = game.newRectObject({
+    x: 0,
+    y: sizeOneBlock / 12,
+    w: 2,
+    h: sizeOneBlock / 1.2,
+    fillColor: "red",
+  })
+  playerRight = game.newRectObject({
+    x: sizeOneBlock - 2,
+    y: sizeOneBlock / 12,
+    w: 2,
+    h: sizeOneBlock / 1.2,
+    fillColor: "red",
+  })
+  playerCenter = game.newRectObject({
+    x: sizeOneBlock / 2 - sizeOneBlock / 2.5 / 2,
+    y: sizeOneBlock / 2 - sizeOneBlock / 2.5 / 2,
+    w: sizeOneBlock / 2.5,
+    h: sizeOneBlock / 2.5,
+    fillColor: "red",
+  })
+  playerBody = game.newAnimationObject({
+    animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 1),
+    x: 0,
+    y: 0,
+    w: sizeOneBlock / 1.1,
+    h: sizeOneBlock / 1.1,
+  });
+
+  player = game.newMesh({
+    x: sizeOneBlock,
+    y: sizeOneBlock,
+    angle: 0,
+    add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
+  });
+
+  player.speed = sizeOneBlock / 20;
+  player.nowX = 1;
+  player.nowY = 1;
+  player.plantBomb = false;
+  player.canBombsNum = 3;
+  player.currentBombNum = 0;
+  player.boomPower = 2;
+  player.canWalkOnBomb = false;
+  player.damageBlocksMas = [];
+  player.seeDoor = false;
+  player.seePrize = false;
+
+
+  player.bombsMas = [
+    {
+      num: 0,
+      bomb: game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          showRight: false,
+          showLeft: false,
+          showTop: false,
+          showBottom: false,
+        }
+      }),
+      timerExplosion: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(1000, function () {
+          explosionBoom(num);
+        });
+      },
+      bombX: 0,
+      bombY: 0,
+      bombsExplosionMas: [],
+      planting: false,
+      explosion: false,
+      timer: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(timeBomb, function () {
+          boom(num);
+        });
+      },
+    },
+    {
+      num: 1,
+      bomb: game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          showRight: false,
+          showLeft: false,
+          showTop: false,
+          showBottom: false,
+        }
+      }),
+      timerExplosion: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(1000, function () {
+          explosionBoom(num);
+        });
+      },
+      bombX: 0,
+      bombY: 0,
+      bombsExplosionMas: [],
+      planting: false,
+      explosion: false,
+      timer: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(timeBomb, function () {
+          boom(num);
+        });
+      },
+    },
+    {
+      num: 2,
+      bomb: game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          showRight: false,
+          showLeft: false,
+          showTop: false,
+          showBottom: false,
+        }
+      }),
+      timerExplosion: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(1000, function () {
+          explosionBoom(num);
+        });
+      },
+      bombX: 0,
+      bombY: 0,
+      bombsExplosionMas: [],
+      planting: false,
+      explosion: false,
+      timer: function () {
+        var num = this.num;
+        return pjs.OOP.newTimer(timeBomb, function () {
+          boom(num);
+        });
+      },
+
+    },
+  ];
+
+  player.bombsMas[0].bomb.num = 0;
+  player.bombsMas[1].bomb.num = 1;
+  player.bombsMas[2].bomb.num = 2;
+
+  player.canBombMas = player.bombsMas;
+  player.plantingBombMas = [];
+
+
+
+
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
-  
-  
+
+
       if (level[i][j].e == undefined) level[i][j].e = 0;
       if (level[i][j].p == undefined) level[i][j].p = 0;
-  
+
       if (level[i][j].b == 0) {
         whiteBlocks.push([i, j])
       }
-  
+
       if (level[i][j].b == 9) {
         blocks.push(game.newRectObject({
           x: sizeOneBlock * j,
@@ -340,17 +339,17 @@ function init() {
           fillColor: "gray",
         }));
       }
-  
+
     }
   }
 
   for (var i = 0; i < 100/*54*/; i++) {
     var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
-  
-  
+
+
     level[blockk[0]][blockk[1]].p = 2;
     whiteBlocks.splice(blockk, 1);
-  
+
     if (i == 0) {
       level[blockk[0]][blockk[1]].door = true;
       door.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
@@ -360,24 +359,227 @@ function init() {
       prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
       prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
     }
-  
+
   }
 
-  for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 10; i++) {
+
+
+    enemyTypes = [
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(426, 215, 16, 18, 5),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 1,
+          framesRun: [0, 2],
+          framesDie: [3, 4],
+          nameEnemy: 'Первый',
+          arrowRand: 0,
+          moving: false,
+          speed: 0.6,
+          canThrough: false,
+          canPath: false,
+          pathActive: false,
+          angryDistance: 0,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(554, 269, 16, 18, 5),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 2,
+          framesRun: [0, 2],
+          framesDie: [3, 4],
+          nameEnemy: 'Второй',
+          arrowRand: 0,
+          moving: false,
+          speed: 0.8,
+          canThrough: false,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 3,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(522, 251, 16, 18, 7),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 3,
+          framesRun: [0, 2],
+          framesDie: [3, 6],
+          nameEnemy: 'третий',
+          arrowRand: 0,
+          moving: false,
+          speed: 0.8,
+          canThrough: false,
+          canPath: false,
+          pathActive: false,
+          angryDistance: 0,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(538, 287, 16, 18, 6),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 4,
+          framesRun: [0, 2],
+          framesDie: [3, 5],
+          nameEnemy: 'Четвертый',
+          arrowRand: 0,
+          moving: false,
+          speed: 1,
+          canThrough: false,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 3,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(144, 343, 16, 16, 5),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 5,
+          framesRun: [0, 2],
+          framesDie: [3, 4],
+          nameEnemy: 'Пятый',
+          arrowRand: 0,
+          moving: false,
+          speed: 0.4,
+          canThrough: true,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 8,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(442, 305, 16, 18, 7),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 6,
+          framesRun: [0, 2],
+          framesDie: [3, 6],
+          nameEnemy: 'шестой',
+          arrowRand: 0,
+          moving: false,
+          speed: 0.6,
+          canThrough: true,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 3,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(394, 233, 16, 18, 5),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 7,
+          framesRun: [0, 2],
+          framesDie: [3, 4],
+          nameEnemy: 'Седьмой',
+          arrowRand: 0,
+          moving: false,
+          speed: 1,
+          canThrough: false,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 8,
+          result: [],
+        }
+      }),
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(506, 215, 16, 18, 6),
+        x: 0,
+        y: 0,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+        userData: {
+          typeEnemy: 8,
+          framesRun: [0, 3],
+          framesDie: [4, 5],
+          nameEnemy: 'Восьмой',
+          arrowRand: 0,
+          moving: false,
+          speed: 1,
+          canThrough: true,
+          canPath: true,
+          pathActive: false,
+          angryDistance: 8,
+          result: [],
+        }
+      }),
+    ]
+
     var enemyBlock = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
-  
-    //enemyType = getRandomNum(1, 3);
-  
-    level[blockk[0]][blockk[1]].e = enemyType;
-    whiteBlocks.splice(blockk, 1);
-  
-    enemyTypes[0].x = sizeOneBlock * enemyBlock[1],
-    enemyTypes[0].y = sizeOneBlock * enemyBlock[0],
-  
-    enemyTypes[1].x = sizeOneBlock * enemyBlock[1],
-    enemyTypes[1].y = sizeOneBlock * enemyBlock[0],
-  
-    enemies.push(enemyTypes[1]);
+
+    enemyType = getRandomNum(0, 7);
+
+    level[enemyBlock[0]][enemyBlock[1]].e = enemyType;
+    whiteBlocks.splice(enemyBlock, 1);
+
+    enemyTypes[0].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[0].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[0].setDelay(15);
+
+    enemyTypes[1].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[1].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[1].setDelay(15);
+
+    enemyTypes[2].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[2].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[2].setDelay(15);
+
+    enemyTypes[3].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[3].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[3].setDelay(12);
+
+    enemyTypes[4].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[4].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[4].setDelay(15);
+
+    enemyTypes[5].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[5].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[5].setDelay(15);
+
+    enemyTypes[6].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[6].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[6].setDelay(15);
+
+    enemyTypes[7].x = sizeOneBlock * enemyBlock[1];
+    enemyTypes[7].y = sizeOneBlock * enemyBlock[0];
+    enemyTypes[7].setDelay(15);
+
+
+
+
+
+    enemies.push(enemyTypes[enemyType]);
   }
 
 
@@ -443,10 +645,10 @@ function explosionBoom(numBomb) {
 
 
 
-document.querySelector('#start_game_button').addEventListener('click', function(){
+document.querySelector('#start_game_button').addEventListener('click', function () {
   document.querySelector('.main_menu').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
-  
+
   gameStarted = true;
   init();
   game.start();
@@ -458,12 +660,15 @@ document.querySelector('#start_game_button').addEventListener('click', function(
 
 
 
+
 game.newLoop('myGame', function () {
 
   //pjs.camera.follow(playerCenter, 10);
-  console.log(123123);
 
-  player.draw();
+
+
+
+  if (gameStarted) player.draw();
 
   player.nowX = Math.round(player.x / sizeOneBlock);
   player.nowY = Math.round(player.y / sizeOneBlock);
@@ -474,12 +679,19 @@ game.newLoop('myGame', function () {
   player.plantingBombMas = player.bombsMas.filter(el => el.planting || el.explosion);
 
   if (!playerCenter.isArrIntersect(blocksBomb)) {
-    playerCanWalkOnBomb = false;
+    player.canWalkOnBomb = false;
   }
   if (playerCenter.isIntersect(door)) {
-    document.querySelector('.main_menu').style.display = 'block';
-    document.querySelector('.game_field').style.display = 'none';
-    gameStarted = false;
+    if (gameStarted) {
+      levelNum++;
+      fieldLevel.textContent = levelNum;
+      fieldLevelMenu.textContent = levelNum;
+
+      document.querySelector('.main_menu').style.display = 'flex';
+      document.querySelector('.game_field').style.display = 'none';
+      gameStarted = false;
+    }
+
   }
 
 
@@ -518,26 +730,33 @@ game.newLoop('myGame', function () {
 
   /*//////////////////////////////////////////////////////////////*/
 
-  enemies.forEach(element => {
-    element.draw();
+  if (gameStarted) {
 
-
-    element.nowX = Math.round(element.x / sizeOneBlock);
-    element.nowY = Math.round(element.y / sizeOneBlock);
+    enemies.forEach(element => {
 
 
 
+      if (element.speed > 0) element.drawFrames(element.framesRun[0], element.framesRun[1]);
+      else element.drawFrames(element.framesDie[0], element.framesDie[1]);
 
 
-    if (!element.pathActive) {
-      enemyGo(element, element.arrowRand);
-    }
-    else {
-      enemyPathGo(element, element.arrowRand);
-    }
+      element.nowX = Math.round(element.x / sizeOneBlock);
+      element.nowY = Math.round(element.y / sizeOneBlock);
 
 
-  })
+
+
+
+      if (!element.pathActive) {
+        enemyGo(element, element.arrowRand);
+      }
+      else {
+        enemyPathGo(element, element.arrowRand);
+      }
+
+
+    })
+  }
 
   /*//////////////////////////////////////////////////////////////*/
 
@@ -610,89 +829,90 @@ game.newLoop('myGame', function () {
     element.drawToFrame(6);
   });
 
+  if (gameStarted) {
 
-  if (key.isPress("D") || key.isPress("RIGHT")) {
-    animPlayer(playerBody, 'right');
-    //playerBody.flip.x = 0;
-  }
-  else if (key.isPress("A") || key.isPress("LEFT")) {
-    animPlayer(playerBody, 'left');
-    //playerBody.flip.x = 1;
-  }
-  else if (key.isPress("W") || key.isPress("UP")) {
-    animPlayer(playerBody, 'top');
-  }
-  else if (key.isPress("S") || key.isPress("DOWN")) {
-    animPlayer(playerBody, 'bottom');
-  }
-  if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
-    animPlayer(playerBody, 'stay');
-    player.moving = false;
-  }
-
-
-
-
-
-  if (key.isDown("D") || key.isDown("RIGHT")) {
-    player.moving = true;
-    player.arrow = 'right';
-    if (!playerRight.isArrIntersect(blocks) && (!playerRight.isArrIntersect(blocksBomb) || playerCanWalkOnBomb)) {
-      player.setPosition(pjs.vector.point(playerBody.getPosition().x + player.speed, playerBody.getPosition().y));
+    if (key.isPress("D") || key.isPress("RIGHT")) {
+      animPlayer(playerBody, 'right');
+      //playerBody.flip.x = 0;
+    }
+    else if (key.isPress("A") || key.isPress("LEFT")) {
+      animPlayer(playerBody, 'left');
+      //playerBody.flip.x = 1;
+    }
+    else if (key.isPress("W") || key.isPress("UP")) {
+      animPlayer(playerBody, 'top');
+    }
+    else if (key.isPress("S") || key.isPress("DOWN")) {
+      animPlayer(playerBody, 'bottom');
+    }
+    if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
+      animPlayer(playerBody, 'stay');
+      player.moving = false;
     }
 
-  } else if (key.isDown("A") || key.isDown("LEFT")) {
-    player.moving = true;
-    player.arrow = 'left';
-    if (!playerLeft.isArrIntersect(blocks) && (!playerLeft.isArrIntersect(blocksBomb) || playerCanWalkOnBomb)) {
-      player.setPosition(pjs.vector.point(playerBody.getPosition().x - player.speed, playerBody.getPosition().y));
+
+
+
+
+    if (key.isDown("D") || key.isDown("RIGHT")) {
+      player.moving = true;
+      player.arrow = 'right';
+      if (!playerRight.isArrIntersect(blocks) && (!playerRight.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x + player.speed, playerBody.getPosition().y));
+      }
+
+    } else if (key.isDown("A") || key.isDown("LEFT")) {
+      player.moving = true;
+      player.arrow = 'left';
+      if (!playerLeft.isArrIntersect(blocks) && (!playerLeft.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x - player.speed, playerBody.getPosition().y));
+      }
     }
+
+    if (key.isDown("W") || key.isDown("UP")) {
+      player.moving = true;
+      player.arrow = 'up';
+      if (!playerTop.isArrIntersect(blocks) && (!playerTop.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y - player.speed));
+      }
+
+    } else if (key.isDown("S") || key.isDown("DOWN")) {
+      player.moving = true;
+      player.arrow = 'down';
+      if (!playerBottom.isArrIntersect(blocks) && (!playerBottom.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y + player.speed));
+      }
+    }
+
+
+    if (key.isPress("Z")) {
+
+      if (player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
+
+        player.canBombMas[0].planting = true;
+
+        player.canWalkOnBomb = true;
+
+        player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
+
+        blocksBomb.push(player.canBombMas[0].bomb);
+        player.canBombMas[0].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
+        level[Math.round(player.canBombMas[0].bomb.y / sizeOneBlock)][Math.round(player.canBombMas[0].bomb.x / sizeOneBlock)].bomb = true;
+
+        player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
+        player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
+
+        player.canBombMas[0].timer().restart();
+
+      }
+
+    }
+
   }
-
-  if (key.isDown("W") || key.isDown("UP")) {
-    player.moving = true;
-    player.arrow = 'up';
-    if (!playerTop.isArrIntersect(blocks) && (!playerTop.isArrIntersect(blocksBomb) || playerCanWalkOnBomb)) {
-      player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y - player.speed));
-    }
-
-  } else if (key.isDown("S") || key.isDown("DOWN")) {
-    player.moving = true;
-    player.arrow = 'down';
-    if (!playerBottom.isArrIntersect(blocks) && (!playerBottom.isArrIntersect(blocksBomb) || playerCanWalkOnBomb)) {
-      player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y + player.speed));
-    }
-  }
-
-
-  if (key.isPress("Z")) {
-
-    if (player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
-
-      player.canBombMas[0].planting = true;
-
-      playerCanWalkOnBomb = true;
-
-      player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
-
-      blocksBomb.push(player.canBombMas[0].bomb);
-      player.canBombMas[0].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
-      level[Math.round(player.canBombMas[0].bomb.y / sizeOneBlock)][Math.round(player.canBombMas[0].bomb.x / sizeOneBlock)].bomb = true;
-
-      player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
-      player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
-
-      player.canBombMas[0].timer().restart();
-
-    }
-
-  }
-
-
 
   player.bombsMas.forEach(element => {
     if (element.planting || element.explosion) {
-      element.bomb.drawFrames(1,2);
+      element.bomb.drawFrames(1, 2);
     }
 
     if (element.explosion) {
@@ -702,7 +922,15 @@ game.newLoop('myGame', function () {
         }
 
         if (el.isArrIntersect(enemies)) {
-          enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
+
+          setTimeout(function () {
+            if (el.isArrIntersect(enemies).speed == 0) {
+              enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
+              console.log(123123);
+              el.isArrIntersect(enemies).speed = 0.001;
+            }
+          }, 1000)
+          el.isArrIntersect(enemies).speed = 0;
         }
         el.drawFrames(2, 3);
       })
@@ -723,6 +951,10 @@ game.newLoop('myGame', function () {
 
 });
 
+
+
+
+
 game.setLoop('myGame');
 if (gameStarted) {
   game.start();
@@ -738,7 +970,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x + i * sizeOneBlock,
           y: element.bomb.y,
-          w: sizeOneBlock,
+          w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock,
         });
 
@@ -788,7 +1020,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x - i * sizeOneBlock,
           y: element.bomb.y,
-          w: sizeOneBlock,
+          w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock,
         });
 
@@ -836,7 +1068,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x,
           y: element.bomb.y + i * sizeOneBlock,
           w: sizeOneBlock,
-          h: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 20,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
@@ -883,7 +1115,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x,
           y: element.bomb.y - i * sizeOneBlock,
           w: sizeOneBlock,
-          h: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 20,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
@@ -962,8 +1194,8 @@ function enemyGo(element, arrow) {
   }
 
 
-  if (element.typeEnemy == 1 || element.typeEnemy == 3) {
-    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
+  if (!element.canThrough) {
+    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].p == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
       element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
 
       if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
@@ -979,7 +1211,7 @@ function enemyGo(element, arrow) {
     }
   }
   else {
-    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && level[element.moveY + arrowY][element.moveX + arrowX].e == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
+    if (level[element.moveY + arrowY][element.moveX + arrowX].b == 0 && !level[element.moveY + arrowY][element.moveX + arrowX].bomb) {
       element.moveTo(pjs.vector.point((element.moveX + arrowX) * sizeOneBlock, (element.moveY + arrowY) * sizeOneBlock), element.speed);
 
       if (Math.abs(element.y - (element.moveY + arrowY) * sizeOneBlock) < 1 && Math.abs(element.x - (element.moveX + arrowX) * sizeOneBlock) < 1) {
@@ -1030,7 +1262,7 @@ function enemyPathGo(element, arrow) {
 
   }
 
-  if (element.result.length == 0 || element.getDistance(playerCenter.getPosition()) > sizeOneBlock * 8) {
+  if (element.result.length == 0 || element.getDistance(playerCenter.getPosition()) > sizeOneBlock * element.angryDistance) {
     //console.log(element.result.length);
     element.moving = false;
     element.pathActive = false;
