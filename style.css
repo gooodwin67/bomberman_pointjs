@@ -4,6 +4,7 @@ body {
 
 canvas {
     margin-top: 30px;
+    background: url('assets/back1.png') !important;
 }
 
 .main_menu {

@@ -6,7 +6,7 @@ pjs.system.initFullPage(); // развернули игру на полный э
 var game = pjs.game;
 var tiles = pjs.tiles;
 var key = pjs.keyControl.initControl();
-
+let keyDowns;
 
 
 let level;
@@ -96,7 +96,6 @@ let prizeMas = [
 
 function init() {
 
-
   fieldLevel.textContent = levelNum;
   fieldLevelMenu.textContent = levelNum;
 
@@ -126,32 +125,28 @@ function init() {
   whiteBlocks = [];
 
   playerTop = game.newRectObject({
-    x: sizeOneBlock / 12,
+    x: sizeOneBlock / 5,
     y: 0,
-    w: sizeOneBlock / 1.2,
+    w: sizeOneBlock / 2,
     h: 2,
-    fillColor: "red",
   })
   playerBottom = game.newRectObject({
-    x: sizeOneBlock / 12,
-    y: sizeOneBlock - 2,
-    w: sizeOneBlock / 1.2,
+    x: sizeOneBlock / 5,
+    y: sizeOneBlock - 6,
+    w: sizeOneBlock / 2,
     h: 2,
-    fillColor: "red",
   })
   playerLeft = game.newRectObject({
-    x: 0,
-    y: sizeOneBlock / 12,
+    x: sizeOneBlock - sizeOneBlock * 0.9,
+    y: sizeOneBlock / 5,
     w: 2,
-    h: sizeOneBlock / 1.2,
-    fillColor: "red",
+    h: sizeOneBlock / 2,
   })
   playerRight = game.newRectObject({
-    x: sizeOneBlock - 2,
-    y: sizeOneBlock / 12,
+    x: sizeOneBlock * 0.9 - 2,
+    y: sizeOneBlock / 5,
     w: 2,
-    h: sizeOneBlock / 1.2,
-    fillColor: "red",
+    h: sizeOneBlock / 2,
   })
   playerCenter = game.newRectObject({
     x: sizeOneBlock / 2 - sizeOneBlock / 2.5 / 2,
@@ -179,13 +174,15 @@ function init() {
   player.nowX = 1;
   player.nowY = 1;
   player.plantBomb = false;
-  player.canBombsNum = 3;
+  player.canBombsNum = 1;
   player.currentBombNum = 0;
-  player.boomPower = 2;
+  player.boomPower = 1;
   player.canWalkOnBomb = false;
   player.damageBlocksMas = [];
   player.seeDoor = false;
   player.seePrize = false;
+
+  pjs.camera.setPosition(playerBody.getPosition());
 
 
   player.bombsMas = [
@@ -206,7 +203,7 @@ function init() {
       }),
       timerExplosion: function () {
         var num = this.num;
-        return pjs.OOP.newTimer(1000, function () {
+        return pjs.OOP.newTimer(500, function () {
           explosionBoom(num);
         });
       },
@@ -675,9 +672,101 @@ document.querySelector('#start_game_button').addEventListener('click', function 
 
 game.newLoop('myGame', function () {
 
-  //pjs.camera.follow(playerCenter, 10);
+  //pjs.camera.follow(playerCenter, 40);
+
+  //console.log(level[0].length * sizeOneBlock);
+  //console.log(pjs.camera.getStaticBox().w + pjs.camera.getStaticBox().x);
+  //pjs.camera.move
+
+  if (player.x > (pjs.camera.getStaticBox().w / 2 + pjs.camera.getStaticBox().x) + 5 && pjs.camera.getStaticBox().w + pjs.camera.getStaticBox().x < level[0].length * sizeOneBlock) {
+    pjs.camera.move(pjs.vector.point(player.speed, 0));
+  }
+  else if (player.x < (pjs.camera.getStaticBox().w / 2 + pjs.camera.getStaticBox().x) - 5 && pjs.camera.getStaticBox().x > 0) {
+    pjs.camera.move(pjs.vector.point(-player.speed, 0));
+  }
+
+  if (player.y > (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) + 5 && pjs.camera.getStaticBox().h + pjs.camera.getStaticBox().y < level.length * sizeOneBlock) {
+    pjs.camera.move(pjs.vector.point(0, player.speed));
+  }
+  else if (player.y < (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) - 5 && pjs.camera.getStaticBox().y > 0) {
+    pjs.camera.move(pjs.vector.point(0, -player.speed));
+  }
 
 
+
+
+
+
+  for (var i = 0; i < level.length; i++) {
+    for (var j = 0; j < level[i].length; j++) {
+
+      game.newAnimationObject({
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(367, 110, 16, 16, 1),
+        x: sizeOneBlock * j,
+        y: sizeOneBlock * i,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+      }).drawFrame(0);
+
+      if (level[i][j].b == 9) {
+        game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1),
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        }).drawFrame(0);
+      }
+      else if (level[i][j].p != 0) {
+        game.newAnimationObject({
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7),
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+        }).drawFrame(0);
+      }
+      if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
+        game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock / 5,
+          h: sizeOneBlock / 5,
+          fillColor: 'yellow',
+        }).draw()
+      }
+
+      if (level[i][j].p != 0 && level[i][j].prize) {  // Где приз
+        game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock / 5,
+          h: sizeOneBlock / 5,
+          fillColor: 'green',
+        }).draw()
+      }
+
+      if (level[i][j].door && level[i][j].p == 0) {
+        door.draw();
+        player.seeDoor = true;
+      }
+      if (level[i][j].prize && level[i][j].p == 0) {
+        prize.draw();
+        player.seePrize = true;
+      }
+
+      // if (level[i][j].e == 1) {
+      //   game.newRectObject({
+      //     x: sizeOneBlock * j + 2,
+      //     y: sizeOneBlock * i + 2,
+      //     w: sizeOneBlock * 1.5,
+      //     h: sizeOneBlock * 1.5,
+      //     fillColor: "green",
+      //   }).draw();
+      // }
+
+    }
+  }
 
 
   if (gameStarted) player.draw();
@@ -774,68 +863,7 @@ game.newLoop('myGame', function () {
 
 
 
-  for (var i = 0; i < level.length; i++) {
-    for (var j = 0; j < level[i].length; j++) {
 
-      if (level[i][j].b == 9) {
-        game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1),
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-        }).drawFrame(0);
-      }
-      else if (level[i][j].p != 0) {
-        game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7),
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-        }).drawFrame(0);
-      }
-      if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
-        game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock / 5,
-          h: sizeOneBlock / 5,
-          fillColor: 'yellow',
-        }).draw()
-      }
-
-      if (level[i][j].p != 0 && level[i][j].prize) {  // Где приз
-        game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock / 5,
-          h: sizeOneBlock / 5,
-          fillColor: 'green',
-        }).draw()
-      }
-
-      if (level[i][j].door && level[i][j].p == 0) {
-        door.draw();
-        player.seeDoor = true;
-      }
-      if (level[i][j].prize && level[i][j].p == 0) {
-        prize.draw();
-        player.seePrize = true;
-      }
-
-      // if (level[i][j].e == 1) {
-      //   game.newRectObject({
-      //     x: sizeOneBlock * j + 2,
-      //     y: sizeOneBlock * i + 2,
-      //     w: sizeOneBlock * 1.5,
-      //     h: sizeOneBlock * 1.5,
-      //     fillColor: "green",
-      //   }).draw();
-      // }
-
-    }
-  }
 
   player.damageBlocksMas.forEach(element => {
     element.drawToFrame(6);
@@ -843,24 +871,33 @@ game.newLoop('myGame', function () {
 
   if (gameStarted) {
 
-    if (key.isPress("D") || key.isPress("RIGHT")) {
-      animPlayer(playerBody, 'right');
-      //playerBody.flip.x = 0;
+    if (key.isPress("D") || key.isPress("A") || key.isPress("W") || key.isPress("S") || key.isUp("D") || key.isUp("A") || key.isUp("W") || key.isUp("S") || key.isPress("RIGHT") || key.isPress("LEFT") || key.isPress("UP") || key.isPress("DOWN") || key.isUp("RIGHT") || key.isUp("LEFT") || key.isUp("UP") || key.isUp("DOWN")) {
+      keyDowns = key.getAllKeysDown();
+
+      if (keyDowns.length > 0) {
+
+        if (keyDowns[keyDowns.length - 1] == "D" || keyDowns[keyDowns.length - 1] == "RIGHT") {
+          animPlayer(playerBody, 'right');
+        }
+        if (keyDowns[keyDowns.length - 1] == "A" || keyDowns[keyDowns.length - 1] == "LEFT") {
+          animPlayer(playerBody, 'left');
+        }
+        if (keyDowns[keyDowns.length - 1] == "W" || keyDowns[keyDowns.length - 1] == "UP") {
+          animPlayer(playerBody, 'top');
+        }
+        if (keyDowns[keyDowns.length - 1] == "S" || keyDowns[keyDowns.length - 1] == "DOWN") {
+          animPlayer(playerBody, 'bottom');
+        }
+
+      }
+      if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
+        animPlayer(playerBody, 'stay');
+        player.moving = false;
+      }
     }
-    else if (key.isPress("A") || key.isPress("LEFT")) {
-      animPlayer(playerBody, 'left');
-      //playerBody.flip.x = 1;
-    }
-    else if (key.isPress("W") || key.isPress("UP")) {
-      animPlayer(playerBody, 'top');
-    }
-    else if (key.isPress("S") || key.isPress("DOWN")) {
-      animPlayer(playerBody, 'bottom');
-    }
-    if (pjs.keyControl.getCountKeysDown() == 0 && player.moving == true) {
-      animPlayer(playerBody, 'stay');
-      player.moving = false;
-    }
+
+
+
 
 
 
@@ -1170,11 +1207,9 @@ function fooExplosion(x, y, element, arrow) {
 
 
 function animPlayer(pers, arrow) {
-  // pers.setAnimation(tiles.newImage("assets/player.png").getAnimation(0, vertTile, 32, 32, 6));
-  // pers.w = sizeOneBlock;
-  // pers.h = sizeOneBlock;
-  if (arrow == 'right') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(69, 0, 23, 23, 3));
-  else if (arrow == 'left') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(138, 0, 23, 23, 3));
+
+  if (arrow == 'right') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(73, 0, 23, 23, 3));
+  else if (arrow == 'left') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(142, 0, 23, 23, 3));
   else if (arrow == 'top') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(217, 0, 23, 23, 3));
   else if (arrow == 'bottom') pers.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(0, 0, 23, 23, 3));
 
