@@ -18,3 +18,33 @@ canvas {
     flex-direction: column;
     background: #fff;
 }
+
+.level_menu {
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: #fff;
+}
+
+.level_menu>div {
+    width: 95%;
+}
+
+.levels_wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.level_block {
+    width: 32%;
+    height: 200px;
+    background-color: rgb(228, 247, 192);
+    margin-bottom: 15px;
+}

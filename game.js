@@ -18,7 +18,6 @@ let level;
 
 let gameStarted = false;
 let fieldLevel = document.querySelector('.level');
-let fieldLevelMenu = document.querySelector('.level_num');
 
 
 let playerTop;
@@ -38,6 +37,10 @@ let enemyType = 1;
 
 let enemyInLevels = [
   [6, 0, 0, 0, 0, 0, 0, 0],
+  [5, 1, 0, 0, 0, 0, 0, 0],
+  [5, 1, 0, 0, 0, 0, 0, 0],
+  [5, 1, 0, 0, 0, 0, 0, 0],
+  [5, 1, 0, 0, 0, 0, 0, 0],
   [5, 1, 0, 0, 0, 0, 0, 0],
 ];
 
@@ -97,7 +100,13 @@ let prizeMas = [
 function init() {
 
   fieldLevel.textContent = levelNum;
-  fieldLevelMenu.textContent = levelNum;
+
+
+  enemyInLevels.forEach((value, index, array) => {
+    document.querySelectorAll('.levels_wrap')[0].children[index].textContent = `Уровень ${index + 1}`;
+  })
+
+
 
   level = [
     [{ b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }, { b: 9 }],
@@ -310,34 +319,21 @@ function init() {
         whiteBlocks.push([i, j])
       }
 
-      if (level[i][j].b == 9) {
-        blocks.push(game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-          fillColor: "black",
-        }));
-      }
-      else if (level[i][j].p != 0) {
-        blocks.push(game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-          fillColor: "gray",
-        }));
-      }
-
     }
   }
+
+
+  whiteBlocks.splice(0, 3);
+  whiteBlocks.splice(26, 1);
+  whiteBlocks.splice(40, 1);
 
   for (var i = 0; i < 54; i++) {
     var blockk = whiteBlocks[getRandomNum(0, whiteBlocks.length - 1)]
 
 
     level[blockk[0]][blockk[1]].p = 2;
-    whiteBlocks.splice(blockk, 1);
+
+    whiteBlocks.splice(whiteBlocks.indexOf(blockk), 1);
 
     if (i == 0) {
       level[blockk[0]][blockk[1]].door = true;
@@ -654,8 +650,15 @@ function explosionBoom(numBomb) {
 
 
 
-document.querySelector('#start_game_button').addEventListener('click', function () {
+document.querySelector('.start_game_button').addEventListener('click', function () {
   document.querySelector('.main_menu').style.display = 'none';
+  document.querySelector('.level_menu').style.display = 'flex';
+  init()
+
+});
+
+document.querySelector('.level_start_game_button').addEventListener('click', function () {
+  document.querySelector('.level_menu').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
 
   gameStarted = true;
@@ -786,9 +789,8 @@ game.newLoop('myGame', function () {
     if (gameStarted) {
       levelNum++;
       fieldLevel.textContent = levelNum;
-      fieldLevelMenu.textContent = levelNum;
 
-      document.querySelector('.main_menu').style.display = 'flex';
+      document.querySelector('.level_menu').style.display = 'flex';
       document.querySelector('.game_field').style.display = 'none';
       gameStarted = false;
     }
@@ -975,7 +977,6 @@ game.newLoop('myGame', function () {
           setTimeout(function () {
             if (el.isArrIntersect(enemies).speed == 0) {
               enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
-              console.log(123123);
               el.isArrIntersect(enemies).speed = 0.001;
             }
           }, 1000)
