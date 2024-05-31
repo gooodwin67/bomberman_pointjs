@@ -90,7 +90,11 @@ let prizeMas = [
 
 
 
-
+function initLevelsScreen() {
+  enemyInLevels.forEach((value, index, array) => {
+    document.querySelectorAll('.levels_wrap')[0].children[index].textContent = `Уровень ${index + 1}`;
+  })
+}
 
 
 
@@ -102,9 +106,7 @@ function init() {
   fieldLevel.textContent = levelNum;
 
 
-  enemyInLevels.forEach((value, index, array) => {
-    document.querySelectorAll('.levels_wrap')[0].children[index].textContent = `Уровень ${index + 1}`;
-  })
+
 
 
 
@@ -653,7 +655,7 @@ function explosionBoom(numBomb) {
 document.querySelector('.start_game_button').addEventListener('click', function () {
   document.querySelector('.main_menu').style.display = 'none';
   document.querySelector('.level_menu').style.display = 'flex';
-  init()
+  initLevelsScreen();
 
 });
 
