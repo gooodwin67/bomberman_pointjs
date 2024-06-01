@@ -1,8 +1,15 @@
-var pjs = new PointJS(640, 480, {
-  backgroundColor: '#ffffff'
+
+
+var pjs = new PointJS(800, 600, {
+
 });
 
-pjs.system.initFullPage(); // развернули игру на полный экран
+
+
+
+
+
+//pjs.system.initFullPage(); // развернули игру на полный экран
 var game = pjs.game;
 var tiles = pjs.tiles;
 var key = pjs.keyControl.initControl();
@@ -14,6 +21,8 @@ let level;
 //31*13 карта
 //54 блоки
 //6 враги
+
+
 
 
 let gameStarted = false;
@@ -128,7 +137,7 @@ function init() {
 
   blocks = [];
   blocksBomb = [];
-  sizeOneBlock = 48;
+
   timeBomb = 2000;
   enemies = [];
   enemyType = 1;
@@ -181,7 +190,7 @@ function init() {
     add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
   });
 
-  player.speed = sizeOneBlock / 20;
+  player.speed = 1.6;
   player.nowX = 1;
   player.nowY = 1;
   player.plantBomb = false;
@@ -386,7 +395,7 @@ function init() {
           nameEnemy: 'Первый',
           arrowRand: 0,
           moving: false,
-          speed: 0.6,
+          speed: 1.2,
           canThrough: false,
           canPath: false,
           pathActive: false,
@@ -407,7 +416,7 @@ function init() {
           nameEnemy: 'Второй',
           arrowRand: 0,
           moving: false,
-          speed: 0.8,
+          speed: 1.4,
           canThrough: false,
           canPath: true,
           pathActive: false,
@@ -428,7 +437,7 @@ function init() {
           nameEnemy: 'третий',
           arrowRand: 0,
           moving: false,
-          speed: 0.8,
+          speed: 1.4,
           canThrough: false,
           canPath: false,
           pathActive: false,
@@ -449,7 +458,7 @@ function init() {
           nameEnemy: 'Четвертый',
           arrowRand: 0,
           moving: false,
-          speed: 1,
+          speed: 1.8,
           canThrough: false,
           canPath: true,
           pathActive: false,
@@ -470,7 +479,7 @@ function init() {
           nameEnemy: 'Пятый',
           arrowRand: 0,
           moving: false,
-          speed: 0.4,
+          speed: 0.8,
           canThrough: true,
           canPath: true,
           pathActive: false,
@@ -491,7 +500,7 @@ function init() {
           nameEnemy: 'шестой',
           arrowRand: 0,
           moving: false,
-          speed: 0.6,
+          speed: 1.2,
           canThrough: true,
           canPath: true,
           pathActive: false,
@@ -512,7 +521,7 @@ function init() {
           nameEnemy: 'Седьмой',
           arrowRand: 0,
           moving: false,
-          speed: 1,
+          speed: 1.8,
           canThrough: false,
           canPath: true,
           pathActive: false,
@@ -533,7 +542,7 @@ function init() {
           nameEnemy: 'Восьмой',
           arrowRand: 0,
           moving: false,
-          speed: 1,
+          speed: 1.8,
           canThrough: true,
           canPath: true,
           pathActive: false,
@@ -1224,7 +1233,7 @@ function enemyGo(element, arrow) {
 
     element.moveX = element.nowX
     element.moveY = element.nowY
-    if (getRandomNum(0, 8) == 1) element.arrowRand = getRandomNum(0, 3);
+    if (getRandomNum(0, 4) == 1) element.arrowRand = getRandomNum(0, 3);
     element.moving = true;
   }
 
