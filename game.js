@@ -45,12 +45,19 @@ let enemies = [];
 let enemyType = 1;
 
 let enemyInLevels = [
-  [6, 0, 0, 0, 0, 0, 0, 0],
-  [5, 1, 0, 0, 0, 0, 0, 0],
-  [5, 1, 0, 0, 0, 0, 0, 0],
-  [5, 1, 0, 0, 0, 0, 0, 0],
-  [5, 1, 0, 0, 0, 0, 0, 0],
-  [5, 1, 0, 0, 0, 0, 0, 0],
+  {
+    level: [6, 0, 0, 0, 0, 0, 0, 0],
+    enable: true,
+  },
+  {
+    level: [4, 2, 0, 0, 0, 0, 0, 0],
+    enable: false,
+  },
+  {
+    level: [1, 2, 3, 0, 0, 0, 0, 0],
+    enable: false,
+  },
+
 ];
 
 
@@ -101,7 +108,12 @@ let prizeMas = [
 
 function initLevelsScreen() {
   enemyInLevels.forEach((value, index, array) => {
-    document.querySelectorAll('.levels_wrap')[0].children[index].textContent = `Уровень ${index + 1}`;
+    console.log(value.enable);
+    document.querySelectorAll('.levels_wrap')[0].children[index].innerHTML = `
+    <div><h2>Уровень ${index + 1}</h2></div>
+    <div><h4>Счет: 555</h4></div>
+    <button class="level_start_game_button" onclick="startGame(${index})">Start Game</button>
+    `;
   })
 }
 
@@ -190,7 +202,7 @@ function init() {
     add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
   });
 
-  player.speed = 1.6;
+  player.speed = 4.6; //1.6
   player.nowX = 1;
   player.nowY = 1;
   player.plantBomb = false;
@@ -360,8 +372,8 @@ function init() {
   let numberOfEnemies;
   let enemyTypesInLevel;
 
-  enemyInLevels.length > levelNum - 1 ? numberOfEnemies = enemyInLevels[levelNum - 1].reduce((previousValue, currentValue) => previousValue + currentValue, 0) : numberOfEnemies = 10;
-  enemyInLevels.length > levelNum - 1 ? enemyTypesInLevel = enemyInLevels[levelNum - 1] : enemyTypesInLevel = 10;
+  enemyInLevels.length > levelNum - 1 ? numberOfEnemies = enemyInLevels[levelNum - 1].level.reduce((previousValue, currentValue) => previousValue + currentValue, 0) : numberOfEnemies = 10;
+  enemyInLevels.length > levelNum - 1 ? enemyTypesInLevel = enemyInLevels[levelNum - 1].level : enemyTypesInLevel = 10;
 
 
 
@@ -668,14 +680,15 @@ document.querySelector('.start_game_button').addEventListener('click', function 
 
 });
 
-document.querySelector('.level_start_game_button').addEventListener('click', function () {
+
+function startGame(level) {
   document.querySelector('.level_menu').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
-
+  levelNum = level + 1;
   gameStarted = true;
   init();
   game.start();
-});
+}
 
 
 
@@ -1233,7 +1246,7 @@ function enemyGo(element, arrow) {
 
     element.moveX = element.nowX
     element.moveY = element.nowY
-    if (getRandomNum(0, 4) == 1) element.arrowRand = getRandomNum(0, 3);
+    if (getRandomNum(0, 5) == 1) element.arrowRand = getRandomNum(0, 3);
     element.moving = true;
   }
 
