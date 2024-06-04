@@ -40,6 +40,15 @@ canvas {
 
 .game_field_wrap>div {
     padding: 0 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.game_field_wrap>div>div {}
+
+.game_field_wrap>div>div:last-child {
+    margin-right: 0;
 }
 
 .main_menu {

@@ -1,6 +1,6 @@
 
 
-var pjs = new PointJS(2000, 600, {
+var pjs = new PointJS(800, 600, {
 
 });
 
@@ -15,6 +15,9 @@ var tiles = pjs.tiles;
 var key = pjs.keyControl.initControl();
 let keyDowns;
 
+let beginTimestamp;
+let visibleGame = true;
+let levelSeconds = 20;
 
 let level;
 
@@ -27,6 +30,9 @@ let level;
 
 let gameStarted = false;
 let fieldLevel = document.querySelector('.level');
+let fieldBombs = document.querySelector('.bombs');
+let fieldPower = document.querySelector('.power');
+let fieldTime = document.querySelector('.time');
 
 
 let playerTop;
@@ -101,16 +107,124 @@ let prizeMas = [
     numPrize: 1,
     namePrize: 'Сила',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
-    action: ()=>{
+    action: () => {
       player.boomPower++;
+      fieldPower.textContent = player.boomPower;
     }
   },
   {
     numPrize: 2,
     namePrize: 'Бомбы',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(16, 16 * 3, 16, 16, 1),
-    action: ()=>{
+    action: () => {
       player.canBombsNum++;
+      fieldBombs.textContent = player.canBombsNum;
+      player.bombsMas = [
+        {
+          num: 0,
+          bomb: game.newAnimationObject({
+            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+            x: 0,
+            y: 0,
+            w: sizeOneBlock,
+            h: sizeOneBlock,
+            userData: {
+              showRight: false,
+              showLeft: false,
+              showTop: false,
+              showBottom: false,
+            }
+          }),
+          timerExplosion: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(500, function () {
+              explosionBoom(num);
+            });
+          },
+          bombX: 0,
+          bombY: 0,
+          bombsExplosionMas: [],
+          planting: false,
+          explosion: false,
+          timer: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(timeBomb, function () {
+              boom(num);
+            });
+          },
+        },
+        {
+          num: 1,
+          bomb: game.newAnimationObject({
+            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+            x: 0,
+            y: 0,
+            w: sizeOneBlock,
+            h: sizeOneBlock,
+            userData: {
+              showRight: false,
+              showLeft: false,
+              showTop: false,
+              showBottom: false,
+            }
+          }),
+          timerExplosion: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(1000, function () {
+              explosionBoom(num);
+            });
+          },
+          bombX: 0,
+          bombY: 0,
+          bombsExplosionMas: [],
+          planting: false,
+          explosion: false,
+          timer: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(timeBomb, function () {
+              boom(num);
+            });
+          },
+        },
+        {
+          num: 2,
+          bomb: game.newAnimationObject({
+            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+            x: 0,
+            y: 0,
+            w: sizeOneBlock,
+            h: sizeOneBlock,
+            userData: {
+              showRight: false,
+              showLeft: false,
+              showTop: false,
+              showBottom: false,
+            }
+          }),
+          timerExplosion: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(1000, function () {
+              explosionBoom(num);
+            });
+          },
+          bombX: 0,
+          bombY: 0,
+          bombsExplosionMas: [],
+          planting: false,
+          explosion: false,
+          timer: function () {
+            var num = this.num;
+            return pjs.OOP.newTimer(timeBomb, function () {
+              boom(num);
+            });
+          },
+
+        },
+      ];
+
+      player.bombsMas[0].bomb.num = 0;
+      player.bombsMas[1].bomb.num = 1;
+      player.bombsMas[2].bomb.num = 2;
     }
   }
 ]
@@ -120,10 +234,12 @@ let prizeMas = [
 
 function initLevelsScreen() {
   enemyInLevels.forEach((value, index, array) => {
+    var enable = 'enabled'
+    value.enable ? enable = 'enabled' : enable = 'disabled';
     document.querySelectorAll('.levels_wrap')[0].children[index].innerHTML = `
     <div><h2>Уровень ${index + 1}</h2></div>
     <div><h4>Счет: 555</h4></div>
-    <button class="level_start_game_button" onclick="startGame(${index})">Start Game</button>
+    <button class="level_start_game_button" ${enable} onclick="startGame(${index})">Start Game</button>
     `;
   })
 }
@@ -168,14 +284,14 @@ function init() {
   whiteBlocks = [];
 
   prize.w = sizeOneBlock,
-  prize.h = sizeOneBlock,
+    prize.h = sizeOneBlock,
 
-  playerTop = game.newRectObject({
-    x: sizeOneBlock / 5,
-    y: 0,
-    w: sizeOneBlock / 2,
-    h: 2,
-  })
+    playerTop = game.newRectObject({
+      x: sizeOneBlock / 5,
+      y: 0,
+      w: sizeOneBlock / 2,
+      h: 2,
+    })
   playerBottom = game.newRectObject({
     x: sizeOneBlock / 5,
     y: sizeOneBlock - 6,
@@ -381,10 +497,10 @@ function init() {
       level[blockk[0]][blockk[1]].prize = levelNum;
       prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
       prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
-      
-      prize.setAnimation(prizeMas[enemyInLevels[levelNum-1].prize-1].prizeImg)
-      console.log(enemyInLevels[levelNum-1].prize);
-      prize.prizeId = enemyInLevels[levelNum-1].prize;
+
+      prize.setAnimation(prizeMas[enemyInLevels[levelNum - 1].prize - 1].prizeImg)
+
+      prize.prizeId = enemyInLevels[levelNum - 1].prize;
     }
 
   }
@@ -402,17 +518,17 @@ function init() {
     for (var j = 0; j < enemyInLevels[levelNum - 1].level[i]; j++) {
 
 
-    // if (numberOfEnemies != 10) {
-    //   for (var j = 0; j < enemyTypesInLevel.length; j++) {
-    //     if (enemyTypesInLevel[j] > 0) {
-    //       enemyType = j;
-    //       enemyTypesInLevel[j]--;
-    //     }
-    //   }
-    // }
-    // else {
-    //   enemyType = getRandomNum(0, 7);
-    // }
+      // if (numberOfEnemies != 10) {
+      //   for (var j = 0; j < enemyTypesInLevel.length; j++) {
+      //     if (enemyTypesInLevel[j] > 0) {
+      //       enemyType = j;
+      //       enemyTypesInLevel[j]--;
+      //     }
+      //   }
+      // }
+      // else {
+      //   enemyType = getRandomNum(0, 7);
+      // }
 
       enemyTypes = [
         game.newAnimationObject({
@@ -633,6 +749,23 @@ function init() {
   }
 
 
+  // var S_LEFT = 10;
+  // function tick() {
+  //   console.log('tick');
+  //   S_LEFT -= 1;
+  //   if (S_LEFT === 0) {
+  //     alert('times dead');
+  //   } else {
+  //     fieldTime.textContent = S_LEFT;
+  //     window.setTimeout(tick, 1000);
+  //   }
+  // };
+  // tick();
+  beginTimestamp = Math.floor(game.getTime() / 1000);
+
+
+
+
 }
 
 
@@ -672,9 +805,8 @@ function boom(numBomb) {
     player.bombsMas[numBomb].bomb.showLeft = true;
     player.bombsMas[numBomb].bomb.showTop = true;
     player.bombsMas[numBomb].bomb.showBottom = true;
-    player.bombsMas[numBomb].planting = false;
-    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 3));
 
+    player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 3));
   }
 }
 
@@ -684,6 +816,7 @@ function explosionBoom(numBomb) {
   player.bombsMas[numBomb].bomb.showTop = false;
   player.bombsMas[numBomb].bomb.showBottom = false;
   player.bombsMas[numBomb].bombsExplosionMas = [];
+  player.bombsMas[numBomb].planting = false;
 
   if (player.bombsMas[numBomb].explosion == true) {
     player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
@@ -713,13 +846,44 @@ function startGame(level) {
 }
 
 
+var endTimestamp;
+var numSecondsRemaining;
 
 
+
+document.addEventListener('visibilitychange', eventHandler);
+
+function eventHandler() {
+  // Проверяем, скрыта ли страница
+  if (document.hidden) {
+
+
+    visibleGame = false;
+
+  } else {
+    visibleGame = true;
+
+  }
+}
 
 
 
 
 game.newLoop('myGame', function () {
+  console.log(beginTimestamp);
+  if (visibleGame) {
+    endTimestamp = beginTimestamp + levelSeconds;
+    numSecondsRemaining = endTimestamp - Math.floor(game.getTime() / 1000)
+
+
+    fieldTime.textContent = numSecondsRemaining;
+  }
+
+
+  if (numSecondsRemaining <= 0) {
+    alert('dead');
+  }
+
 
   //pjs.camera.follow(playerCenter, 40);
 
@@ -740,9 +904,6 @@ game.newLoop('myGame', function () {
   else if (player.y < (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) - 5 && pjs.camera.getStaticBox().y > 0) {
     pjs.camera.move(pjs.vector.point(0, -player.speed));
   }
-
-
-
 
 
 
@@ -825,6 +986,7 @@ game.newLoop('myGame', function () {
 
 
   player.bombsMas.splice(player.canBombsNum, 10)
+
   player.canBombMas = player.bombsMas.filter(el => !el.planting);
   player.plantingBombMas = player.bombsMas.filter(el => el.planting || el.explosion);
 
@@ -947,7 +1109,7 @@ game.newLoop('myGame', function () {
         player.takedPrize = true;
         prize.w = 0;
         prize.h = 0;
-        prizeMas[prize.prizeId-1].action();
+        prizeMas[prize.prizeId - 1].action();
       }
     }
 
