@@ -870,7 +870,7 @@ function eventHandler() {
 
 
 game.newLoop('myGame', function () {
-  console.log(beginTimestamp);
+  
   if (visibleGame) {
     endTimestamp = beginTimestamp + levelSeconds;
     numSecondsRemaining = endTimestamp - Math.floor(game.getTime() / 1000)
@@ -881,7 +881,7 @@ game.newLoop('myGame', function () {
 
 
   if (numSecondsRemaining <= 0) {
-    alert('dead');
+    console.log('Time done');
   }
 
 
