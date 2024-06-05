@@ -11,10 +11,11 @@
     <div class='game_field' style="display: none;">
         <div class="game_field_wrap">
             <div>
-                <div><span>Level </span><span class='level'>1</span></div>
-                <div><span> Bombs </span><span class='bombs'>1</span></div>
-                <div><span> Power </span><span class='power'>1</span></div>
-                <div><span> Time </span><span class='time'>00:00</span></div>
+                <div><span>Уровень </span><span class='level'>1</span></div>
+                <div><span> Бомбы </span><span class='bombs'>1</span></div>
+                <div><span> Сила взрыва </span><span class='power'>1</span></div>
+                <div><span> Ручные бомбы: </span><span class='manualBombs'>Нет</span></div>
+                <div><span> Время </span><span class='time'>00:00</span></div>
             </div>
         </div>
     </div>
@@ -36,6 +37,16 @@
         </div>
     </div>
 
+    <div class="dead_menu">
+        <div class='dead_menu_block'>
+            <h2>Вы умерли</h2>
+            <div>
+                <button class='dead_to_new'>Начать урочень заново</button>
+                <button class='dead_to_menu'>Выйти в меню</button>
+            </div>
+        </div>
+    </div>
+
     <div class='canv_div'></div>
     <script type="text/javascript" src="pointjs.js"></script>
     <script type="text/javascript" src="astar.js"></script>
@@ -45,6 +56,13 @@
 
 
 
+    <div class="notification notification_bomb_pause">
+        Дождитесь когда взорвется бомба
+    </div>
+
+    <div class="notification notification_enemies">
+        Уничтожьте всех врагов
+    </div>
 
 </body>
 
