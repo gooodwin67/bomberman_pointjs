@@ -95,6 +95,44 @@ const door = game.newAnimationObject({
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
+function addBomb(num) {
+  return {
+    num: num,
+    bomb: game.newAnimationObject({
+      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+      x: 0,
+      y: 0,
+      w: sizeOneBlock,
+      h: sizeOneBlock,
+      userData: {
+        showRight: false,
+        showLeft: false,
+        showTop: false,
+        showBottom: false,
+      }
+    }),
+    timerExplosion: function () {
+      var num = this.num;
+      return pjs.OOP.newTimer(500, function () {
+        explosionBoom(num);
+      });
+    },
+    bombX: 0,
+    bombY: 0,
+    bombsExplosionMas: [],
+    planting: false,
+    explosion: false,
+    timer: function () {
+      var num = this.num;
+      return pjs.OOP.newTimer(timeBomb, function () {
+        boom(num);
+      });
+    },
+  };
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
 const prize = game.newAnimationObject({
   animation: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
   x: 0,
@@ -125,112 +163,10 @@ let prizeMas = [
     action: () => {
       playerCanBombsNum++;
       fieldBombs.textContent = playerCanBombsNum;
-      player.bombsMas = [
-        {
-          num: 0,
-          bomb: game.newAnimationObject({
-            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-            x: 0,
-            y: 0,
-            w: sizeOneBlock,
-            h: sizeOneBlock,
-            userData: {
-              showRight: false,
-              showLeft: false,
-              showTop: false,
-              showBottom: false,
-            }
-          }),
-          timerExplosion: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(500, function () {
-              explosionBoom(num);
-            });
-          },
-          bombX: 0,
-          bombY: 0,
-          bombsExplosionMas: [],
-          planting: false,
-          explosion: false,
-          timer: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(timeBomb, function () {
-              boom(num);
-            });
-          },
-        },
-        {
-          num: 1,
-          bomb: game.newAnimationObject({
-            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-            x: 0,
-            y: 0,
-            w: sizeOneBlock,
-            h: sizeOneBlock,
-            userData: {
-              showRight: false,
-              showLeft: false,
-              showTop: false,
-              showBottom: false,
-            }
-          }),
-          timerExplosion: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(1000, function () {
-              explosionBoom(num);
-            });
-          },
-          bombX: 0,
-          bombY: 0,
-          bombsExplosionMas: [],
-          planting: false,
-          explosion: false,
-          timer: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(timeBomb, function () {
-              boom(num);
-            });
-          },
-        },
-        {
-          num: 2,
-          bomb: game.newAnimationObject({
-            animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-            x: 0,
-            y: 0,
-            w: sizeOneBlock,
-            h: sizeOneBlock,
-            userData: {
-              showRight: false,
-              showLeft: false,
-              showTop: false,
-              showBottom: false,
-            }
-          }),
-          timerExplosion: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(1000, function () {
-              explosionBoom(num);
-            });
-          },
-          bombX: 0,
-          bombY: 0,
-          bombsExplosionMas: [],
-          planting: false,
-          explosion: false,
-          timer: function () {
-            var num = this.num;
-            return pjs.OOP.newTimer(timeBomb, function () {
-              boom(num);
-            });
-          },
-
-        },
-      ];
-
-      player.bombsMas[0].bomb.num = 0;
-      player.bombsMas[1].bomb.num = 1;
-      player.bombsMas[2].bomb.num = 2;
+      for (var i = 0; i < 10; i++) {
+        player.bombsMas.push(addBomb(i))
+        player.bombsMas[i].bomb.num = i;
+      }
     }
   },
   {
@@ -267,7 +203,7 @@ function initLevelsScreen() {
 function init() {
 
   visibleGame = true;
-  levelSeconds = 20;
+  levelSeconds = 200;
   gameStarted = false;
   gamePaused = false;
 
@@ -368,112 +304,14 @@ function init() {
   pjs.camera.setPosition(playerBody.getPosition());
 
 
-  player.bombsMas = [
-    {
-      num: 0,
-      bomb: game.newAnimationObject({
-        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-        x: 0,
-        y: 0,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        userData: {
-          showRight: false,
-          showLeft: false,
-          showTop: false,
-          showBottom: false,
-        }
-      }),
-      timerExplosion: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(500, function () {
-          explosionBoom(num);
-        });
-      },
-      bombX: 0,
-      bombY: 0,
-      bombsExplosionMas: [],
-      planting: false,
-      explosion: false,
-      timer: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(timeBomb, function () {
-          boom(num);
-        });
-      },
-    },
-    {
-      num: 1,
-      bomb: game.newAnimationObject({
-        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-        x: 0,
-        y: 0,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        userData: {
-          showRight: false,
-          showLeft: false,
-          showTop: false,
-          showBottom: false,
-        }
-      }),
-      timerExplosion: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(1000, function () {
-          explosionBoom(num);
-        });
-      },
-      bombX: 0,
-      bombY: 0,
-      bombsExplosionMas: [],
-      planting: false,
-      explosion: false,
-      timer: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(timeBomb, function () {
-          boom(num);
-        });
-      },
-    },
-    {
-      num: 2,
-      bomb: game.newAnimationObject({
-        animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
-        x: 0,
-        y: 0,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-        userData: {
-          showRight: false,
-          showLeft: false,
-          showTop: false,
-          showBottom: false,
-        }
-      }),
-      timerExplosion: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(1000, function () {
-          explosionBoom(num);
-        });
-      },
-      bombX: 0,
-      bombY: 0,
-      bombsExplosionMas: [],
-      planting: false,
-      explosion: false,
-      timer: function () {
-        var num = this.num;
-        return pjs.OOP.newTimer(timeBomb, function () {
-          boom(num);
-        });
-      },
 
-    },
-  ];
+  player.bombsMas = [];
+  for (var i = 0; i < 10; i++) {
+    player.bombsMas.push(addBomb(i))
+    player.bombsMas[i].bomb.num = i;
+  }
 
-  player.bombsMas[0].bomb.num = 0;
-  player.bombsMas[1].bomb.num = 1;
-  player.bombsMas[2].bomb.num = 2;
+
 
   player.canBombMas = player.bombsMas;
   player.plantingBombMas = [];
@@ -1313,16 +1151,19 @@ game.newLoop('myGame', function () {
         if (el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) {
           if (!player.dead) player.goDead = true;
           player.dead = true;
+
         }
 
         if (el.isArrIntersect(enemies)) {
 
-          setTimeout(function () {
+          pjs.OOP.newTimer(1000, function () {
             if (el.isArrIntersect(enemies).speed == 0) {
               enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
               el.isArrIntersect(enemies).speed = 0.001;
             }
-          }, 1000)
+          }).start();
+
+
           el.isArrIntersect(enemies).speed = 0;
         }
         el.drawFrames(2, 3);
