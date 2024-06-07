@@ -44,13 +44,13 @@ let playerRight;
 let playerCenter;
 let playerBody;
 
-let playerBoomPower = 1;
-let playerCanBombsNum = 1;
-let playerCanBoom = false;
+let playerBoomPower = 10;
+let playerCanBombsNum = 10;
+let playerCanBoom = true;
 let playerSpeed = 4.6; //1.6
-let playerWallpass = false;
-let playerBombPass = false;
-let playerExplosionPass = false;
+let playerWallpass = true;
+let playerBombPass = true;
+let playerExplosionPass = true;
 
 let player;
 let blocks = [];
@@ -742,7 +742,6 @@ function boom(numBomb) {
 function explosionBoom(numBomb) {
 
   if (document.querySelector('.notification_bomb_pause').classList.contains("show")) document.querySelector('.notification_bomb_pause').classList.toggle('show');
-
   if (player.bombsMas[numBomb] != undefined) {
     player.bombsMas[numBomb].bomb.showRight = false;
     player.bombsMas[numBomb].bomb.showLeft = false;
@@ -1177,6 +1176,7 @@ game.newLoop('myGame', function () {
       }
     }
 
+    console.log(player.canBombMas);
 
     if (key.isPress("Z")) {
 
@@ -1209,6 +1209,8 @@ game.newLoop('myGame', function () {
     }
 
   }
+
+
 
 
 
