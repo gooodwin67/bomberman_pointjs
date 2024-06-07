@@ -51,6 +51,7 @@ let playerSpeed = 4.6; //1.6
 let playerWallpass = true;
 let playerBombPass = true;
 let playerExplosionPass = true;
+let playerGod = true;
 
 let player;
 let blocks = [];
@@ -72,21 +73,45 @@ else {
   levelMas = [
     {
       level: [3, 0, 0, 0, 0, 0, 0, 0],
-      prize: 7,
+      prize: 1,
       enable: true,
-      star: false,
+      secret: true,
+      city: 'Москва'
     },
     {
       level: [4, 2, 0, 0, 0, 0, 0, 0],
-      prize: 1,
+      prize: 2,
       enable: false,
-      star: false,
+      secret: true,
+      city: 'Санкт-Петербург'
     },
     {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
-      star: false,
+      secret: false,
+      city: 'Смоленск'
+    },
+    {
+      level: [3, 0, 0, 0, 0, 0, 0, 0],
+      prize: 7,
+      enable: true,
+      secret: true,
+      city: 'Москва'
+    },
+    {
+      level: [4, 2, 0, 0, 0, 0, 0, 0],
+      prize: 1,
+      enable: false,
+      secret: true,
+      city: 'Санкт-Петербург'
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      secret: false,
+      city: 'Смоленск'
     },
 
   ];
@@ -172,10 +197,12 @@ let prizeMas = [
     action: () => {
       playerCanBombsNum++;
       fieldBombs.textContent = playerCanBombsNum;
+      player.bombsMas = [];
       for (var i = 0; i < 10; i++) {
         player.bombsMas.push(addBomb(i))
         player.bombsMas[i].bomb.num = i;
       }
+      
     }
   },
   {
@@ -249,13 +276,20 @@ let prizeMas = [
 
 
 function initLevelsScreen() {
+  document.querySelectorAll('.levels_wrap')[0].innerHTML = '';
   levelMas.forEach((value, index, array) => {
-    var enable = 'enabled'
+    var enable = 'enabled';
+    var secret;
+    var style;
     value.enable ? enable = 'enabled' : enable = 'disabled';
-    document.querySelectorAll('.levels_wrap')[0].children[index].innerHTML = `
+    value.enable ? style = 'background: #6ee696' : style = 'background: #cdcdcd';
+    value.secret ? secret = `<span class = 'city_name'>${value.city}</span>` : secret = `<img class = 'secret_img' src = 'assets/secret.png'>`;
+    document.querySelectorAll('.levels_wrap')[0].innerHTML += `
+    <div class = 'level_block'>
     <div><h2>Уровень ${index + 1}</h2></div>
-    <div><h4>Счет: 555</h4></div>
-    <button class="level_start_game_button" ${enable} onclick="startGame(${index})">Start Game</button>
+    <div><button class="level_start_game_button" style = '${style}' ${enable} onclick="startGame(${index})">Начать уровень</button></div>
+    <div class = 'secret'>${secret}</div>
+    </div>
     `;
   })
 }
@@ -719,6 +753,7 @@ function init() {
 /*//////////////////////////////////////////////////////////////////////////*/
 
 function boom(numBomb) {
+  
   if (player.bombsMas[numBomb] != undefined) {
     if (player.bombsMas[numBomb].planting) {
       level[Math.round(player.bombsMas[numBomb].bomb.y / sizeOneBlock)][Math.round(player.bombsMas[numBomb].bomb.x / sizeOneBlock)].bomb = false;
@@ -832,7 +867,7 @@ function eventHandler() {
 
 game.newLoop('myGame', function () {
 
-  if (key.isPress("ENTER")) {
+  if (key.isPress("ENTER") && !player.dead) {
 
     if (gamePaused) {
 
@@ -1075,7 +1110,7 @@ game.newLoop('myGame', function () {
       element.nowX = Math.round(element.x / sizeOneBlock);
       element.nowY = Math.round(element.y / sizeOneBlock);
 
-      if (element.isIntersect(playerCenter) && !player.dead) {
+      if (element.isIntersect(playerCenter) && !player.dead && !playerGod) {
         player.goDead = true;
         player.dead = true;
       }
@@ -1176,14 +1211,13 @@ game.newLoop('myGame', function () {
       }
     }
 
-    console.log(player.canBombMas);
+    
 
     if (key.isPress("Z")) {
 
       if (level[player.nowY][player.nowX].p == 0 && player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
-
         player.canBombMas[0].planting = true;
-
+        
         player.canWalkOnBomb = true;
 
         player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
@@ -1194,7 +1228,7 @@ game.newLoop('myGame', function () {
 
         player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
         player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
-
+        
         if (!playerCanBoom) player.canBombMas[0].timer().restart();
 
       }
@@ -1245,7 +1279,6 @@ game.newLoop('myGame', function () {
         }
         el.drawFrames(2, 3);
       })
-
 
       fooExplosion(0, 1, element, 'showRight');
       fooExplosion(0, -1, element, 'showLeft');
