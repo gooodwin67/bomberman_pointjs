@@ -47,33 +47,51 @@ let playerBody;
 let playerBoomPower = 1;
 let playerCanBombsNum = 1;
 let playerCanBoom = false;
+let playerSpeed = 4.6; //1.6
+let playerWallpass = false;
+let playerBombPass = false;
+let playerExplosionPass = false;
 
 let player;
 let blocks = [];
+let solidBlocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
 
-let enemyInLevels = [
-  {
-    level: [6, 0, 0, 0, 0, 0, 0, 0],
-    prize: 3,
-    enable: true,
-  },
-  {
-    level: [4, 2, 0, 0, 0, 0, 0, 0],
-    enable: false,
-    prize: 1,
-  },
-  {
-    level: [5, 2, 1, 0, 0, 0, 0, 0],
-    enable: false,
-    prize: 2,
-  },
+let levelMas;
 
-];
+localStorage.clear(); ////////////////////////////////////////////////DEL
+
+if (localStorage.getItem('levelMas') !== null) {
+  levelMas = JSON.parse(localStorage.getItem('levelMas'));
+}
+else {
+  levelMas = [
+    {
+      level: [3, 0, 0, 0, 0, 0, 0, 0],
+      prize: 7,
+      enable: true,
+      star: false,
+    },
+    {
+      level: [4, 2, 0, 0, 0, 0, 0, 0],
+      prize: 1,
+      enable: false,
+      star: false,
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      star: false,
+    },
+
+  ];
+}
+
 
 
 let levelNum = 1;
@@ -149,15 +167,6 @@ const prize = game.newAnimationObject({
 let prizeMas = [
   {
     numPrize: 1,
-    namePrize: 'Сила',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
-    action: () => {
-      playerBoomPower++;
-      fieldPower.textContent = playerBoomPower;
-    }
-  },
-  {
-    numPrize: 2,
     namePrize: 'Бомбы',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(16, 16 * 3, 16, 16, 1),
     action: () => {
@@ -170,12 +179,68 @@ let prizeMas = [
     }
   },
   {
+    numPrize: 2,
+    namePrize: 'Сила взрыва',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      playerBoomPower++;
+      fieldPower.textContent = playerBoomPower;
+    }
+  },
+
+  {
     numPrize: 3,
-    namePrize: 'Управляемый взрыв',
+    namePrize: 'Скорость',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      playerSpeed = playerSpeed * 2;
+      // fieldPower.textContent = playerBoomPower;
+    }
+  },
+  {
+    numPrize: 4,
+    namePrize: 'Сквозь стены',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      playerWallpass = true;
+      // fieldPower.textContent = playerBoomPower;
+    }
+  },
+
+  {
+    numPrize: 5,
+    namePrize: 'Детонатор',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(32, 16 * 3, 16, 16, 1),
     action: () => {
       playerCanBoom = true;
       fieldManual.textContent = 'Да';
+    }
+  },
+  {
+    numPrize: 6,
+    namePrize: 'Сквозь бомбы',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      playerBombPass = true;
+      // fieldPower.textContent = playerBoomPower;
+    }
+  },
+  {
+    numPrize: 7,
+    namePrize: 'Иммунитет к взрывам',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      playerExplosionPass = true;
+      // fieldPower.textContent = playerBoomPower;
+    }
+  },
+  {
+    numPrize: 8,
+    namePrize: 'Временная неуязвимость',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    action: () => {
+      // playerBoomPower++;
+      // fieldPower.textContent = playerBoomPower;
     }
   },
 ]
@@ -184,7 +249,7 @@ let prizeMas = [
 
 
 function initLevelsScreen() {
-  enemyInLevels.forEach((value, index, array) => {
+  levelMas.forEach((value, index, array) => {
     var enable = 'enabled'
     value.enable ? enable = 'enabled' : enable = 'disabled';
     document.querySelectorAll('.levels_wrap')[0].children[index].innerHTML = `
@@ -231,6 +296,7 @@ function init() {
   ]
 
   blocks = [];
+  solidBlocks = [];
   blocksBomb = [];
 
   timeBomb = 2000;
@@ -288,7 +354,6 @@ function init() {
     add: [playerTop, playerBottom, playerLeft, playerRight, playerCenter, playerBody]
   });
 
-  player.speed = 4.6; //1.6
   player.nowX = 1;
   player.nowY = 1;
   player.plantBomb = false;
@@ -356,9 +421,9 @@ function init() {
       prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
       prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
 
-      prize.setAnimation(prizeMas[enemyInLevels[levelNum - 1].prize - 1].prizeImg)
+      prize.setAnimation(prizeMas[levelMas[levelNum - 1].prize - 1].prizeImg)
 
-      prize.prizeId = enemyInLevels[levelNum - 1].prize;
+      prize.prizeId = levelMas[levelNum - 1].prize;
     }
 
   }
@@ -371,9 +436,9 @@ function init() {
 
 
 
-  for (var i = 0; i < enemyInLevels[levelNum - 1].level.length; i++) {
+  for (var i = 0; i < levelMas[levelNum - 1].level.length; i++) {
 
-    for (var j = 0; j < enemyInLevels[levelNum - 1].level[i]; j++) {
+    for (var j = 0; j < levelMas[levelNum - 1].level[i]; j++) {
 
 
       // if (numberOfEnemies != 10) {
@@ -730,6 +795,10 @@ function deadMenu() {
   playerBoomPower = 1;
   playerCanBombsNum = 1;
   playerCanBoom = false;
+  playerSpeed = 4.6; //1.6
+  playerWallpass = false;
+  playerBombPass = false;
+  playerExplosionPass = false;
   fieldBombs.textContent = playerCanBombsNum;
   fieldPower.textContent = playerBoomPower;
   fieldManual.textContent = 'Нет';
@@ -814,17 +883,17 @@ game.newLoop('myGame', function () {
 
 
   if (player.x > (pjs.camera.getStaticBox().w / 2 + pjs.camera.getStaticBox().x) + 5 && pjs.camera.getStaticBox().w + pjs.camera.getStaticBox().x < level[0].length * sizeOneBlock) {
-    pjs.camera.move(pjs.vector.point(player.speed, 0));
+    pjs.camera.move(pjs.vector.point(playerSpeed, 0));
   }
   else if (player.x < (pjs.camera.getStaticBox().w / 2 + pjs.camera.getStaticBox().x) - 5 && pjs.camera.getStaticBox().x > 0) {
-    pjs.camera.move(pjs.vector.point(-player.speed, 0));
+    pjs.camera.move(pjs.vector.point(-playerSpeed, 0));
   }
 
   if (player.y > (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) + 5 && pjs.camera.getStaticBox().h + pjs.camera.getStaticBox().y < level.length * sizeOneBlock) {
-    pjs.camera.move(pjs.vector.point(0, player.speed));
+    pjs.camera.move(pjs.vector.point(0, playerSpeed));
   }
   else if (player.y < (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) - 5 && pjs.camera.getStaticBox().y > 0) {
-    pjs.camera.move(pjs.vector.point(0, -player.speed));
+    pjs.camera.move(pjs.vector.point(0, -playerSpeed));
   }
 
 
@@ -931,13 +1000,14 @@ game.newLoop('myGame', function () {
   player.canBombMas = player.bombsMas.filter(el => !el.planting);
   player.plantingBombMas = player.bombsMas.filter(el => el.planting || el.explosion);
 
-  if (!playerCenter.isArrIntersect(blocksBomb)) {
+  if (!playerCenter.isArrIntersect(blocksBomb) && !playerBombPass) {
     player.canWalkOnBomb = false;
   }
-  if (playerCenter.isIntersect(door)) {
-    if (gameStarted /*&& enemies.length == 0*/) {
+  if (playerCenter.isIntersect(door) && player.seeDoor) {
+    if (gameStarted /*&& enemies.length == 0*/) { ///////////////////////////////////////////////////////////////////////////////////////
       levelNum++;
-      if (enemyInLevels.length >= levelNum) enemyInLevels[levelNum - 1].enable = true;
+      if (levelMas.length >= levelNum) levelMas[levelNum - 1].enable = true;
+      localStorage.setItem('levelMas', JSON.stringify(levelMas))
       initLevelsScreen();
       fieldLevel.textContent = levelNum;
 
@@ -955,12 +1025,20 @@ game.newLoop('myGame', function () {
   /*//////////////////////////////////////////////////////////////*/
 
   blocks = [];
+  solidBlocks = [];
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
 
       if (level[i][j].b == 9) {
         blocks.push(game.newRectObject({
+          x: sizeOneBlock * j,
+          y: sizeOneBlock * i,
+          w: sizeOneBlock,
+          h: sizeOneBlock,
+          fillColor: "black",
+        }));
+        solidBlocks.push(game.newRectObject({
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
@@ -1069,44 +1147,40 @@ game.newLoop('myGame', function () {
     }
 
 
-
-
-
-
     if (key.isDown("D") || key.isDown("RIGHT")) {
       player.moving = true;
       player.arrow = 'right';
-      if (!playerRight.isArrIntersect(blocks) && (!playerRight.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
-        player.setPosition(pjs.vector.point(playerBody.getPosition().x + player.speed, playerBody.getPosition().y));
+      if ((!playerRight.isArrIntersect(blocks) || playerWallpass) && !playerRight.isArrIntersect(solidBlocks) && (!playerRight.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x + playerSpeed, playerBody.getPosition().y));
       }
 
     } else if (key.isDown("A") || key.isDown("LEFT")) {
       player.moving = true;
       player.arrow = 'left';
-      if (!playerLeft.isArrIntersect(blocks) && (!playerLeft.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
-        player.setPosition(pjs.vector.point(playerBody.getPosition().x - player.speed, playerBody.getPosition().y));
+      if ((!playerLeft.isArrIntersect(blocks) || playerWallpass) && !playerLeft.isArrIntersect(solidBlocks) && (!playerLeft.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x - playerSpeed, playerBody.getPosition().y));
       }
     }
 
     if (key.isDown("W") || key.isDown("UP")) {
       player.moving = true;
       player.arrow = 'up';
-      if (!playerTop.isArrIntersect(blocks) && (!playerTop.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
-        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y - player.speed));
+      if ((!playerTop.isArrIntersect(blocks) || playerWallpass) && !playerTop.isArrIntersect(solidBlocks) && (!playerTop.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y - playerSpeed));
       }
 
     } else if (key.isDown("S") || key.isDown("DOWN")) {
       player.moving = true;
       player.arrow = 'down';
-      if (!playerBottom.isArrIntersect(blocks) && (!playerBottom.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
-        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y + player.speed));
+      if ((!playerBottom.isArrIntersect(blocks) || playerWallpass) && !playerBottom.isArrIntersect(solidBlocks) && (!playerBottom.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
+        player.setPosition(pjs.vector.point(playerBody.getPosition().x, playerBody.getPosition().y + playerSpeed));
       }
     }
 
 
     if (key.isPress("Z")) {
 
-      if (player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
+      if (level[player.nowY][player.nowX].p == 0 && player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
 
         player.canBombMas[0].planting = true;
 
@@ -1131,11 +1205,12 @@ game.newLoop('myGame', function () {
 
       if (blocksBomb.length > 0 && playerCanBoom) {
         boom(blocksBomb[0].num);
-
       }
     }
 
   }
+
+
 
   player.bombsMas.forEach(element => {
     if (element.planting || element.explosion) {
@@ -1144,11 +1219,11 @@ game.newLoop('myGame', function () {
 
     if (element.explosion) {
       element.bombsExplosionMas.forEach(function (el) {
-        if (el.isArrIntersect(blocksBomb) /*&& arrow.isArrIntersect(blocksBomb).num != element.num*/) {
+        if (el.isArrIntersect(blocksBomb)) {
           boom(el.isArrIntersect(blocksBomb).num);
         }
 
-        if (el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) {
+        if ((el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) && !playerExplosionPass) {
           if (!player.dead) player.goDead = true;
           player.dead = true;
 
@@ -1168,6 +1243,7 @@ game.newLoop('myGame', function () {
         }
         el.drawFrames(2, 3);
       })
+
 
       fooExplosion(0, 1, element, 'showRight');
       fooExplosion(0, -1, element, 'showLeft');
@@ -1206,7 +1282,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x + i * sizeOneBlock,
           y: element.bomb.y,
           w: sizeOneBlock - sizeOneBlock / 20,
-          h: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 20,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
@@ -1256,7 +1332,7 @@ function fooExplosion(x, y, element, arrow) {
           x: element.bomb.x - i * sizeOneBlock,
           y: element.bomb.y,
           w: sizeOneBlock - sizeOneBlock / 20,
-          h: sizeOneBlock,
+          h: sizeOneBlock - sizeOneBlock / 20,
         });
 
         element.bombsExplosionMas.push(explosionArrow);
@@ -1302,7 +1378,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x,
           y: element.bomb.y + i * sizeOneBlock,
-          w: sizeOneBlock,
+          w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
         });
 
@@ -1349,7 +1425,7 @@ function fooExplosion(x, y, element, arrow) {
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x,
           y: element.bomb.y - i * sizeOneBlock,
-          w: sizeOneBlock,
+          w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
         });
 

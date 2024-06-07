@@ -11,7 +11,8 @@ canvas {
     z-index: -1;
     transform: translate(-50%, -50%);
     border: 2px solid #fff;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4)
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
+    max-width: 100%;
 }
 
 .game_field {
