@@ -3,6 +3,7 @@ body {
     background: url('assets/back1.png') !important;
     display: flex;
     justify-content: center;
+    overflow: auto !important;
 }
 
 canvas {
@@ -86,7 +87,7 @@ h1 {
 }
 
 .level_menu {
-    position: absolute;
+    position: relative !important;
     z-index: 999;
     width: 100%;
     height: 100%;

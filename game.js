@@ -45,7 +45,7 @@ let playerCenter;
 let playerBody;
 
 let playerBoomPower = 10;
-let playerCanBombsNum = 10;
+let playerCanBombsNum = 5;
 let playerCanBoom = true;
 let playerSpeed = 4.6; //1.6
 let playerWallpass = true;
@@ -105,6 +105,34 @@ else {
       enable: false,
       secret: true,
       city: 'Санкт-Петербург'
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      secret: false,
+      city: 'Смоленск'
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      secret: false,
+      city: 'Смоленск'
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      secret: false,
+      city: 'Смоленск'
+    },
+    {
+      level: [5, 2, 1, 0, 0, 0, 0, 0],
+      prize: 2,
+      enable: false,
+      secret: false,
+      city: 'Смоленск'
     },
     {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
@@ -770,6 +798,7 @@ function boom(numBomb) {
       player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 3));
     }
   }
+  
 
 
 }
@@ -788,7 +817,6 @@ function explosionBoom(numBomb) {
     if (player.bombsMas[numBomb].explosion == true) {
       player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
       player.bombsMas[numBomb].explosion = false;
-
     }
   }
 }
@@ -1244,9 +1272,10 @@ game.newLoop('myGame', function () {
 
   }
 
-
-
-
+  // player.bombsMas.forEach(element => {
+    
+  //     console.log(element.planting);
+  // })
 
   player.bombsMas.forEach(element => {
     if (element.planting || element.explosion) {
@@ -1254,9 +1283,12 @@ game.newLoop('myGame', function () {
     }
 
     if (element.explosion) {
+
       element.bombsExplosionMas.forEach(function (el) {
         if (el.isArrIntersect(blocksBomb)) {
-          boom(el.isArrIntersect(blocksBomb).num);
+          boom(blocksBomb[0].num)
+          
+          
         }
 
         if ((el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) && !playerExplosionPass) {
@@ -1280,10 +1312,14 @@ game.newLoop('myGame', function () {
         el.drawFrames(2, 3);
       })
 
+      //console.log(element.bombsExplosionMas)
+      
+
       fooExplosion(0, 1, element, 'showRight');
       fooExplosion(0, -1, element, 'showLeft');
       fooExplosion(1, 0, element, 'showTop');
       fooExplosion(-1, 0, element, 'showBottom');
+      
 
 
 
