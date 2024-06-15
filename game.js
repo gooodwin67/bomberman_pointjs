@@ -4,9 +4,19 @@ var pjs = new PointJS(800, 600, {
 
 });
 
+let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
+let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
+let levelAudio2 = pjs.audio.newAudio('assets/audio/level2.mp3');
+let finishAudio = pjs.audio.newAudio('assets/audio/finish.mp3');
 
+let deathAudio1 = pjs.audio.newAudio('assets/audio/death1.mp3');
+let deathAudio2 = pjs.audio.newAudio('assets/audio/death2.mp3');
+let runAudio1 = pjs.audio.newAudio('assets/audio/run.mp3');
+let runAudio2 = pjs.audio.newAudio('assets/audio/run2.mp3');
 
-
+let bombAudio = pjs.audio.newAudio('assets/audio/bomb.mp3');
+let exploseAudio = pjs.audio.newAudio('assets/audio/explose.mp3');
+let pauseAudio = pjs.audio.newAudio('assets/audio/pause.mp3');
 
 
 //pjs.system.initFullPage(); // развернули игру на полный экран
@@ -52,6 +62,9 @@ let playerWallpass = true;
 let playerBombPass = true;
 let playerExplosionPass = true;
 let playerGod = true;
+let playerDead = false;
+
+let playerCanSecret = false;
 
 let player;
 let blocks = [];
@@ -61,6 +74,14 @@ let sizeOneBlock = 48;
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
+
+let exploseDoor = false;
+
+let numberOfEnemies;
+
+let gamePreStarted = false;
+let preLevelTimeOut;
+
 
 let levelMas;
 
@@ -72,17 +93,17 @@ if (localStorage.getItem('levelMas') !== null) {
 else {
   levelMas = [
     {
-      level: [3, 0, 0, 0, 0, 0, 0, 0],
+      level: [3, 0, 0, 1, 0, 0, 0, 0],
       prize: 1,
       enable: true,
-      secret: true,
+      secret: false,
       city: 'Москва'
     },
     {
       level: [4, 2, 0, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
-      secret: true,
+      secret: false,
       city: 'Санкт-Петербург'
     },
     {
@@ -95,15 +116,15 @@ else {
     {
       level: [3, 0, 0, 0, 0, 0, 0, 0],
       prize: 7,
-      enable: true,
-      secret: true,
+      enable: false,
+      secret: false,
       city: 'Москва'
     },
     {
       level: [4, 2, 0, 0, 0, 0, 0, 0],
       prize: 1,
       enable: false,
-      secret: true,
+      secret: false,
       city: 'Санкт-Петербург'
     },
     {
@@ -294,7 +315,7 @@ let prizeMas = [
     namePrize: 'Временная неуязвимость',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
     action: () => {
-      // playerBoomPower++;
+      //playerGod = true;
       // fieldPower.textContent = playerBoomPower;
     }
   },
@@ -304,6 +325,9 @@ let prizeMas = [
 
 
 function initLevelsScreen() {
+  playerDead = false;
+  menuAudio.play();
+  levelAudio2.stop();
   document.querySelectorAll('.levels_wrap')[0].innerHTML = '';
   levelMas.forEach((value, index, array) => {
     var enable = 'enabled';
@@ -311,7 +335,7 @@ function initLevelsScreen() {
     var style;
     value.enable ? enable = 'enabled' : enable = 'disabled';
     value.enable ? style = 'background: #6ee696' : style = 'background: #cdcdcd';
-    value.secret ? secret = `<span class = 'city_name'>${value.city}</span>` : secret = `<img class = 'secret_img' src = 'assets/secret.png'>`;
+    value.secret ? secret = `<span class = 'city_name'>${value.city}</span>` : secret = `<img class = 'secret_img' onclick="secretAlert()" src = 'assets/secret.png'>`;
     document.querySelectorAll('.levels_wrap')[0].innerHTML += `
     <div class = 'level_block'>
     <div><h2>Уровень ${index + 1}</h2></div>
@@ -327,7 +351,7 @@ function initLevelsScreen() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-function init() {
+function init() {  
 
   visibleGame = true;
   levelSeconds = 200;
@@ -335,6 +359,13 @@ function init() {
   gamePaused = false;
 
   fieldLevel.textContent = levelNum;
+  fieldBombs.textContent = playerCanBombsNum;
+  fieldPower.textContent = playerBoomPower;
+  playerCanBoom ? fieldManual.textContent = 'Да' : fieldManual.textContent = 'Нет';
+  
+
+  playerCanSecret = false;
+  exploseDoor = false;
 
 
 
@@ -426,7 +457,8 @@ function init() {
   player.seePrize = false;
   player.takedPrize = false;
   player.goDead = false;
-  player.dead = false;
+  playerDead = false;
+  playerGod = false;
 
   pjs.camera.setPosition(playerBody.getPosition());
 
@@ -494,6 +526,9 @@ function init() {
 
   // enemyInLevels.length > levelNum - 1 ? numberOfEnemies = enemyInLevels[levelNum - 1].level.reduce((previousValue, currentValue) => previousValue + currentValue, 0) : numberOfEnemies = 10;
   // enemyInLevels.length > levelNum - 1 ? enemyTypesInLevel = enemyInLevels[levelNum - 1].level : enemyTypesInLevel = 10;
+
+  numberOfEnemies = levelMas[levelNum - 1].level.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+  
 
 
 
@@ -796,6 +831,7 @@ function boom(numBomb) {
       player.bombsMas[numBomb].bomb.showBottom = true;
 
       player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(390, 16 * 2, 16, 16, 3));
+      exploseAudio.replay();
     }
   }
   
@@ -804,6 +840,7 @@ function boom(numBomb) {
 }
 
 function explosionBoom(numBomb) {
+  
 
   if (document.querySelector('.notification_bomb_pause').classList.contains("show")) document.querySelector('.notification_bomb_pause').classList.toggle('show');
   if (player.bombsMas[numBomb] != undefined) {
@@ -819,6 +856,51 @@ function explosionBoom(numBomb) {
       player.bombsMas[numBomb].explosion = false;
     }
   }
+}
+
+
+function exploseDoorFunction() {
+  let newEnemy = game.newAnimationObject({
+    animation: tiles.newImage("assets/big_dyna.png").getAnimation(144, 343, 16, 16, 5),
+    x: door.x,
+    y: door.y,
+    w: sizeOneBlock,
+    h: sizeOneBlock,
+    userData: {
+      typeEnemy: 5,
+      framesRun: [0, 2],
+      framesDie: [3, 4],
+      nameEnemy: 'Пятый',
+      arrowRand: 0,
+      moving: false,
+      speed: 0.8,
+      canThrough: true,
+      canPath: true,
+      pathActive: false,
+      angryDistance: 8,
+      result: [],
+    }
+  });
+
+  
+  pjs.OOP.newTimer(500, function () {
+    enemies.push(pjs.OOP.clone(newEnemy));
+    numberOfEnemies++;
+  }).start();
+  pjs.OOP.newTimer(1500, function () {
+    enemies.push(pjs.OOP.clone(newEnemy));
+    numberOfEnemies++;
+  }).start();
+  pjs.OOP.newTimer(2000, function () {
+    enemies.push(pjs.OOP.clone(newEnemy));
+    numberOfEnemies++;
+  }).start();
+  pjs.OOP.newTimer(2500, function () {
+    enemies.push(pjs.OOP.clone(newEnemy));
+    numberOfEnemies++;
+    exploseDoor = false;
+  }).start();
+  
 }
 
 
@@ -843,17 +925,63 @@ document.querySelector('.dead_to_new').addEventListener('click', function () {
 });
 
 
+document.querySelector('.win_to_menu').addEventListener('click', function () {
+  document.querySelector('.win_menu').style.display = 'none';
+  document.querySelector('.level_menu').style.display = 'flex';
+  initLevelsScreen();
+});
+
+document.querySelector('.win_to_new').addEventListener('click', function () {
+  document.querySelector('.win_menu').style.display = 'none';
+  startGame(levelNum - 1);
+});
+
+document.querySelector('.win_to_next').addEventListener('click', function () {
+  levelNum++;
+  document.querySelector('.win_menu').style.display = 'none';
+  startGame(levelNum - 1);
+});
+
+
+
+function secretAlert() {
+  alert("Чтобы пройти уровень, надо выполнить 2 условия: убить всех врагов и найти дверь. Чтобы открыть секрет, надо сначала найти дверь, не убив ни одного врага");
+};
+
+
 
 function startGame(level) {
+
+  menuAudio.stop();
+  
   document.querySelector('.level_menu').style.display = 'none';
+  document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('canvas').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
   levelNum = level + 1;
-  init();
-  gameStarted = true;
-  game.start();
+  document.querySelector('.level-before-start').textContent = `Уровень ${levelNum}`;
+  levelAudio1.play();
+  gamePreStarted = true;
+  preLevelTimeOut = setTimeout(function(){
+    gamePreStarted = false;
+    if (visibleGame) {
+      document.querySelector('canvas').style.display = 'block';
+      document.querySelector('.game_field_wrap').style.display = 'flex';
+      levelAudio1.stop();
+      levelAudio2.play();
+      levelAudio2.setNextPlay(levelAudio2);
+      init();
+      gameStarted = true;
+      game.start();
+    }
+  }, 2700);
+  
+  
 }
 
 function deadMenu() {
+  document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('canvas').style.display = 'none';
   playerBoomPower = 1;
   playerCanBombsNum = 1;
   playerCanBoom = false;
@@ -868,6 +996,12 @@ function deadMenu() {
   document.querySelector('.dead_menu').style.display = 'flex';
 }
 
+function winMenu() {
+  document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('canvas').style.display = 'none';
+  document.querySelector('.win_menu').style.display = 'flex';
+}
+
 
 var endTimestamp;
 var numSecondsRemaining;
@@ -879,14 +1013,40 @@ document.addEventListener('visibilitychange', eventHandler);
 function eventHandler() {
   // Проверяем, скрыта ли страница
   if (document.hidden) {
-
     visibleGame = false;
+
+    if (gamePreStarted) {
+      window.clearTimeout(preLevelTimeOut);
+      levelAudio1.stop();
+    }
+    if (gameStarted && !gamePreStarted) levelAudio2.pause();
+    else if (!gameStarted && !gamePreStarted) menuAudio.pause();
 
   } else {
     beginTimestamp = Math.floor(Date.now() / 1000);
     levelSeconds = numSecondsRemaining;
     endTimestamp = beginTimestamp + levelSeconds;
     visibleGame = true;
+    if (gamePreStarted) {
+      preLevelTimeOut = setTimeout(function(){
+        gamePreStarted = false;
+        if (visibleGame) {
+          document.querySelector('canvas').style.display = 'block';
+          document.querySelector('.game_field_wrap').style.display = 'flex';
+          levelAudio1.stop();
+          levelAudio2.play();
+          init();
+          gameStarted = true;
+          game.start();
+        }
+      }, 500);
+    }
+    
+    if (gameStarted) levelAudio2.play();
+
+    else if (!gameStarted && !gamePreStarted && !playerDead) menuAudio.play();
+    
+    
   }
 }
 
@@ -895,10 +1055,10 @@ function eventHandler() {
 
 game.newLoop('myGame', function () {
 
-  if (key.isPress("ENTER") && !player.dead) {
+  if (key.isPress("ENTER") && !playerDead) {
 
     if (gamePaused) {
-
+      levelAudio2.playPause();
       gamePaused = false
       beginTimestamp = Math.floor(Date.now() / 1000);
       levelSeconds = numSecondsRemaining;
@@ -910,6 +1070,9 @@ game.newLoop('myGame', function () {
         return value.planting
       })
       if (!isPlantingBombs) {
+        levelAudio2.playPause();
+        pauseAudio.stop();
+        pauseAudio.play();
         gamePaused = true;
         visibleGame = false;
         animPlayer(playerBody, 'stay');
@@ -935,9 +1098,9 @@ game.newLoop('myGame', function () {
 
 
   if (numSecondsRemaining <= 0) {
-    if (!player.dead) {
+    if (!playerDead) {
       player.goDead = true;
-      player.dead = true;
+      playerDead = true;
     }
   }
 
@@ -964,7 +1127,7 @@ game.newLoop('myGame', function () {
     for (var j = 0; j < level[i].length; j++) {
 
       game.newAnimationObject({
-        animation: tiles.newImage("assets/big_dyna.png").getAnimation(367, 110, 16, 16, 1),
+        animation: tiles.newImage("assets/big_dyna.png").getAnimation(367, 110, 16, 16, 1), //трава
         x: sizeOneBlock * j,
         y: sizeOneBlock * i,
         w: sizeOneBlock,
@@ -973,7 +1136,7 @@ game.newLoop('myGame', function () {
 
       if (level[i][j].b == 9) {
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1),
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1), //Стены
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
@@ -982,7 +1145,7 @@ game.newLoop('myGame', function () {
       }
       else if (level[i][j].p != 0) {
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7),
+          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7), //Кирпич
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
@@ -1012,6 +1175,8 @@ game.newLoop('myGame', function () {
       if (level[i][j].door && level[i][j].p == 0) {
         door.draw();
         player.seeDoor = true;
+
+        if (numberOfEnemies == enemies.length) playerCanSecret = true;
       }
       if (level[i][j].prize && level[i][j].p == 0 && !player.takedPrize) {
         prize.draw();
@@ -1032,10 +1197,11 @@ game.newLoop('myGame', function () {
   }
 
 
-  if (gameStarted && !gamePaused && !player.dead) {
+  if (gameStarted && !gamePaused && !playerDead) {
     playerBody.draw();
   }
-  else if (player.dead && gameStarted) {
+  else if (playerDead && gameStarted) {
+    levelAudio2.stop();
     playerBody.drawToFrame(10);
 
     if (playerBody.getFrame() == 10) {
@@ -1048,9 +1214,12 @@ game.newLoop('myGame', function () {
 
 
 
-  if (player.dead && player.goDead) {
+  if (playerDead && player.goDead) {
     playerBody.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(0, 23, 24, 24, 10));
     player.goDead = false;
+    
+    deathAudio1.play();
+    deathAudio1.setNextPlay(deathAudio2);
   }
 
   player.nowX = Math.round(player.x / sizeOneBlock);
@@ -1066,16 +1235,18 @@ game.newLoop('myGame', function () {
     player.canWalkOnBomb = false;
   }
   if (playerCenter.isIntersect(door) && player.seeDoor) {
-    if (gameStarted /*&& enemies.length == 0*/) { ///////////////////////////////////////////////////////////////////////////////////////
-      levelNum++;
-      if (levelMas.length >= levelNum) levelMas[levelNum - 1].enable = true;
+    if (gameStarted /*enemies.length == 0*/) { ///////////////////////////////////////////////////////////////////////////////////////УБРАТЬ КОММЕНТ
+      if (levelMas.length >= levelNum) levelMas[levelNum].enable = true;
+      if (playerCanSecret) levelMas[levelNum-1].secret = true;
       localStorage.setItem('levelMas', JSON.stringify(levelMas))
-      initLevelsScreen();
-      fieldLevel.textContent = levelNum;
-
-      document.querySelector('.level_menu').style.display = 'flex';
-      document.querySelector('.game_field').style.display = 'none';
       gameStarted = false;
+      levelAudio2.stop();
+      levelAudio1.stop();
+      finishAudio.play();
+
+      pjs.OOP.newTimer(3000, function () {
+        winMenu();
+      }).start();
     }
     else if (gameStarted && enemies.length > 0) {
       document.querySelector('.notification_enemies').classList.add('show');
@@ -1138,9 +1309,10 @@ game.newLoop('myGame', function () {
       element.nowX = Math.round(element.x / sizeOneBlock);
       element.nowY = Math.round(element.y / sizeOneBlock);
 
-      if (element.isIntersect(playerCenter) && !player.dead && !playerGod) {
+      if (element.isIntersect(playerCenter) && !playerDead && !playerGod) {
+        
         player.goDead = true;
-        player.dead = true;
+        playerDead = true;
       }
 
 
@@ -1169,7 +1341,7 @@ game.newLoop('myGame', function () {
 
 
 
-  if (gameStarted && !gamePaused && !player.dead) {
+  if (gameStarted && !gamePaused && !playerDead) {
 
     if (key.isPress("D") || key.isPress("A") || key.isPress("W") || key.isPress("S") || key.isUp("D") || key.isUp("A") || key.isUp("W") || key.isUp("S") || key.isPress("RIGHT") || key.isPress("LEFT") || key.isPress("UP") || key.isPress("DOWN") || key.isUp("RIGHT") || key.isUp("LEFT") || key.isUp("UP") || key.isUp("DOWN")) {
       keyDowns = key.getAllKeysDown();
@@ -1210,6 +1382,7 @@ game.newLoop('myGame', function () {
 
 
     if (key.isDown("D") || key.isDown("RIGHT")) {
+      runAudio1.play();
       player.moving = true;
       player.arrow = 'right';
       if ((!playerRight.isArrIntersect(blocks) || playerWallpass) && !playerRight.isArrIntersect(solidBlocks) && (!playerRight.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
@@ -1217,6 +1390,7 @@ game.newLoop('myGame', function () {
       }
 
     } else if (key.isDown("A") || key.isDown("LEFT")) {
+      runAudio1.play();
       player.moving = true;
       player.arrow = 'left';
       if ((!playerLeft.isArrIntersect(blocks) || playerWallpass) && !playerLeft.isArrIntersect(solidBlocks) && (!playerLeft.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
@@ -1225,6 +1399,7 @@ game.newLoop('myGame', function () {
     }
 
     if (key.isDown("W") || key.isDown("UP")) {
+      runAudio2.play();
       player.moving = true;
       player.arrow = 'up';
       if ((!playerTop.isArrIntersect(blocks) || playerWallpass) && !playerTop.isArrIntersect(solidBlocks) && (!playerTop.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
@@ -1232,6 +1407,7 @@ game.newLoop('myGame', function () {
       }
 
     } else if (key.isDown("S") || key.isDown("DOWN")) {
+      runAudio2.play();
       player.moving = true;
       player.arrow = 'down';
       if ((!playerBottom.isArrIntersect(blocks) || playerWallpass) && !playerBottom.isArrIntersect(solidBlocks) && (!playerBottom.isArrIntersect(blocksBomb) || player.canWalkOnBomb)) {
@@ -1244,6 +1420,8 @@ game.newLoop('myGame', function () {
     if (key.isPress("Z")) {
 
       if (level[player.nowY][player.nowX].p == 0 && player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
+        bombAudio.stop();
+        bombAudio.play();
         player.canBombMas[0].planting = true;
         
         player.canWalkOnBomb = true;
@@ -1271,7 +1449,6 @@ game.newLoop('myGame', function () {
     }
 
   }
-
   // player.bombsMas.forEach(element => {
     
   //     console.log(element.planting);
@@ -1287,13 +1464,16 @@ game.newLoop('myGame', function () {
       element.bombsExplosionMas.forEach(function (el) {
         if (el.isArrIntersect(blocksBomb)) {
           boom(blocksBomb[0].num)
-          
-          
+        }
+
+        if (el.isIntersect(door) && player.seeDoor && !exploseDoor) {
+          exploseDoorFunction();
+          exploseDoor = true;
         }
 
         if ((el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) && !playerExplosionPass) {
-          if (!player.dead) player.goDead = true;
-          player.dead = true;
+          if (!playerDead) player.goDead = true;
+          playerDead = true;
 
         }
 
