@@ -17,6 +17,7 @@ let runAudio2 = pjs.audio.newAudio('assets/audio/run2.mp3');
 let bombAudio = pjs.audio.newAudio('assets/audio/bomb.mp3');
 let exploseAudio = pjs.audio.newAudio('assets/audio/explose.mp3');
 let pauseAudio = pjs.audio.newAudio('assets/audio/pause.mp3');
+let prizeAudio = pjs.audio.newAudio('assets/audio/prize.mp3');
 
 
 //pjs.system.initFullPage(); // развернули игру на полный экран
@@ -96,6 +97,7 @@ else {
       level: [3, 0, 0, 1, 0, 0, 0, 0],
       prize: 1,
       enable: true,
+      finish: false,
       secret: false,
       city: 'Москва'
     },
@@ -103,6 +105,7 @@ else {
       level: [4, 2, 0, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Санкт-Петербург'
     },
@@ -110,6 +113,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -117,6 +121,7 @@ else {
       level: [3, 0, 0, 0, 0, 0, 0, 0],
       prize: 7,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Москва'
     },
@@ -124,6 +129,7 @@ else {
       level: [4, 2, 0, 0, 0, 0, 0, 0],
       prize: 1,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Санкт-Петербург'
     },
@@ -131,6 +137,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -138,6 +145,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -145,6 +153,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -152,6 +161,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -159,6 +169,7 @@ else {
       level: [5, 2, 1, 0, 0, 0, 0, 0],
       prize: 2,
       enable: false,
+      finish: false,
       secret: false,
       city: 'Смоленск'
     },
@@ -251,7 +262,7 @@ let prizeMas = [
         player.bombsMas.push(addBomb(i))
         player.bombsMas[i].bomb.num = i;
       }
-      
+
     }
   },
   {
@@ -331,13 +342,15 @@ function initLevelsScreen() {
   document.querySelectorAll('.levels_wrap')[0].innerHTML = '';
   levelMas.forEach((value, index, array) => {
     var enable = 'enabled';
+    let classDiv
     var secret;
     var style;
     value.enable ? enable = 'enabled' : enable = 'disabled';
+    value.finish ? classDiv = '<div class = "level_block level_finish">' : classDiv = '<div class = "level_block">';
     value.enable ? style = 'background: #6ee696' : style = 'background: #cdcdcd';
     value.secret ? secret = `<span class = 'city_name'>${value.city}</span>` : secret = `<img class = 'secret_img' onclick="secretAlert()" src = 'assets/secret.png'>`;
     document.querySelectorAll('.levels_wrap')[0].innerHTML += `
-    <div class = 'level_block'>
+    ${classDiv}
     <div><h2>Уровень ${index + 1}</h2></div>
     <div><button class="level_start_game_button" style = '${style}' ${enable} onclick="startGame(${index})">Начать уровень</button></div>
     <div class = 'secret'>${secret}</div>
@@ -351,7 +364,7 @@ function initLevelsScreen() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-function init() {  
+function init() {
 
   visibleGame = true;
   levelSeconds = 200;
@@ -362,7 +375,7 @@ function init() {
   fieldBombs.textContent = playerCanBombsNum;
   fieldPower.textContent = playerBoomPower;
   playerCanBoom ? fieldManual.textContent = 'Да' : fieldManual.textContent = 'Нет';
-  
+
 
   playerCanSecret = false;
   exploseDoor = false;
@@ -528,7 +541,7 @@ function init() {
   // enemyInLevels.length > levelNum - 1 ? enemyTypesInLevel = enemyInLevels[levelNum - 1].level : enemyTypesInLevel = 10;
 
   numberOfEnemies = levelMas[levelNum - 1].level.reduce((previousValue, currentValue) => previousValue + currentValue, 0);
-  
+
 
 
 
@@ -816,7 +829,7 @@ function init() {
 /*//////////////////////////////////////////////////////////////////////////*/
 
 function boom(numBomb) {
-  
+
   if (player.bombsMas[numBomb] != undefined) {
     if (player.bombsMas[numBomb].planting) {
       level[Math.round(player.bombsMas[numBomb].bomb.y / sizeOneBlock)][Math.round(player.bombsMas[numBomb].bomb.x / sizeOneBlock)].bomb = false;
@@ -834,13 +847,13 @@ function boom(numBomb) {
       exploseAudio.replay();
     }
   }
-  
+
 
 
 }
 
 function explosionBoom(numBomb) {
-  
+
 
   if (document.querySelector('.notification_bomb_pause').classList.contains("show")) document.querySelector('.notification_bomb_pause').classList.toggle('show');
   if (player.bombsMas[numBomb] != undefined) {
@@ -882,7 +895,7 @@ function exploseDoorFunction() {
     }
   });
 
-  
+
   pjs.OOP.newTimer(500, function () {
     enemies.push(pjs.OOP.clone(newEnemy));
     numberOfEnemies++;
@@ -900,7 +913,7 @@ function exploseDoorFunction() {
     numberOfEnemies++;
     exploseDoor = false;
   }).start();
-  
+
 }
 
 
@@ -953,20 +966,22 @@ function secretAlert() {
 function startGame(level) {
 
   menuAudio.stop();
-  
+
   document.querySelector('.level_menu').style.display = 'none';
   document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
   levelNum = level + 1;
   document.querySelector('.level-before-start').textContent = `Уровень ${levelNum}`;
   levelAudio1.play();
   gamePreStarted = true;
-  preLevelTimeOut = setTimeout(function(){
+  preLevelTimeOut = setTimeout(function () {
     gamePreStarted = false;
     if (visibleGame) {
       document.querySelector('canvas').style.display = 'block';
       document.querySelector('.game_field_wrap').style.display = 'flex';
+      document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
       levelAudio1.stop();
       levelAudio2.play();
       levelAudio2.setNextPlay(levelAudio2);
@@ -975,12 +990,13 @@ function startGame(level) {
       game.start();
     }
   }, 2700);
-  
-  
+
+
 }
 
 function deadMenu() {
   document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
   playerBoomPower = 1;
   playerCanBombsNum = 1;
@@ -998,6 +1014,7 @@ function deadMenu() {
 
 function winMenu() {
   document.querySelector('.game_field_wrap').style.display = 'none';
+  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
   document.querySelector('.win_menu').style.display = 'flex';
 }
@@ -1028,11 +1045,12 @@ function eventHandler() {
     endTimestamp = beginTimestamp + levelSeconds;
     visibleGame = true;
     if (gamePreStarted) {
-      preLevelTimeOut = setTimeout(function(){
+      preLevelTimeOut = setTimeout(function () {
         gamePreStarted = false;
         if (visibleGame) {
           document.querySelector('canvas').style.display = 'block';
           document.querySelector('.game_field_wrap').style.display = 'flex';
+          document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
           levelAudio1.stop();
           levelAudio2.play();
           init();
@@ -1041,12 +1059,12 @@ function eventHandler() {
         }
       }, 500);
     }
-    
+
     if (gameStarted) levelAudio2.play();
 
     else if (!gameStarted && !gamePreStarted && !playerDead) menuAudio.play();
-    
-    
+
+
   }
 }
 
@@ -1217,7 +1235,7 @@ game.newLoop('myGame', function () {
   if (playerDead && player.goDead) {
     playerBody.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(0, 23, 24, 24, 10));
     player.goDead = false;
-    
+
     deathAudio1.play();
     deathAudio1.setNextPlay(deathAudio2);
   }
@@ -1237,7 +1255,8 @@ game.newLoop('myGame', function () {
   if (playerCenter.isIntersect(door) && player.seeDoor) {
     if (gameStarted /*enemies.length == 0*/) { ///////////////////////////////////////////////////////////////////////////////////////УБРАТЬ КОММЕНТ
       if (levelMas.length >= levelNum) levelMas[levelNum].enable = true;
-      if (playerCanSecret) levelMas[levelNum-1].secret = true;
+      levelMas[levelNum - 1].finish = true;
+      if (playerCanSecret) levelMas[levelNum - 1].secret = true;
       localStorage.setItem('levelMas', JSON.stringify(levelMas))
       gameStarted = false;
       levelAudio2.stop();
@@ -1310,7 +1329,7 @@ game.newLoop('myGame', function () {
       element.nowY = Math.round(element.y / sizeOneBlock);
 
       if (element.isIntersect(playerCenter) && !playerDead && !playerGod) {
-        
+
         player.goDead = true;
         playerDead = true;
       }
@@ -1374,6 +1393,7 @@ game.newLoop('myGame', function () {
 
       if (playerCenter.isIntersect(prize)) {
         player.takedPrize = true;
+        prizeAudio.play();
         prize.w = 0;
         prize.h = 0;
         prizeMas[prize.prizeId - 1].action();
@@ -1415,7 +1435,7 @@ game.newLoop('myGame', function () {
       }
     }
 
-    
+
 
     if (key.isPress("Z")) {
 
@@ -1423,7 +1443,7 @@ game.newLoop('myGame', function () {
         bombAudio.stop();
         bombAudio.play();
         player.canBombMas[0].planting = true;
-        
+
         player.canWalkOnBomb = true;
 
         player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
@@ -1434,7 +1454,7 @@ game.newLoop('myGame', function () {
 
         player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
         player.canBombMas[0].bombY = player.nowY * sizeOneBlock + sizeOneBlock / 4;
-        
+
         if (!playerCanBoom) player.canBombMas[0].timer().restart();
 
       }
@@ -1450,7 +1470,7 @@ game.newLoop('myGame', function () {
 
   }
   // player.bombsMas.forEach(element => {
-    
+
   //     console.log(element.planting);
   // })
 
@@ -1493,13 +1513,13 @@ game.newLoop('myGame', function () {
       })
 
       //console.log(element.bombsExplosionMas)
-      
+
 
       fooExplosion(0, 1, element, 'showRight');
       fooExplosion(0, -1, element, 'showLeft');
       fooExplosion(1, 0, element, 'showTop');
       fooExplosion(-1, 0, element, 'showBottom');
-      
+
 
 
 
