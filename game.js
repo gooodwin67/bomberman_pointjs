@@ -797,7 +797,7 @@ function init() {
   //   }
   // };
   // tick();
-  beginTimestamp = Math.floor(game.getTime() / 1000);
+  //beginTimestamp = Math.floor(game.getTime() / 1000);
 
 
 
@@ -994,6 +994,7 @@ function startGame(level) {
       levelAudio2.setNextPlay(levelAudio2);
       init();
       gameStarted = true;
+      beginTimestamp = Math.floor(Date.now() / 1000);
       game.start();
     }
   }, 2700);
