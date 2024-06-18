@@ -252,7 +252,7 @@ const prize = game.newAnimationObject({
 let prizeMas = [
   {
     numPrize: 1,
-    namePrize: 'Бомбы',
+    namePrize: 'Увеличение количества бомб',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(16, 16 * 3, 16, 16, 1),
     action: () => {
       playerCanBombsNum++;
@@ -267,7 +267,7 @@ let prizeMas = [
   },
   {
     numPrize: 2,
-    namePrize: 'Сила взрыва',
+    namePrize: 'Увеличение силы взрыва',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
     action: () => {
       playerBoomPower++;
@@ -277,8 +277,8 @@ let prizeMas = [
 
   {
     numPrize: 3,
-    namePrize: 'Скорость',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    namePrize: 'Увеличение скорости',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(48, 16 * 3, 16, 16, 1),
     action: () => {
       playerSpeed = playerSpeed * 2;
       // fieldPower.textContent = playerBoomPower;
@@ -286,8 +286,8 @@ let prizeMas = [
   },
   {
     numPrize: 4,
-    namePrize: 'Сквозь стены',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    namePrize: 'Можно ходить сквозь стены',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(80, 16 * 3, 16, 16, 1),
     action: () => {
       playerWallpass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -296,7 +296,7 @@ let prizeMas = [
 
   {
     numPrize: 5,
-    namePrize: 'Детонатор',
+    namePrize: 'Детонатор (взрыв нажатием второй кнопки)',
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(32, 16 * 3, 16, 16, 1),
     action: () => {
       playerCanBoom = true;
@@ -305,8 +305,8 @@ let prizeMas = [
   },
   {
     numPrize: 6,
-    namePrize: 'Сквозь бомбы',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    namePrize: 'Можно ходить сквозь бомбы',
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(64, 16 * 3, 16, 16, 1),
     action: () => {
       playerBombPass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -315,7 +315,7 @@ let prizeMas = [
   {
     numPrize: 7,
     namePrize: 'Иммунитет к взрывам',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(96, 16 * 3, 16, 16, 1),
     action: () => {
       playerExplosionPass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -336,6 +336,9 @@ let prizeMas = [
 
 
 function initLevelsScreen() {
+  document.body.style.background = "#3a2769";
+  document.querySelector('.level_menu').style.background = "#3a2769";
+  console.log(123)
   playerDead = false;
   menuAudio.play();
   levelAudio2.stop();
@@ -967,13 +970,16 @@ function startGame(level) {
 
   menuAudio.stop();
 
+  document.body.style.background = "url('assets/back1.png')";
+  document.querySelector('.level_menu').style.background = "url('assets/back1.png')";
+
   document.querySelector('.level_menu').style.display = 'none';
   document.querySelector('.game_field_wrap').style.display = 'none';
   document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
   levelNum = level + 1;
-  document.querySelector('.level-before-start').textContent = `Уровень ${levelNum}`;
+  document.querySelector('.level-before-start h2').textContent = `Уровень ${levelNum}`;
   levelAudio1.play();
   gamePreStarted = true;
   preLevelTimeOut = setTimeout(function () {
@@ -1106,7 +1112,6 @@ game.newLoop('myGame', function () {
     }
   }
 
-
   if (visibleGame && gameStarted) {
     endTimestamp = beginTimestamp + levelSeconds;
     numSecondsRemaining = endTimestamp - Math.floor(Date.now() / 1000)
@@ -1145,7 +1150,7 @@ game.newLoop('myGame', function () {
     for (var j = 0; j < level[i].length; j++) {
 
       game.newAnimationObject({
-        animation: tiles.newImage("assets/big_dyna.png").getAnimation(367, 110, 16, 16, 1), //трава
+        animation: tiles.newImage("assets/tiles/map/grass.jpg").getAnimation(0, 0, 16, 16, 1), //трава
         x: sizeOneBlock * j,
         y: sizeOneBlock * i,
         w: sizeOneBlock,
@@ -1154,7 +1159,7 @@ game.newLoop('myGame', function () {
 
       if (level[i][j].b == 9) {
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(342, 16 * 0, 16, 16, 1), //Стены
+          animation: tiles.newImage("assets/tiles/map/wall.jpg").getAnimation(0, 0, 16, 16, 1), //Стены
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
@@ -1163,7 +1168,7 @@ game.newLoop('myGame', function () {
       }
       else if (level[i][j].p != 0) {
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 7), //Кирпич
+          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(0, 0, 16, 16, 1), //Кирпич
           x: sizeOneBlock * j,
           y: sizeOneBlock * i,
           w: sizeOneBlock,
@@ -1355,7 +1360,7 @@ game.newLoop('myGame', function () {
 
 
   player.damageBlocksMas.forEach(element => {
-    element.drawToFrame(6);
+    element.drawFrames(0, 4);
   });
 
 
@@ -1391,7 +1396,15 @@ game.newLoop('myGame', function () {
         player.moving = false;
       }
 
-      if (playerCenter.isIntersect(prize)) {
+      if (playerCenter.isIntersect(prize) && player.seePrize) {
+        document.querySelector('.notification_prize').textContent = prizeMas.find(el => el.numPrize == prize.prizeId).namePrize;
+
+        document.querySelector('.notification_prize').classList.add('show');
+
+        pjs.OOP.newTimer(3000, function () {
+          if (document.querySelector('.notification_prize').classList.contains("show")) document.querySelector('.notification_prize').classList.toggle('show');
+        }).start();
+
         player.takedPrize = true;
         prizeAudio.play();
         prize.w = 0;
@@ -1569,7 +1582,7 @@ function fooExplosion(x, y, element, arrow) {
         });
 
         let block = game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(16, 0, 16, 16, 5), //Кирпич
           x: damageBlock[0].x,
           y: damageBlock[0].y,
           w: sizeOneBlock,
@@ -1619,7 +1632,7 @@ function fooExplosion(x, y, element, arrow) {
         });
 
         let block = game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(16, 0, 16, 16, 5), //Кирпич
           x: damageBlock[0].x,
           y: damageBlock[0].y,
           w: sizeOneBlock,
@@ -1666,7 +1679,7 @@ function fooExplosion(x, y, element, arrow) {
         });
 
         let block = game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(16, 0, 16, 16, 5), //Кирпич
           x: damageBlock[0].x,
           y: damageBlock[0].y,
           w: sizeOneBlock,
@@ -1713,7 +1726,7 @@ function fooExplosion(x, y, element, arrow) {
         });
 
         let block = game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(358, 16 * 0, 16, 16, 6),
+          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(16, 0, 16, 16, 5), //Кирпич
           x: damageBlock[0].x,
           y: damageBlock[0].y,
           w: sizeOneBlock,

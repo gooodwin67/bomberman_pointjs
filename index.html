@@ -20,22 +20,25 @@
         </div>
         <div class="game_field_wrap_bottom">
             <div>
-                <img src='assets/wasd.jpg'>
+                <img src='assets/wasd.png'>
             </div>
             <div>
                 <img src='assets/zx.jpg'>
             </div>
         </div>
-        <div class='level-before-start'>Уровень 1</div>
+        <div class='level-before-start'>
+            <h2>Уровень 1</h2>
+        </div>
     </div>
     <div class='main_menu' style='position: absolute; z-index: 999;'>
-        <h1>BomberMan</h1>
+        <img class='bomberman_h_img' src="assets/bomberman.jpg" alt="">
 
-        <button class="start_game_button">Начать игру</button>
+        <!--<button class="start_game_button">Начать игру</button>-->
+        <img class="start_game_button main_start" src="assets/startgame.jpg" alt="">
     </div>
     <div class='level_menu' style='position: absolute; z-index: 999;'>
         <div>
-            <h1>BomberMan</h1>
+            <img class='bomberman_h_img' src="assets/bomberman.jpg" alt="">
             <div class="levels_wrap">
 
             </div>
@@ -57,7 +60,7 @@
             <h2>Уровень пройден!</h2>
             <div>
                 <button class='win_to_new'>Начать урочень заново</button>
-                <button class='win_to_next'>Начать следующий урочень</button>
+                <button class='win_to_next'>Начать следующий уровень</button>
                 <button class='win_to_menu'>Выйти в меню</button>
             </div>
         </div>
@@ -78,6 +81,10 @@
 
     <div class="notification notification_enemies">
         Уничтожьте всех врагов
+    </div>
+
+    <div class="notification notification_prize">
+        Приз
     </div>
 
 </body>
