@@ -55,14 +55,14 @@ let playerRight;
 let playerCenter;
 let playerBody;
 
-let playerBoomPower = 10;
-let playerCanBombsNum = 5;
-let playerCanBoom = true;
-let playerSpeed = 4.6; //1.6
-let playerWallpass = true;
-let playerBombPass = true;
-let playerExplosionPass = true;
-let playerGod = true;
+let playerBoomPower = 1;
+let playerCanBombsNum = 1;
+let playerCanBoom = false;
+let playerSpeed = 2.6; //1.6
+let playerWallpass = false;
+let playerBombPass = false;
+let playerExplosionPass = false;
+let playerGod = false;
 let playerDead = false;
 
 let playerCanSecret = false;
@@ -338,7 +338,7 @@ let prizeMas = [
 function initLevelsScreen() {
   document.body.style.background = "#3a2769";
   document.querySelector('.level_menu').style.background = "#3a2769";
-  console.log(123)
+
   playerDead = false;
   menuAudio.play();
   levelAudio2.stop();
@@ -802,6 +802,7 @@ function init() {
 
 
 
+
 }
 
 
@@ -1047,6 +1048,7 @@ function eventHandler() {
 
   } else {
     beginTimestamp = Math.floor(Date.now() / 1000);
+
     levelSeconds = numSecondsRemaining;
     endTimestamp = beginTimestamp + levelSeconds;
     visibleGame = true;
@@ -1450,7 +1452,7 @@ game.newLoop('myGame', function () {
 
 
 
-    if (key.isPress("Z")) {
+    if (key.isPress("Z") || key.isPress("N")) {
 
       if (level[player.nowY][player.nowX].p == 0 && player.canBombMas.length > 0 && !player.plantingBombMas.some((val) => Math.round(val.bomb.x / sizeOneBlock) === player.nowX && Math.round(val.bomb.y / sizeOneBlock) === player.nowY)) {
         bombAudio.stop();
@@ -1474,7 +1476,7 @@ game.newLoop('myGame', function () {
 
     }
 
-    if (key.isPress("X")) {
+    if (key.isPress("X") || key.isPress("M")) {
 
       if (blocksBomb.length > 0 && playerCanBoom) {
         boom(blocksBomb[0].num);
