@@ -1,4 +1,5 @@
 
+import { levelsMas } from "./levels.js";
 
 var pjs = new PointJS(800, 600, {
 
@@ -57,12 +58,12 @@ let playerBody;
 
 let playerBoomPower = 1;
 let playerCanBombsNum = 1;
-let playerCanBoom = false;
+let playerCanBoom = true;
 let playerSpeed = 2.6; //1.6
 let playerWallpass = false;
 let playerBombPass = false;
 let playerExplosionPass = false;
-let playerGod = false;
+let playerGod = true;
 let playerDead = false;
 
 let playerCanSecret = false;
@@ -92,89 +93,7 @@ if (localStorage.getItem('levelMas') !== null) {
   levelMas = JSON.parse(localStorage.getItem('levelMas'));
 }
 else {
-  levelMas = [
-    {
-      level: [3, 0, 0, 1, 0, 0, 0, 0],
-      prize: 1,
-      enable: true,
-      finish: false,
-      secret: false,
-      city: 'Москва'
-    },
-    {
-      level: [4, 2, 0, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Санкт-Петербург'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-    {
-      level: [3, 0, 0, 0, 0, 0, 0, 0],
-      prize: 7,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Москва'
-    },
-    {
-      level: [4, 2, 0, 0, 0, 0, 0, 0],
-      prize: 1,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Санкт-Петербург'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-    {
-      level: [5, 2, 1, 0, 0, 0, 0, 0],
-      prize: 2,
-      enable: false,
-      finish: false,
-      secret: false,
-      city: 'Смоленск'
-    },
-
-  ];
+  levelMas = levelsMas;
 }
 
 
@@ -474,7 +393,7 @@ function init() {
   player.takedPrize = false;
   player.goDead = false;
   playerDead = false;
-  playerGod = false;
+  playerGod = true;
 
   pjs.camera.setPosition(playerBody.getPosition());
 
@@ -1508,8 +1427,10 @@ game.newLoop('myGame', function () {
         }
 
         if ((el.isIntersect(playerCenter) || element.bomb.isIntersect(playerCenter)) && !playerExplosionPass) {
-          if (!playerDead) player.goDead = true;
-          playerDead = true;
+          if (!playerGod) {
+            if (!playerDead) player.goDead = true;
+            playerDead = true;
+          }
 
         }
 
