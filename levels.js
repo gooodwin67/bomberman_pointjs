@@ -1,4 +1,4 @@
-export let levelsMas = [
+[
     {
         level: [6, , , , , , ,],
         prize: 1,
