@@ -97,7 +97,7 @@ else {
         prize: 1,
         enable: true,
         finish: false,
-        secret: false,
+        secret: true,
         city: 'Секрет'
     },
     {
@@ -672,7 +672,7 @@ function initLevelsScreen() {
     value.enable ? enable = 'enabled' : enable = 'disabled';
     value.finish ? classDiv = '<div class = "level_block level_finish">' : classDiv = '<div class = "level_block">';
     value.enable ? style = 'background: #6ee696' : style = 'background: #cdcdcd';
-    value.secret ? secret = `<span class = 'city_name'>${value.city}</span>` : secret = `<img class = 'secret_img' onclick="secretAlert()" src = 'assets/secret.png'>`;
+    value.secret ? secret = `<img class = 'secret_img' onclick="secretAlert()" src = 'assets/secret-true.png'>` : secret = `<img class = 'secret_img' onclick="secretAlert()" src = 'assets/secret.png'>`;
     document.querySelectorAll('.levels_wrap')[0].innerHTML += `
     ${classDiv}
     <div><h2>Уровень ${index + 1}</h2></div>
@@ -907,6 +907,7 @@ function init() {
             pathActive: false,
             angryDistance: 0,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -928,6 +929,7 @@ function init() {
             pathActive: false,
             angryDistance: 3,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -949,6 +951,7 @@ function init() {
             pathActive: false,
             angryDistance: 0,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -970,6 +973,7 @@ function init() {
             pathActive: false,
             angryDistance: 3,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -991,6 +995,7 @@ function init() {
             pathActive: false,
             angryDistance: 8,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -1012,6 +1017,7 @@ function init() {
             pathActive: false,
             angryDistance: 3,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -1033,6 +1039,7 @@ function init() {
             pathActive: false,
             angryDistance: 8,
             result: [],
+            dead: false,
           }
         }),
         game.newAnimationObject({
@@ -1054,6 +1061,7 @@ function init() {
             pathActive: false,
             angryDistance: 8,
             result: [],
+            dead: false,
           }
         }),
       ]
@@ -1283,7 +1291,7 @@ document.querySelector('.win_to_next').addEventListener('click', function () {
 
 
 function secretAlert() {
-  alert("Чтобы пройти уровень, надо выполнить 2 условия: убить всех врагов и найти дверь. Чтобы открыть секрет, надо сначала найти дверь, не убив ни одного врага");
+  alert("Чтобы пройти уровень, надо выполнить 2 условия: убить всех врагов и найти дверь. Чтобы открыть звезду, надо сначала найти дверь, не убив ни одного врага");
 };
 
 
@@ -1650,7 +1658,7 @@ game.newLoop('myGame', function () {
 
     enemies.forEach(element => {
 
-      if (element.speed > 0) element.drawFrames(element.framesRun[0], element.framesRun[1]);
+      if (!element.dead) element.drawFrames(element.framesRun[0], element.framesRun[1]);
       else element.drawFrames(element.framesDie[0], element.framesDie[1]);
 
 
@@ -1806,10 +1814,6 @@ game.newLoop('myGame', function () {
     }
 
   }
-  // player.bombsMas.forEach(element => {
-
-  //     console.log(element.planting);
-  // })
 
   player.bombsMas.forEach(element => {
     if (element.planting || element.explosion) {
@@ -1836,18 +1840,19 @@ game.newLoop('myGame', function () {
 
         }
 
-        if (el.isArrIntersect(enemies)) {
 
-          pjs.OOP.newTimer(1000, function () {
-            if (el.isArrIntersect(enemies).speed == 0) {
-              enemies.splice(enemies.indexOf(el.isArrIntersect(enemies)), 1);
-              el.isArrIntersect(enemies).speed = 0.001;
-            }
-          }).start();
+        enemies.forEach(function (elEnemy) {
+          if (elEnemy.isIntersect(el) && !elEnemy.dead) {
+            elEnemy.dead = true;
+            elEnemy.speed = 0;
+            pjs.OOP.newTimer(1000, function () {
+              enemies.splice(enemies.indexOf(elEnemy), 1);
+            }).start();
+          }
+        })
 
 
-          el.isArrIntersect(enemies).speed = 0;
-        }
+
         el.drawFrames(2, 3);
       })
 
@@ -1889,7 +1894,7 @@ function fooExplosion(x, y, element, arrow) {
 
         explosionArrow = game.newAnimationObject({
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-          x: element.bomb.x + i * sizeOneBlock,
+          x: element.bomb.x + i * sizeOneBlock - sizeOneBlock / 20,
           y: element.bomb.y,
           w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
@@ -1939,7 +1944,7 @@ function fooExplosion(x, y, element, arrow) {
 
         explosionArrow = game.newAnimationObject({
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-          x: element.bomb.x - i * sizeOneBlock,
+          x: element.bomb.x - i * sizeOneBlock+sizeOneBlock / 20,
           y: element.bomb.y,
           w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
@@ -2034,7 +2039,7 @@ function fooExplosion(x, y, element, arrow) {
         explosionArrow = game.newAnimationObject({
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
           x: element.bomb.x,
-          y: element.bomb.y - i * sizeOneBlock,
+          y: element.bomb.y - i * sizeOneBlock + sizeOneBlock / 20,
           w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
         });
