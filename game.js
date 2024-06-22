@@ -62,6 +62,11 @@ let playerWallpass = false;
 let playerBombPass = false;
 let playerExplosionPass = false;
 let playerGod = true;
+
+localStorage.getItem('playerBoomPower') == null ? localStorage.setItem('playerBoomPower', 1) : playerBoomPower = localStorage.getItem('playerBoomPower');
+console.log(playerBoomPower);
+
+
 let playerDead = false;
 
 let playerCanSecret = false;
@@ -93,409 +98,409 @@ if (localStorage.getItem('levelMas') !== null) {
 else {
   levelMas = [
     {
-        level: [6, , , , , , ,],
-        prize: 1,
-        enable: true,
-        finish: false,
-        secret: true,
-        city: 'Секрет'
+      level: [6, , , , , , ,],
+      prize: 2,
+      enable: true,
+      finish: false,
+      secret: true,
+      city: 'Секрет'
     },
     {
-        level: [3, 3, , , , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [3, 3, , , , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [2, 2, 2, , , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [2, 2, 2, , , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [1, 1, 2, 2, , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [1, 1, 2, 2, , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 4, 3, , , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 4, 3, , , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 2, 3, 2, , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 2, 3, 2, , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 2, 3, , 2, , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 2, 3, , 2, , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 2, 4, , , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 2, 4, , , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 1, 4, 1, , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 1, 4, 1, , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 1, 1, 3, 1, ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 1, 1, 3, 1, ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 2, 3, 1, 1, ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 2, 3, 1, 1, ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 1, 1, 4, 1, ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 1, 1, 4, 1, ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 3, 3, 3, , ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 3, 3, 3, , ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , , 7, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , , 7, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 1, 3, 3, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 1, 3, 3, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , 3, 4, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , 3, 4, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 5, , 2, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 5, , 2, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [3, 3, , , , , 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [3, 3, , , , , 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [1, 1, 3, , , 1, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [1, 1, 3, , , 1, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 1, 1, 2, 1, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 1, 1, 2, 1, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 4, 3, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 4, 3, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 4, 3, 1, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 4, 3, 1, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 2, 2, 2, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 2, 2, 2, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 1, 1, 4, 2, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 1, 1, 4, 2, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 2, 1, 1, 2, 2, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 2, 1, 1, 2, 2, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [1, 1, 1, 1, 2, 1, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [1, 1, 1, 1, 2, 1, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [1, 1, , , 5, 1, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [1, 1, , , 5, 1, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 3, 3, 1, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 3, 3, 1, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 2, 5, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 2, 5, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 3, 2, 1, 2, 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 3, 2, 1, 2, 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 2, 2, 2, 2, 2, ,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 2, 2, 2, 2, 2, ,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, 1, 1, 3, 4, , 1,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, 1, 1, 3, 4, , 1,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 2, 3, 1, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 2, 3, 1, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 3, 3, , 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 3, 3, , 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 1, 3, 1, 2,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 1, 3, 1, 2,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 2, 3, , 3,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 2, 3, , 3,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 1, 3, 1, 3,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 1, 3, 1, 3,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 2, 2, 3, , 3,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 2, 2, 3, , 3,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 1, 1, 2, 2, 4,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 1, 1, 2, 2, 4,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 1, 2, 3, , 4,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 1, 2, 3, , 4,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , 1, 1, 3, 1, 4,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , 1, 1, 3, 1, 4,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , 1, 3, 1, 5,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , 1, 3, 1, 5,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , 1, 2, 1, 6,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , 1, 2, 1, 6,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , 1, 2, 1, 6,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , 1, 2, 1, 6,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 2, 2, 6,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 2, 2, 6,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 2, 2, 6,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 2, 2, 6,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 2, 2, 6,],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 2, 2, 6,],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 2, 1, 6, 1],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 2, 1, 6, 1],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 1, 2, 6, 1],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 1, 2, 6, 1],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
     {
-        level: [, , , , 1, 2, 5, 2],
-        prize: 1,
-        enable: false,
-        finish: false,
-        secret: false,
-        city: 'Секрет'
+      level: [, , , , 1, 2, 5, 2],
+      prize: 1,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
     },
 
 
 
-];
+  ];
 }
 
 
@@ -592,6 +597,7 @@ let prizeMas = [
     prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
     action: () => {
       playerBoomPower++;
+      localStorage.setItem('playerBoomPower', playerBoomPower);
       fieldPower.textContent = playerBoomPower;
     }
   },
@@ -1335,13 +1341,13 @@ function deadMenu() {
   document.querySelector('.game_field_wrap').style.display = 'none';
   document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
-  playerBoomPower = 1;
-  playerCanBombsNum = 1;
-  playerCanBoom = false;
-  playerSpeed = 4.6; //1.6
-  playerWallpass = false;
-  playerBombPass = false;
-  playerExplosionPass = false;
+  // playerBoomPower = 1;
+  // playerCanBombsNum = 1;
+  // playerCanBoom = false;
+  // playerSpeed = 4.6; //1.6
+  // playerWallpass = false;
+  // playerBombPass = false;
+  // playerExplosionPass = false;
   fieldBombs.textContent = playerCanBombsNum;
   fieldPower.textContent = playerBoomPower;
   fieldManual.textContent = 'Нет';
@@ -1944,7 +1950,7 @@ function fooExplosion(x, y, element, arrow) {
 
         explosionArrow = game.newAnimationObject({
           animation: y == 0 ? tiles.newImage("assets/big_dyna.png").getAnimation(582, 16 * 1, 16, 16, 4) : tiles.newImage("assets/big_dyna.png").getAnimation(326, 16 * 2, 16, 16, 4),
-          x: element.bomb.x - i * sizeOneBlock+sizeOneBlock / 20,
+          x: element.bomb.x - i * sizeOneBlock + sizeOneBlock / 20,
           y: element.bomb.y,
           w: sizeOneBlock - sizeOneBlock / 20,
           h: sizeOneBlock - sizeOneBlock / 20,
@@ -2166,7 +2172,7 @@ function enemyPathGo(element, arrow) {
     for (var i = 0; i < level.length; i++) {
       for (var j = 0; j < level[i].length; j++) {
 
-        if (level[i][j].b == 9 || level[i][j].p != 0) {
+        if (level[i][j].b == 9 || level[i][j].p != 0 || level[i][j].bomb) {
           levelGraph[i][j] = 0;
         } else {
           levelGraph[i][j] = 1;
