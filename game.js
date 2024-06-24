@@ -115,7 +115,7 @@ else {
     },
     {
       level: [2, 2, 2, , , , ,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -123,7 +123,7 @@ else {
     },
     {
       level: [1, 1, 2, 2, , , ,],
-      prize: 1,
+      prize: 3,
       enable: false,
       finish: false,
       secret: false,
@@ -147,7 +147,7 @@ else {
     },
     {
       level: [, 2, 3, , 2, , ,],
-      prize: 1,
+      prize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -155,7 +155,7 @@ else {
     },
     {
       level: [, 1, 2, 4, , , ,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -163,7 +163,7 @@ else {
     },
     {
       level: [, 1, 1, 4, 1, , ,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -171,7 +171,7 @@ else {
     },
     {
       level: [, 1, 1, 1, 3, 1, ,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -195,7 +195,7 @@ else {
     },
     {
       level: [, , 3, 3, 3, , ,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -203,7 +203,7 @@ else {
     },
     {
       level: [, , , , , 7, 1,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -211,7 +211,7 @@ else {
     },
     {
       level: [, , 1, 3, 3, , 1,],
-      prize: 1,
+      prize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -219,7 +219,7 @@ else {
     },
     {
       level: [, , , 3, 4, , 1,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -235,7 +235,7 @@ else {
     },
     {
       level: [3, 3, , , , , 2,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -251,7 +251,7 @@ else {
     },
     {
       level: [, 1, 1, 1, 2, 1, 2,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -259,7 +259,7 @@ else {
     },
     {
       level: [, , , , 4, 3, 2,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -267,7 +267,7 @@ else {
     },
     {
       level: [, , 4, 3, 1, , 1,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -283,7 +283,7 @@ else {
     },
     {
       level: [, , 1, 1, 4, 2, 1,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -291,7 +291,7 @@ else {
     },
     {
       level: [, 2, 1, 1, 2, 2, 1,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -299,7 +299,7 @@ else {
     },
     {
       level: [1, 1, 1, 1, 2, 1, 1,],
-      prize: 1,
+      prize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -307,7 +307,7 @@ else {
     },
     {
       level: [1, 1, , , 5, 1, 1,],
-      prize: 1,
+      prize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -323,7 +323,7 @@ else {
     },
     {
       level: [, , , , 2, 5, 2,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -331,7 +331,7 @@ else {
     },
     {
       level: [, , 3, 2, 1, 2, 1,],
-      prize: 1,
+      prize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -339,7 +339,7 @@ else {
     },
     {
       level: [, 2, 2, 2, 2, 2, ,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -355,7 +355,7 @@ else {
     },
     {
       level: [, , 2, 2, 3, 1, 2,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -363,7 +363,7 @@ else {
     },
     {
       level: [, , 2, 3, 3, , 2,],
-      prize: 1,
+      prize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -371,7 +371,7 @@ else {
     },
     {
       level: [, , 2, 1, 3, 1, 2,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -379,7 +379,7 @@ else {
     },
     {
       level: [, , 2, 2, 3, , 3,],
-      prize: 1,
+      prize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -387,7 +387,7 @@ else {
     },
     {
       level: [, , 2, 1, 3, 1, 3,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -395,7 +395,7 @@ else {
     },
     {
       level: [, , 2, 2, 3, , 3,],
-      prize: 1,
+      prize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -403,7 +403,7 @@ else {
     },
     {
       level: [, , 1, 1, 2, 2, 4,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -411,7 +411,7 @@ else {
     },
     {
       level: [, , 1, 2, 3, , 4,],
-      prize: 1,
+      prize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -419,7 +419,7 @@ else {
     },
     {
       level: [, , 1, 1, 3, 1, 4,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -427,7 +427,7 @@ else {
     },
     {
       level: [, , , 1, 3, 1, 5,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -435,7 +435,7 @@ else {
     },
     {
       level: [, , , 1, 2, 1, 6,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -443,7 +443,7 @@ else {
     },
     {
       level: [, , , 1, 2, 1, 6,],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -451,7 +451,7 @@ else {
     },
     {
       level: [, , , , 2, 2, 6,],
-      prize: 1,
+      prize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -459,7 +459,7 @@ else {
     },
     {
       level: [, , , , 2, 2, 6,],
-      prize: 1,
+      prize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -467,7 +467,7 @@ else {
     },
     {
       level: [, , , , 2, 2, 6,],
-      prize: 1,
+      prize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -475,7 +475,7 @@ else {
     },
     {
       level: [, , , , 2, 1, 6, 1],
-      prize: 1,
+      prize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -483,7 +483,7 @@ else {
     },
     {
       level: [, , , , 1, 2, 6, 1],
-      prize: 1,
+      prize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -491,7 +491,7 @@ else {
     },
     {
       level: [, , , , 1, 2, 5, 2],
-      prize: 1,
+      prize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -853,12 +853,14 @@ function init() {
       level[blockk[0]][blockk[1]].door = true;
       door.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
     }
-    if (i == 3) {
+    if (i == 3 && levelMas[levelNum - 1].prize > 0) {
       level[blockk[0]][blockk[1]].prize = levelNum;
       prize.setPosition(pjs.vector.point(blockk[1] * sizeOneBlock, blockk[0] * sizeOneBlock));
       prizeMas.length <= levelNum - 1 ? prize.setAnimation(prizeMas[0].prizeImg) : prize.setAnimation(prizeMas[levelNum - 1].prizeImg);
 
       prize.setAnimation(prizeMas[levelMas[levelNum - 1].prize - 1].prizeImg)
+
+      console.log(levelMas[levelNum - 1].prize);
 
       prize.prizeId = levelMas[levelNum - 1].prize;
     }
@@ -917,7 +919,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(554, 269, 16, 18, 5),
+          animation: tiles.newImage("assets/tiles/enemies/enemy2.png").getAnimation(0, 0, 16, 17, 5),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -939,7 +941,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(522, 251, 16, 18, 7),
+          animation: tiles.newImage("assets/tiles/enemies/enemy3.png").getAnimation(0, 0, 16, 18, 7),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -961,7 +963,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(538, 287, 16, 18, 6),
+          animation: tiles.newImage("assets/tiles/enemies/enemy4.png").getAnimation(0, 0, 16, 18, 6),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -983,7 +985,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(144, 343, 16, 16, 5),
+          animation: tiles.newImage("assets/tiles/enemies/enemy5.png").getAnimation(0, 0, 18, 16, 5),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -1005,7 +1007,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(442, 305, 16, 18, 7),
+          animation: tiles.newImage("assets/tiles/enemies/enemy6.png").getAnimation(0, 0, 18, 18, 7),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -1027,7 +1029,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(394, 233, 16, 18, 5),
+          animation: tiles.newImage("assets/tiles/enemies/enemy7.png").getAnimation(0, 0, 16, 18, 5),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -1049,7 +1051,7 @@ function init() {
           }
         }),
         game.newAnimationObject({
-          animation: tiles.newImage("assets/big_dyna.png").getAnimation(506, 215, 16, 18, 6),
+          animation: tiles.newImage("assets/tiles/enemies/enemy8.png").getAnimation(0, 0, 18, 18, 6),
           x: 0,
           y: 0,
           w: sizeOneBlock,
@@ -1743,6 +1745,9 @@ game.newLoop('myGame', function () {
           if (document.querySelector('.notification_prize').classList.contains("show")) document.querySelector('.notification_prize').classList.toggle('show');
         }).start();
 
+        levelMas[levelNum - 1].prize = 0;
+        localStorage.setItem('levelMas', JSON.stringify(levelMas))
+
         player.takedPrize = true;
         prizeAudio.play();
         prize.w = 0;
@@ -2163,7 +2168,7 @@ function enemyGo(element, arrow) {
 function enemyPathGo(element, arrow) {
 
   if (!element.moving) {
-
+    console.log(element.canThrough)
 
 
 
@@ -2171,11 +2176,19 @@ function enemyPathGo(element, arrow) {
 
     for (var i = 0; i < level.length; i++) {
       for (var j = 0; j < level[i].length; j++) {
-
-        if (level[i][j].b == 9 || level[i][j].p != 0 || level[i][j].bomb) {
-          levelGraph[i][j] = 0;
-        } else {
-          levelGraph[i][j] = 1;
+        if (!element.canThrough) {
+          if (level[i][j].b == 9 || level[i][j].p != 0 || level[i][j].bomb) {
+            levelGraph[i][j] = 0;
+          } else {
+            levelGraph[i][j] = 1;
+          }
+        }
+        else {
+          if (level[i][j].b == 9 || level[i][j].bomb) {
+            levelGraph[i][j] = 0;
+          } else {
+            levelGraph[i][j] = 1;
+          }
         }
       }
     }
