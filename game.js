@@ -1420,10 +1420,10 @@ function deadMenu() {
   animPlayer(playerBody, 'stay');
   document.querySelector('.dead_menu').style.display = 'flex';
 
-  if (levelMas[levelNum - 1].prize == 4 || levelMas[levelNum - 1].prize == 5 || levelMas[levelNum - 1].prize == 6 || levelMas[levelNum - 1].prize == 7 || levelMas[levelNum - 1].prize == 8) {
-    levelMas[levelNum - 1].prize = levelMas[levelNum - 1].oldPrize
-    localStorage.setItem('levelMas', JSON.stringify(levelMas))
-  }
+  // if (levelMas[levelNum - 1].prize == 4 || levelMas[levelNum - 1].prize == 5 || levelMas[levelNum - 1].prize == 6 || levelMas[levelNum - 1].prize == 7 || levelMas[levelNum - 1].prize == 8) {
+  //   levelMas[levelNum - 1].prize = levelMas[levelNum - 1].oldPrize
+  //   localStorage.setItem('levelMas', JSON.stringify(levelMas))
+  // }
 }
 
 function winMenu() {
@@ -1833,8 +1833,10 @@ game.newLoop('myGame', function () {
           if (document.querySelector('.notification_prize').classList.contains("show")) document.querySelector('.notification_prize').classList.toggle('show');
         }).start();
 
-        levelMas[levelNum - 1].prize = 0;
-        localStorage.setItem('levelMas', JSON.stringify(levelMas))
+        if (levelMas[levelNum - 1].prize == 1 || levelMas[levelNum - 1].prize == 2 || levelMas[levelNum - 1].prize == 3 || levelMas[levelNum - 1].prize == 4) {
+          levelMas[levelNum - 1].prize = 0;
+          localStorage.setItem('levelMas', JSON.stringify(levelMas))
+        }
 
         player.takedPrize = true;
         prizeAudio.play();
