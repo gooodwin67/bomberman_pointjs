@@ -15,25 +15,44 @@
                 <div><span> Время: </span><span class='time'>00:00</span></div>
                 <div><span> Бомбы: </span><span class='bombs'>1</span></div>
                 <div><span> Сила взрыва: </span><span class='power'>1</span></div>
-                <div><span> Ручная детонация: </span><span class='manualBombs'>Нет</span></div>
+                <div><span> Детонатор: </span><span class='manualBombs'>Нет</span></div>
             </div>
         </div>
         <div class="game_field_wrap_bottom">
             <div>
-                <img src='assets/wasd.png'>
+                <img src='assets/wasd.jpg'>
             </div>
             <div>
                 <img src='assets/zx.jpg'>
+            </div>
+            <div>
+                <img src='assets/pause.jpg'>
             </div>
         </div>
         <div class='level-before-start'>
             <h2>Уровень 1</h2>
         </div>
+        <div class='pause-field'>
+            <div>
+                <h2>Пауза</h2>
+                <p>Правила просты до гениальности - нужно уничтожить все недружественные создания на уровне с помощью бомб, а потом найти выход наружу раньше, чем истечет время.</p>
+                <p>Взрывная волна от каждой бомбы распространяется в четыре стороны, вам нужно это учитывать, чтобы самому ненароком не взорваться.</p>
+                <p>Также смотрите, чтобы бомбой вы сами себя не зажали в углу. Поначалу Бомбермен слаб и немощен, но, подбирая пауэр-апы на каждом из уровней, можно неплохо его прокачать. </p>
+                <p>Безумно увлекательная игра, способная вызвать море восторга.</p>
+                <p>
+                    <strong>Враги</strong><br>
+                    <img class='pause_img' src='assets/enemies.jpg'>
+                </p>
+                <p>
+                    <strong>Призы</strong><br>
+                    <img class='pause_img' src='assets/prizes.jpg'>
+                </p>
+            </div>
+        </div>
     </div>
     <div class='main_menu' style='position: absolute; z-index: 999;'>
-        <img class='bomberman_h_img' src="assets/bomberman.jpg" alt="">
 
-        <!--<button class="start_game_button">Начать игру</button>-->
+        <div class='main_h_block'><img class='man_img' src="assets/man.png" alt=""><img class='bomberman_h_img' src="assets/bomberman.jpg" alt=""></div>
         <img class="start_game_button main_start" src="assets/startgame.jpg" alt="">
     </div>
     <div class='level_menu' style='position: absolute; z-index: 999;'>
@@ -47,6 +66,7 @@
 
     <div class="dead_menu">
         <div class='dead_menu_block'>
+            <img class='man_img' src="assets/man.png" alt="">
             <h2>Вы умерли</h2>
             <div>
                 <button class='dead_to_new'>Начать урочень заново</button>
@@ -57,6 +77,7 @@
 
     <div class="win_menu">
         <div class='win_menu_block'>
+            <img class='man_img' src="assets/man.png" alt="">
             <h2>Уровень пройден!</h2>
             <div>
                 <button class='win_to_new'>Начать урочень заново</button>

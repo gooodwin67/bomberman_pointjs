@@ -56,12 +56,12 @@ let playerBody;
 
 let playerBoomPower = 1;
 let playerCanBombsNum = 1;
-let playerCanBoom = true;
-let playerSpeed = 2.6; //1.6
+let playerSpeed = 1.8; //1.6
+let playerCanBoom = false;
 let playerWallpass = false;
 let playerBombPass = false;
 let playerExplosionPass = false;
-let playerGod = true;
+let playerGod = false;
 
 localStorage.getItem('playerBoomPower') == null ? localStorage.setItem('playerBoomPower', 1) : playerBoomPower = localStorage.getItem('playerBoomPower');
 console.log(playerBoomPower);
@@ -90,7 +90,7 @@ let preLevelTimeOut;
 
 let levelMas;
 
-localStorage.clear(); ////////////////////////////////////////////////DEL
+//localStorage.clear(); ////////////////////////////////////////////////DEL
 
 if (localStorage.getItem('levelMas') !== null) {
   levelMas = JSON.parse(localStorage.getItem('levelMas'));
@@ -100,14 +100,16 @@ else {
     {
       level: [6, , , , , , ,],
       prize: 2,
+      oldPrize: 2,
       enable: true,
       finish: false,
-      secret: true,
+      secret: false,
       city: 'Секрет'
     },
     {
       level: [3, 3, , , , , ,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -116,6 +118,7 @@ else {
     {
       level: [2, 2, 2, , , , ,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -124,6 +127,7 @@ else {
     {
       level: [1, 1, 2, 2, , , ,],
       prize: 3,
+      oldPrize: 3,
       enable: false,
       finish: false,
       secret: false,
@@ -132,6 +136,7 @@ else {
     {
       level: [, 4, 3, , , , ,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -140,6 +145,7 @@ else {
     {
       level: [, 2, 3, 2, , , ,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -148,6 +154,7 @@ else {
     {
       level: [, 2, 3, , 2, , ,],
       prize: 2,
+      oldPrize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -156,6 +163,7 @@ else {
     {
       level: [, 1, 2, 4, , , ,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -164,6 +172,7 @@ else {
     {
       level: [, 1, 1, 4, 1, , ,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -172,6 +181,7 @@ else {
     {
       level: [, 1, 1, 1, 3, 1, ,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -180,6 +190,7 @@ else {
     {
       level: [, 1, 2, 3, 1, 1, ,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -188,6 +199,7 @@ else {
     {
       level: [, 1, 1, 1, 4, 1, ,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -196,6 +208,7 @@ else {
     {
       level: [, , 3, 3, 3, , ,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -204,6 +217,7 @@ else {
     {
       level: [, , , , , 7, 1,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -212,6 +226,7 @@ else {
     {
       level: [, , 1, 3, 3, , 1,],
       prize: 2,
+      oldPrize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -220,6 +235,7 @@ else {
     {
       level: [, , , 3, 4, , 1,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -228,6 +244,7 @@ else {
     {
       level: [, , 5, , 2, , 1,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -236,6 +253,7 @@ else {
     {
       level: [3, 3, , , , , 2,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -244,6 +262,7 @@ else {
     {
       level: [1, 1, 3, , , 1, 2,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -252,6 +271,7 @@ else {
     {
       level: [, 1, 1, 1, 2, 1, 2,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -260,6 +280,7 @@ else {
     {
       level: [, , , , 4, 3, 2,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -268,6 +289,7 @@ else {
     {
       level: [, , 4, 3, 1, , 1,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -276,6 +298,7 @@ else {
     {
       level: [, , 2, 2, 2, 2, 1,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -284,6 +307,7 @@ else {
     {
       level: [, , 1, 1, 4, 2, 1,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -292,6 +316,7 @@ else {
     {
       level: [, 2, 1, 1, 2, 2, 1,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -300,6 +325,7 @@ else {
     {
       level: [1, 1, 1, 1, 2, 1, 1,],
       prize: 8,
+      oldPrize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -308,6 +334,7 @@ else {
     {
       level: [1, 1, , , 5, 1, 1,],
       prize: 2,
+      oldPrize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -316,6 +343,7 @@ else {
     {
       level: [, 1, 3, 3, 1, , 1,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -324,6 +352,7 @@ else {
     {
       level: [, , , , 2, 5, 2,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -332,6 +361,7 @@ else {
     {
       level: [, , 3, 2, 1, 2, 1,],
       prize: 7,
+      oldPrize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -340,6 +370,7 @@ else {
     {
       level: [, 2, 2, 2, 2, 2, ,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -348,6 +379,7 @@ else {
     {
       level: [, 1, 1, 3, 4, , 1,],
       prize: 1,
+      oldPrize: 1,
       enable: false,
       finish: false,
       secret: false,
@@ -356,6 +388,7 @@ else {
     {
       level: [, , 2, 2, 3, 1, 2,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -364,6 +397,7 @@ else {
     {
       level: [, , 2, 3, 3, , 2,],
       prize: 8,
+      oldPrize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -372,6 +406,7 @@ else {
     {
       level: [, , 2, 1, 3, 1, 2,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -380,6 +415,7 @@ else {
     {
       level: [, , 2, 2, 3, , 3,],
       prize: 7,
+      oldPrize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -388,6 +424,7 @@ else {
     {
       level: [, , 2, 1, 3, 1, 3,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -396,6 +433,7 @@ else {
     {
       level: [, , 2, 2, 3, , 3,],
       prize: 2,
+      oldPrize: 2,
       enable: false,
       finish: false,
       secret: false,
@@ -404,6 +442,7 @@ else {
     {
       level: [, , 1, 1, 2, 2, 4,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -412,6 +451,7 @@ else {
     {
       level: [, , 1, 2, 3, , 4,],
       prize: 8,
+      oldPrize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -420,6 +460,7 @@ else {
     {
       level: [, , 1, 1, 3, 1, 4,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -428,6 +469,7 @@ else {
     {
       level: [, , , 1, 3, 1, 5,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -436,6 +478,7 @@ else {
     {
       level: [, , , 1, 2, 1, 6,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -444,6 +487,7 @@ else {
     {
       level: [, , , 1, 2, 1, 6,],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -452,6 +496,7 @@ else {
     {
       level: [, , , , 2, 2, 6,],
       prize: 8,
+      oldPrize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -460,6 +505,7 @@ else {
     {
       level: [, , , , 2, 2, 6,],
       prize: 4,
+      oldPrize: 4,
       enable: false,
       finish: false,
       secret: false,
@@ -468,6 +514,7 @@ else {
     {
       level: [, , , , 2, 2, 6,],
       prize: 6,
+      oldPrize: 6,
       enable: false,
       finish: false,
       secret: false,
@@ -476,6 +523,7 @@ else {
     {
       level: [, , , , 2, 1, 6, 1],
       prize: 5,
+      oldPrize: 5,
       enable: false,
       finish: false,
       secret: false,
@@ -484,6 +532,7 @@ else {
     {
       level: [, , , , 1, 2, 6, 1],
       prize: 7,
+      oldPrize: 7,
       enable: false,
       finish: false,
       secret: false,
@@ -492,6 +541,16 @@ else {
     {
       level: [, , , , 1, 2, 5, 2],
       prize: 8,
+      oldPrize: 8,
+      enable: false,
+      finish: false,
+      secret: false,
+      city: 'Секрет'
+    },
+    {
+      level: [, , , , , , , 8],
+      prize: 8,
+      oldPrize: 8,
       enable: false,
       finish: false,
       secret: false,
@@ -579,7 +638,7 @@ let prizeMas = [
   {
     numPrize: 1,
     namePrize: 'Увеличение количества бомб',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(16, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(16, 0, 16, 16, 1),
     action: () => {
       playerCanBombsNum++;
       fieldBombs.textContent = playerCanBombsNum;
@@ -594,7 +653,7 @@ let prizeMas = [
   {
     numPrize: 2,
     namePrize: 'Увеличение силы взрыва',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(0, 0, 16, 16, 1),
     action: () => {
       playerBoomPower++;
       localStorage.setItem('playerBoomPower', playerBoomPower);
@@ -605,16 +664,16 @@ let prizeMas = [
   {
     numPrize: 3,
     namePrize: 'Увеличение скорости',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(48, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(48, 0, 16, 16, 1),
     action: () => {
-      playerSpeed = playerSpeed * 2;
+      playerSpeed = playerSpeed + 0.5;
       // fieldPower.textContent = playerBoomPower;
     }
   },
   {
     numPrize: 4,
     namePrize: 'Можно ходить сквозь стены',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(80, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(80, 0, 16, 16, 1),
     action: () => {
       playerWallpass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -624,7 +683,7 @@ let prizeMas = [
   {
     numPrize: 5,
     namePrize: 'Детонатор (взрыв нажатием второй кнопки)',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(32, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(32, 0, 16, 16, 1),
     action: () => {
       playerCanBoom = true;
       fieldManual.textContent = 'Да';
@@ -633,7 +692,7 @@ let prizeMas = [
   {
     numPrize: 6,
     namePrize: 'Можно ходить сквозь бомбы',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(64, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(64, 0, 16, 16, 1),
     action: () => {
       playerBombPass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -642,7 +701,7 @@ let prizeMas = [
   {
     numPrize: 7,
     namePrize: 'Иммунитет к взрывам',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(96, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(96, 0, 16, 16, 1),
     action: () => {
       playerExplosionPass = true;
       // fieldPower.textContent = playerBoomPower;
@@ -651,9 +710,9 @@ let prizeMas = [
   {
     numPrize: 8,
     namePrize: 'Временная неуязвимость',
-    prizeImg: tiles.newImage("assets/big_dyna.png").getAnimation(0, 16 * 3, 16, 16, 1),
+    prizeImg: tiles.newImage("assets/tiles/prizes/prizes.jpg").getAnimation(112, 0, 16, 16, 1),
     action: () => {
-      //playerGod = true;
+      playerGod = true;
       // fieldPower.textContent = playerBoomPower;
     }
   },
@@ -801,7 +860,7 @@ function init() {
   player.takedPrize = false;
   player.goDead = false;
   playerDead = false;
-  playerGod = true;
+  playerGod = false;
 
   pjs.camera.setPosition(playerBody.getPosition());
 
@@ -860,7 +919,6 @@ function init() {
 
       prize.setAnimation(prizeMas[levelMas[levelNum - 1].prize - 1].prizeImg)
 
-      console.log(levelMas[levelNum - 1].prize);
 
       prize.prizeId = levelMas[levelNum - 1].prize;
     }
@@ -1001,7 +1059,7 @@ function init() {
             canThrough: true,
             canPath: true,
             pathActive: false,
-            angryDistance: 8,
+            angryDistance: 6,
             result: [],
             dead: false,
           }
@@ -1045,7 +1103,7 @@ function init() {
             canThrough: false,
             canPath: true,
             pathActive: false,
-            angryDistance: 8,
+            angryDistance: 6,
             result: [],
             dead: false,
           }
@@ -1067,7 +1125,7 @@ function init() {
             canThrough: true,
             canPath: true,
             pathActive: false,
-            angryDistance: 8,
+            angryDistance: 6,
             result: [],
             dead: false,
           }
@@ -1324,6 +1382,7 @@ function startGame(level) {
     gamePreStarted = false;
     if (visibleGame) {
       document.querySelector('canvas').style.display = 'block';
+      document.querySelector('.level-before-start').style.display = 'none';
       document.querySelector('.game_field_wrap').style.display = 'flex';
       document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
       levelAudio1.stop();
@@ -1340,9 +1399,14 @@ function startGame(level) {
 }
 
 function deadMenu() {
+  document.querySelector('.level-before-start').style.display = 'flex';
   document.querySelector('.game_field_wrap').style.display = 'none';
   document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
+  playerCanBoom = false;
+  playerWallpass = false;
+  playerBombPass = false;
+  playerExplosionPass = false;
   // playerBoomPower = 1;
   // playerCanBombsNum = 1;
   // playerCanBoom = false;
@@ -1355,9 +1419,15 @@ function deadMenu() {
   fieldManual.textContent = 'Нет';
   animPlayer(playerBody, 'stay');
   document.querySelector('.dead_menu').style.display = 'flex';
+
+  if (levelMas[levelNum - 1].prize == 4 || levelMas[levelNum - 1].prize == 5 || levelMas[levelNum - 1].prize == 6 || levelMas[levelNum - 1].prize == 7 || levelMas[levelNum - 1].prize == 8) {
+    levelMas[levelNum - 1].prize = levelMas[levelNum - 1].oldPrize
+    localStorage.setItem('levelMas', JSON.stringify(levelMas))
+  }
 }
 
 function winMenu() {
+  document.querySelector('.level-before-start').style.display = 'flex';
   document.querySelector('.game_field_wrap').style.display = 'none';
   document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
@@ -1406,7 +1476,7 @@ function eventHandler() {
       }, 500);
     }
 
-    if (gameStarted) levelAudio2.play();
+    if (gameStarted && !gamePaused) levelAudio2.play();
 
     else if (!gameStarted && !gamePreStarted && !playerDead) menuAudio.play();
 
@@ -1428,6 +1498,11 @@ game.newLoop('myGame', function () {
       levelSeconds = numSecondsRemaining;
       endTimestamp = beginTimestamp + levelSeconds;
       visibleGame = true;
+      document.querySelector('.pause-field').style.display = 'none';
+      document.querySelector('canvas').style.display = 'block';
+      document.querySelector('.game_field_wrap').style.display = 'flex';
+      document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
+
     }
     else {
       let isPlantingBombs = player.bombsMas.some(value => {
@@ -1441,6 +1516,10 @@ game.newLoop('myGame', function () {
         visibleGame = false;
         animPlayer(playerBody, 'stay');
         player.moving = false;
+        document.querySelector('.pause-field').style.display = 'flex';
+        document.querySelector('canvas').style.display = 'none';
+        document.querySelector('.game_field_wrap').style.display = 'none';
+        document.querySelector('.game_field_wrap_bottom').style.display = 'none';
       }
       else {
 
@@ -1452,7 +1531,7 @@ game.newLoop('myGame', function () {
     }
   }
 
-  if (visibleGame && gameStarted) {
+  if (visibleGame && gameStarted && !gamePaused) {
     endTimestamp = beginTimestamp + levelSeconds;
     numSecondsRemaining = endTimestamp - Math.floor(Date.now() / 1000)
 
@@ -1521,7 +1600,7 @@ game.newLoop('myGame', function () {
           y: sizeOneBlock * i,
           w: sizeOneBlock / 5,
           h: sizeOneBlock / 5,
-          fillColor: 'yellow',
+          //fillColor: 'yellow',
         }).draw()
       }
 
@@ -1531,7 +1610,7 @@ game.newLoop('myGame', function () {
           y: sizeOneBlock * i,
           w: sizeOneBlock / 5,
           h: sizeOneBlock / 5,
-          fillColor: 'blue',
+          //fillColor: 'blue',
         }).draw()
       }
 
@@ -1598,8 +1677,9 @@ game.newLoop('myGame', function () {
     player.canWalkOnBomb = false;
   }
   if (playerCenter.isIntersect(door) && player.seeDoor) {
-    if (gameStarted /*enemies.length == 0*/) { ///////////////////////////////////////////////////////////////////////////////////////УБРАТЬ КОММЕНТ
-      if (levelMas.length >= levelNum) levelMas[levelNum].enable = true;
+    if (gameStarted && enemies.length == 0) { ///////////////////////////////////////////////////////////////////////////////////////УБРАТЬ КОММЕНТ
+      console.log(levelNum);
+      if (levelMas.length >= levelNum + 1) levelMas[levelNum].enable = true;
       levelMas[levelNum - 1].finish = true;
       if (playerCanSecret) levelMas[levelNum - 1].secret = true;
       localStorage.setItem('levelMas', JSON.stringify(levelMas))
@@ -1609,7 +1689,15 @@ game.newLoop('myGame', function () {
       finishAudio.play();
 
       pjs.OOP.newTimer(3000, function () {
-        winMenu();
+        if (levelMas.length >= levelNum + 1) {
+          winMenu();
+        }
+        else {
+          document.querySelector('.dead_menu').style.display = 'none';
+          document.querySelector('.level_menu').style.display = 'flex';
+          document.querySelector('.level-before-start').style.display = 'flex';
+          initLevelsScreen();
+        }
       }).start();
     }
     else if (gameStarted && enemies.length > 0) {
@@ -1854,6 +1942,7 @@ game.newLoop('myGame', function () {
 
         enemies.forEach(function (elEnemy) {
           if (elEnemy.isIntersect(el) && !elEnemy.dead) {
+            if (enemies.length <= 1) pauseAudio.play();
             elEnemy.dead = true;
             elEnemy.speed = 0;
             pjs.OOP.newTimer(1000, function () {
@@ -2168,9 +2257,6 @@ function enemyGo(element, arrow) {
 function enemyPathGo(element, arrow) {
 
   if (!element.moving) {
-    console.log(element.canThrough)
-
-
 
     let levelGraph = new Array(level.length).fill(0).map(el => new Array(level[0].length).fill(0));
 
