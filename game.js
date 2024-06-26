@@ -56,7 +56,7 @@ let playerBody;
 
 let playerBoomPower = 1;
 let playerCanBombsNum = 1;
-let playerSpeed = 1.8; //1.6
+let playerSpeed = 2.2; //1.6
 let playerCanBoom = false;
 let playerWallpass = false;
 let playerBombPass = false;
