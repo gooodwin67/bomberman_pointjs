@@ -50,6 +50,14 @@ canvas {
     max-width: 100%;
 }
 
+.stats {
+    position: absolute;
+    left: 0;
+    right: 0;
+    font-size: 20px;
+    color: #000;
+}
+
 .bomberman_h_img {
     margin: 50px 0;
 }

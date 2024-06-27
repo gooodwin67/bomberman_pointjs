@@ -18,12 +18,15 @@ let exploseAudio = pjs.audio.newAudio('assets/audio/explose.mp3');
 let pauseAudio = pjs.audio.newAudio('assets/audio/pause.mp3');
 let prizeAudio = pjs.audio.newAudio('assets/audio/prize.mp3');
 
+var lastLoop = new Date();
+
 
 //pjs.system.initFullPage(); // развернули игру на полный экран
 var game = pjs.game;
 var tiles = pjs.tiles;
 var key = pjs.keyControl.initControl();
 let keyDowns;
+pjs.system.initFPSCheck();
 
 let beginTimestamp;
 let visibleGame = true;
@@ -1488,6 +1491,10 @@ function eventHandler() {
 
 
 game.newLoop('myGame', function () {
+
+
+  document.querySelector('.stats').textContent = `FPS: ${pjs.system.getFPS()}`;
+
 
   if (key.isPress("ENTER") && !playerDead) {
 
