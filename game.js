@@ -4,7 +4,6 @@ var pjs = new PointJS(800, 600, {
 });
 
 var blockssGrass = [];
-var blockssWall = [];
 
 let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
 let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
@@ -80,6 +79,7 @@ let blocks = [];
 let solidBlocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
+document.querySelector('canvas').style.backgroundSize = sizeOneBlock + 'px';
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
@@ -1186,13 +1186,13 @@ function init() {
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
 
-      blockssGrass.push(game.newImageObject({
-        file: "assets/tiles/map/grass.jpg",
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-      }));
+      // blockssGrass.push(game.newImageObject({
+      //   file: "assets/tiles/map/grass.jpg",
+      //   x: sizeOneBlock * j,
+      //   y: sizeOneBlock * i,
+      //   w: sizeOneBlock,
+      //   h: sizeOneBlock,
+      // }));
 
       if (level[i][j].b == 9) {
         blockssGrass.push(game.newImageObject({
@@ -1647,25 +1647,25 @@ game.newLoop('myGame', function () {
       //     fillColor: 'black'
       //   }).draw();
       // }
-      if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
-        game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock / 5,
-          h: sizeOneBlock / 5,
-          //fillColor: 'yellow',
-        }).draw()
-      }
+      // if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
+      //   game.newRectObject({
+      //     x: sizeOneBlock * j,
+      //     y: sizeOneBlock * i,
+      //     w: sizeOneBlock / 5,
+      //     h: sizeOneBlock / 5,
+      //     //fillColor: 'yellow',
+      //   }).draw()
+      // }
 
-      if (level[i][j].p != 0 && level[i][j].prize) {  // Где приз
-        game.newRectObject({
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock / 5,
-          h: sizeOneBlock / 5,
-          //fillColor: 'blue',
-        }).draw()
-      }
+      // if (level[i][j].p != 0 && level[i][j].prize) {  // Где приз
+      //   game.newRectObject({
+      //     x: sizeOneBlock * j,
+      //     y: sizeOneBlock * i,
+      //     w: sizeOneBlock / 5,
+      //     h: sizeOneBlock / 5,
+      //     //fillColor: 'blue',
+      //   }).draw()
+      // }
 
       if (level[i][j].door && level[i][j].p == 0) {
         door.draw();
