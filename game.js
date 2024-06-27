@@ -3,6 +3,8 @@ var pjs = new PointJS(800, 600, {
 
 });
 
+var blockss = [];
+
 let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
 let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
 let levelAudio2 = pjs.audio.newAudio('assets/audio/level2.mp3');
@@ -1180,6 +1182,19 @@ function init() {
     }
   }
 
+  for (var i = 0; i < level.length; i++) {
+    for (var j = 0; j < level[i].length; j++) {
+
+      blockss.push(game.newImageObject({
+        file: "assets/tiles/map/grass.jpg",
+        x: sizeOneBlock * j,
+        y: sizeOneBlock * i,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+      }));
+    }
+  }
+
 
   // var S_LEFT = 10;
   // function tick() {
@@ -1488,6 +1503,8 @@ function eventHandler() {
 
 
 
+
+
 game.newLoop('myGame', function () {
 
 
@@ -1568,7 +1585,9 @@ game.newLoop('myGame', function () {
     pjs.camera.move(pjs.vector.point(0, -playerSpeed));
   }
 
-
+  blockss.forEach((el) => {
+    el.draw();
+  });
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
@@ -1581,32 +1600,42 @@ game.newLoop('myGame', function () {
       //   h: sizeOneBlock,
       // }).drawFrame(0);
 
-      game.newImageObject({
-        file: "assets/tiles/map/grass.jpg",
-        x: sizeOneBlock * j,
-        y: sizeOneBlock * i,
-        w: sizeOneBlock,
-        h: sizeOneBlock,
-      }).draw();
+      // game.newImageObject({
+      //   file: "assets/tiles/map/grass.jpg",
+      //   x: sizeOneBlock * j,
+      //   y: sizeOneBlock * i,
+      //   w: sizeOneBlock,
+      //   h: sizeOneBlock,
+      // }).draw();
 
-      if (level[i][j].b == 9) {
-        game.newAnimationObject({
-          animation: tiles.newImage("assets/tiles/map/wall.jpg").getAnimation(0, 0, 16, 16, 1), //Стены
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-        }).drawFrame(0);
-      }
-      else if (level[i][j].p != 0) {
-        game.newAnimationObject({
-          animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(0, 0, 16, 16, 1), //Кирпич
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-        }).drawFrame(0);
-      }
+      // if (level[i][j].b == 9) {
+      //   game.newAnimationObject({
+      //     animation: tiles.newImage("assets/tiles/map/wall.jpg").getAnimation(0, 0, 16, 16, 1), //Стены
+      //     x: sizeOneBlock * j,
+      //     y: sizeOneBlock * i,
+      //     w: sizeOneBlock,
+      //     h: sizeOneBlock,
+      //   }).drawFrame(0);
+      // }
+      // if (level[i][j].p != 0) {
+      //   game.newAnimationObject({
+      //     animation: tiles.newImage("assets/tiles/map/brick.png").getAnimation(0, 0, 16, 16, 1), //Кирпич
+      //     x: sizeOneBlock * j,
+      //     y: sizeOneBlock * i,
+      //     w: sizeOneBlock,
+      //     h: sizeOneBlock,
+      //   }).drawFrame(0);
+      // }
+      // if (level[i][j].p != 0) {
+      //   game.newRectObject({
+
+      //     x: sizeOneBlock * j,
+      //     y: sizeOneBlock * i,
+      //     w: sizeOneBlock,
+      //     h: sizeOneBlock,
+      //     fillColor: 'black'
+      //   }).draw();
+      // }
       if (level[i][j].p != 0 && level[i][j].door) {  // Где дверь
         game.newRectObject({
           x: sizeOneBlock * j,
