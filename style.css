@@ -48,7 +48,6 @@ canvas {
     border: 2px solid #fff;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.4);
     max-width: 100%;
-    background: url('assets/tiles/map/grass.jpg');
 }
 
 .stats {

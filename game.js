@@ -3,7 +3,6 @@ var pjs = new PointJS(800, 600, {
 
 });
 
-var blockssGrass = [];
 
 let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
 let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
@@ -79,7 +78,6 @@ let blocks = [];
 let solidBlocks = [];
 let blocksBomb = [];
 let sizeOneBlock = 48;
-document.querySelector('canvas').style.backgroundSize = sizeOneBlock + 'px';
 let timeBomb = 2000;
 let enemies = [];
 let enemyType = 1;
@@ -91,6 +89,7 @@ let numberOfEnemies;
 let gamePreStarted = false;
 let preLevelTimeOut;
 
+let backgroundObj;
 
 let levelMas;
 
@@ -804,6 +803,16 @@ function init() {
 
   whiteBlocks = [];
 
+  backgroundObj = game.newBackgroundObject({
+    file: "assets/tiles/map/map.jpg",
+    x: 0,
+    y: 0,
+    w: sizeOneBlock * level[0].length,
+    h: sizeOneBlock * level.length,
+    countX: 1,
+    countY: 1,
+  });
+
   prize.w = sizeOneBlock,
     prize.h = sizeOneBlock,
 
@@ -1183,28 +1192,6 @@ function init() {
     }
   }
 
-  for (var i = 0; i < level.length; i++) {
-    for (var j = 0; j < level[i].length; j++) {
-
-      // blockssGrass.push(game.newImageObject({
-      //   file: "assets/tiles/map/grass.jpg",
-      //   x: sizeOneBlock * j,
-      //   y: sizeOneBlock * i,
-      //   w: sizeOneBlock,
-      //   h: sizeOneBlock,
-      // }));
-
-      if (level[i][j].b == 9) {
-        blockssGrass.push(game.newImageObject({
-          file: "assets/tiles/map/wall.jpg",
-          x: sizeOneBlock * j,
-          y: sizeOneBlock * i,
-          w: sizeOneBlock,
-          h: sizeOneBlock,
-        }));
-      }
-    }
-  }
 
 
   // var S_LEFT = 10;
@@ -1597,8 +1584,7 @@ game.newLoop('myGame', function () {
   }
 
 
-
-  pjs.OOP.drawArr(blockssGrass);
+  backgroundObj.draw();
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
