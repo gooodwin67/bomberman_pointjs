@@ -62,10 +62,10 @@ let playerRight;
 let playerCenter;
 let playerBody;
 
-let playerBoomPower = 2;
-let playerCanBombsNum = 5;
+let playerBoomPower = 1;
+let playerCanBombsNum = 1;
 let playerSpeed = 2.2; //1.6
-let playerCanBoom = true;
+let playerCanBoom = false;
 let playerWallpass = false;
 let playerBombPass = false;
 let playerExplosionPass = false;
@@ -99,7 +99,7 @@ let backgroundObj;
 
 let levelMas;
 
-localStorage.clear(); ////////////////////////////////////////////////DEL
+//localStorage.clear(); ////////////////////////////////////////////////DEL
 
 if (localStorage.getItem('levelMas') !== null) {
   levelMas = JSON.parse(localStorage.getItem('levelMas'));
@@ -119,16 +119,16 @@ else {
       level: [3, 3, , , , , ,],
       prize: 1,
       oldPrize: 1,
-      enable: false,
+      enable: true,
       finish: false,
-      secret: false,
+      secret: true,
       city: 'Секрет'
     },
     {
       level: [2, 2, 2, , , , ,],
       prize: 5,
       oldPrize: 5,
-      enable: false,
+      enable: true,
       finish: false,
       secret: false,
       city: 'Секрет'
@@ -137,7 +137,7 @@ else {
       level: [1, 1, 2, 2, , , ,],
       prize: 3,
       oldPrize: 3,
-      enable: false,
+      enable: true,
       finish: false,
       secret: false,
       city: 'Секрет'
@@ -191,7 +191,7 @@ else {
       level: [, 1, 1, 1, 3, 1, ,],
       prize: 4,
       oldPrize: 4,
-      enable: true,
+      enable: false,
       finish: false,
       secret: false,
       city: 'Секрет'
