@@ -18,8 +18,6 @@ let exploseAudio = pjs.audio.newAudio('assets/audio/explose.mp3');
 let pauseAudio = pjs.audio.newAudio('assets/audio/pause.mp3');
 let prizeAudio = pjs.audio.newAudio('assets/audio/prize.mp3');
 
-var lastLoop = new Date();
-
 
 //pjs.system.initFullPage(); // развернули игру на полный экран
 var game = pjs.game;
@@ -1575,13 +1573,21 @@ game.newLoop('myGame', function () {
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
 
-      game.newAnimationObject({
-        animation: tiles.newImage("assets/tiles/map/grass.jpg").getAnimation(0, 0, 16, 16, 1), //трава
+      // game.newAnimationObject({
+      //   animation: tiles.newImage("assets/tiles/map/grass.jpg").getAnimation(0, 0, 16, 16, 1), //трава
+      //   x: sizeOneBlock * j,
+      //   y: sizeOneBlock * i,
+      //   w: sizeOneBlock,
+      //   h: sizeOneBlock,
+      // }).drawFrame(0);
+
+      game.newImageObject({
+        file: "assets/tiles/map/grass.jpg",
         x: sizeOneBlock * j,
         y: sizeOneBlock * i,
         w: sizeOneBlock,
         h: sizeOneBlock,
-      }).drawFrame(0);
+      }).draw();
 
       if (level[i][j].b == 9) {
         game.newAnimationObject({
