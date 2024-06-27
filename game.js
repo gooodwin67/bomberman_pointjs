@@ -3,7 +3,7 @@ var pjs = new PointJS(800, 600, {
 
 });
 
-var blockss = [];
+var blockssGrass = [];
 
 let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
 let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
@@ -1185,7 +1185,7 @@ function init() {
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
 
-      blockss.push(game.newImageObject({
+      blockssGrass.push(game.newImageObject({
         file: "assets/tiles/map/grass.jpg",
         x: sizeOneBlock * j,
         y: sizeOneBlock * i,
@@ -1585,8 +1585,8 @@ game.newLoop('myGame', function () {
     pjs.camera.move(pjs.vector.point(0, -playerSpeed));
   }
 
-  blockss.forEach((el) => {
-    el.draw();
+  blockssGrass.forEach((el) => {
+    //el.draw();
   });
 
   for (var i = 0; i < level.length; i++) {
@@ -1600,13 +1600,13 @@ game.newLoop('myGame', function () {
       //   h: sizeOneBlock,
       // }).drawFrame(0);
 
-      // game.newImageObject({
-      //   file: "assets/tiles/map/grass.jpg",
-      //   x: sizeOneBlock * j,
-      //   y: sizeOneBlock * i,
-      //   w: sizeOneBlock,
-      //   h: sizeOneBlock,
-      // }).draw();
+      game.newImageObject({
+        file: "assets/tiles/map/grass.jpg",
+        x: sizeOneBlock * j,
+        y: sizeOneBlock * i,
+        w: sizeOneBlock,
+        h: sizeOneBlock,
+      }).draw();
 
       // if (level[i][j].b == 9) {
       //   game.newAnimationObject({
