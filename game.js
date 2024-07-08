@@ -119,16 +119,16 @@ else {
       level: [3, 3, , , , , ,],
       prize: 1,
       oldPrize: 1,
-      enable: true,
+      enable: false,
       finish: false,
-      secret: true,
+      secret: false,
       city: 'Секрет'
     },
     {
       level: [2, 2, 2, , , , ,],
       prize: 5,
       oldPrize: 5,
-      enable: true,
+      enable: false,
       finish: false,
       secret: false,
       city: 'Секрет'
@@ -137,7 +137,7 @@ else {
       level: [1, 1, 2, 2, , , ,],
       prize: 3,
       oldPrize: 3,
-      enable: true,
+      enable: false,
       finish: false,
       secret: false,
       city: 'Секрет'
@@ -1377,8 +1377,18 @@ document.querySelector('.win_to_next').addEventListener('click', function () {
 
 
 function secretAlert() {
-  alert("Чтобы пройти уровень, надо выполнить 2 условия: убить всех врагов и найти дверь. Чтобы открыть звезду, надо сначала найти дверь, не убив ни одного врага");
+  document.querySelector('.alert-field').style.display = 'flex';
 };
+
+document.querySelector('.close-alert').addEventListener('click', function () {
+  document.querySelector('.alert-field').style.display = 'none';
+});
+
+
+window.addEventListener('scroll', function(event) {
+window.scrollTo(0, 0);
+event.preventDefault();
+}, false);
 
 
 

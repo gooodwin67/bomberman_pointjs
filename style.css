@@ -26,15 +26,22 @@
 
 * {
     font-family: "LXGW WenKai TC", cursive;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 }
 
 body {
     margin: 0 !important;
     /*background: url('assets/back1.png') !important;*/
-    background: #3a2769;
+    background: #3E226C;
     display: flex;
     justify-content: center;
-    overflow: auto !important;
+    /*overflow: auto !important;*/
 }
 
 canvas {
@@ -60,6 +67,7 @@ canvas {
 
 .bomberman_h_img {
     margin: 50px 0;
+    width: 100%;
 }
 
 .main_start {
@@ -107,7 +115,7 @@ button:hover {
 .main_h_block .man_img {
     position: absolute;
     right: -140px;
-    top: 58px;
+    top: 82px;
     width: 110px;
 }
 
@@ -151,6 +159,26 @@ h1 {
     border-radius: 0;
     width: 100%;
     text-align: center;
+}
+.alert-field {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    top: 0;
+}
+.alert-field button {
+    min-width: 170px;
+    padding: 10px 30px;
+}
+.alert-field>div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    padding: 30px 30px;
+    background: #fff;
+    transform: translate(-50%, -50%);
+    border-radius: 7px;
 }
 
 .pause-field {
@@ -230,7 +258,7 @@ h1 {
     flex-direction: column;
     /*background: #fff;*/
     /*background: url('assets/back1.png') !important;*/
-    background-color: #3a2769;
+    background-color: #3E226C;
 }
 
 .level_menu {
@@ -245,7 +273,7 @@ h1 {
     background: #fff;
     text-align: center;
     /*background: url('assets/back1.png') !important;*/
-    background: #3a2769;
+    background: #3E226C;
     max-width: 1000px;
 }
 
