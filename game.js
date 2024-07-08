@@ -1,9 +1,9 @@
 YaGames
-    .init()
-    .then(ysdk => {
-        console.log('Yandex SDK initialized');
-        window.ysdk = ysdk;
-    });
+  .init()
+  .then(ysdk => {
+    console.log('Yandex SDK initialized');
+    window.ysdk = ysdk;
+  });
 
 var pjs = new PointJS(800, 600, {
 
@@ -1375,6 +1375,30 @@ document.querySelector('.win_to_next').addEventListener('click', function () {
 });
 
 
+// document.querySelector('.down_arrow').addEventListener('click', function () {
+//   //window.scrollBy(0, 50);
+//   //window.scrollTo(0, document.documentElement.clientHeight);
+// })
+
+// let wheel = 0;
+// window.onwheel = (e) => e.deltaY < 0 ? wheel = 1 : wheel = -1;
+
+// window.addEventListener('wheel', function (e) {
+
+//   e.deltaY < 0 ? wheel = -1 : wheel = 1;
+//   if (wheel == 1) {
+//     window.scrollBy(0, 100);
+//     wheel = 0;
+//   }
+//   else if (wheel == -1) {
+//     window.scrollBy(0, -100);
+//     wheel = 0;
+//   }
+// })
+
+
+
+
 
 function secretAlert() {
   document.querySelector('.alert-field').style.display = 'flex';
@@ -1385,10 +1409,10 @@ document.querySelector('.close-alert').addEventListener('click', function () {
 });
 
 
-window.addEventListener('scroll', function(event) {
-window.scrollTo(0, 0);
-event.preventDefault();
-}, false);
+// window.addEventListener('scroll', function (event) {
+//   window.scrollTo(0, 0);
+//   event.preventDefault();
+// }, false);
 
 
 

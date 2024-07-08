@@ -26,12 +26,18 @@
 
 * {
     font-family: "LXGW WenKai TC", cursive;
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
@@ -42,6 +48,36 @@ body {
     display: flex;
     justify-content: center;
     /*overflow: auto !important;*/
+
+    overflow: auto !important;
+    -ms-overflow-style: none;
+    scrollbar-width: auto;
+
+    overflow-y: scroll;
+    scrollbar-color: #007 #bada55;
+    -moz-appearance: none !important;
+    scrollbar-width: 0px;
+
+
+
+}
+
+:root {
+    scrollbar-color: rgb(58, 39, 105) rgb(58, 39, 105);
+    scrollbar-width: 25px;
+}
+
+scrollbar {
+    -moz-appearance: none !important;
+    background: rgb(58, 39, 105) !important;
+    width: 0px;
+    scrollbar-color: rgb(58, 39, 105) rgb(58, 39, 105);
+}
+
+body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 canvas {
@@ -160,17 +196,20 @@ h1 {
     width: 100%;
     text-align: center;
 }
+
 .alert-field {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     top: 0;
 }
+
 .alert-field button {
     min-width: 170px;
     padding: 10px 30px;
 }
+
 .alert-field>div {
     position: absolute;
     left: 50%;
@@ -180,6 +219,8 @@ h1 {
     transform: translate(-50%, -50%);
     border-radius: 7px;
 }
+
+
 
 .pause-field {
     position: absolute;
@@ -286,6 +327,7 @@ h1 {
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
+    padding-bottom: 150px;
 }
 
 .level_block {
