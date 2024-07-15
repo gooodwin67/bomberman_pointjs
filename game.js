@@ -10,9 +10,9 @@ var pjs = new PointJS(800, 600, {
 });
 
 
-let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
-let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
-let levelAudio2 = pjs.audio.newAudio('assets/audio/level2.mp3');
+//let menuAudio = pjs.audio.newAudio('assets/audio/menu.mp3');
+//let levelAudio1 = pjs.audio.newAudio('assets/audio/level1.mp3');
+//let levelAudio2 = pjs.audio.newAudio('assets/audio/level2.mp3');
 let finishAudio = pjs.audio.newAudio('assets/audio/finish.mp3');
 
 let deathAudio1 = pjs.audio.newAudio('assets/audio/death1.mp3');
@@ -24,6 +24,37 @@ let bombAudio = pjs.audio.newAudio('assets/audio/bomb.mp3');
 let exploseAudio = pjs.audio.newAudio('assets/audio/explose.mp3');
 let pauseAudio = pjs.audio.newAudio('assets/audio/pause.mp3');
 let prizeAudio = pjs.audio.newAudio('assets/audio/prize.mp3');
+
+
+let menuAudio = new Howl({
+  src: ['assets/audio/menu.mp3'],
+});
+
+let levelAudio1 = new Howl({
+  src: ['assets/audio/level1.mp3'],
+});
+
+let levelAudio2 = new Howl({
+  src: ['assets/audio/level2.mp3'],
+});
+
+let userheight = document.documentElement.clientHeight;
+if (userheight < 800) {
+  document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
+}
+
+window.addEventListener('resize', function (event) {
+  userheight = document.documentElement.clientHeight;
+  if (userheight < 800) {
+    document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
+  }
+  else {
+    document.querySelector('.game_field_wrap_bottom').classList.remove('resize_bottom');
+  }
+}, true);
+
+
+
 
 
 //pjs.system.initFullPage(); // развернули игру на полный экран
@@ -736,6 +767,7 @@ function initLevelsScreen() {
 
   playerDead = false;
   menuAudio.play();
+
   levelAudio2.stop();
   document.querySelectorAll('.levels_wrap')[0].innerHTML = '';
   levelMas.forEach((value, index, array) => {
@@ -1441,7 +1473,7 @@ function startGame(level) {
       document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
       levelAudio1.stop();
       levelAudio2.play();
-      levelAudio2.setNextPlay(levelAudio2);
+
       init();
       gameStarted = true;
       beginTimestamp = Math.floor(Date.now() / 1000);
@@ -1532,7 +1564,7 @@ function eventHandler() {
 
     if (gameStarted && !gamePaused) levelAudio2.play();
 
-    else if (!gameStarted && !gamePreStarted && !playerDead) menuAudio.play();
+    //else if (!gameStarted && !gamePreStarted && !playerDead) menuAudio.play();
 
 
   }
@@ -1552,7 +1584,7 @@ game.newLoop('myGame', function () {
   if (key.isPress("ENTER") && !playerDead) {
 
     if (gamePaused) {
-      levelAudio2.playPause();
+      levelAudio2.play();
       gamePaused = false
       beginTimestamp = Math.floor(Date.now() / 1000);
       levelSeconds = numSecondsRemaining;
@@ -1569,7 +1601,7 @@ game.newLoop('myGame', function () {
         return value.planting
       })
       if (!isPlantingBombs) {
-        levelAudio2.playPause();
+        levelAudio2.pause();
         pauseAudio.stop();
         pauseAudio.play();
         gamePaused = true;
