@@ -5,7 +5,7 @@ YaGames
     window.ysdk = ysdk;
   });
 
-var pjs = new PointJS(800, 600, {
+var pjs = new PointJS(800, 715, {
 
 });
 
@@ -38,20 +38,7 @@ let levelAudio2 = new Howl({
   src: ['assets/audio/level2.mp3'],
 });
 
-let userheight = document.documentElement.clientHeight;
-if (userheight < 800) {
-  document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
-}
 
-window.addEventListener('resize', function (event) {
-  userheight = document.documentElement.clientHeight;
-  if (userheight < 800) {
-    document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
-  }
-  else {
-    document.querySelector('.game_field_wrap_bottom').classList.remove('resize_bottom');
-  }
-}, true);
 
 
 
@@ -74,12 +61,13 @@ let level;
 //54 блоки
 //6 враги
 
-
+let resizeBlock = 0;
 
 
 let gameStarted = false;
 let gamePaused = false;
-let fieldLevel = document.querySelector('.level');
+
+//let fieldLevel = document.querySelector('.level');
 let fieldBombs = document.querySelector('.bombs');
 let fieldPower = document.querySelector('.power');
 let fieldManual = document.querySelector('.manualBombs');
@@ -127,6 +115,32 @@ let gamePreStarted = false;
 let preLevelTimeOut;
 
 let backgroundObj;
+
+
+
+// let userheight = document.documentElement.clientHeight;
+// if (userheight < 800) {
+//   document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
+//   document.querySelector('canvas').classList.add('resize_canvas');
+//   resizeBlock = sizeOneBlock * 1.3;
+// }
+
+// window.addEventListener('resize', function (event) {
+// userheight = document.documentElement.clientHeight;
+// if (userheight < 800) {
+//   document.querySelector('.game_field_wrap_bottom').classList.add('resize_bottom');
+//   document.querySelector('canvas').classList.add('resize_canvas');
+//   resizeBlock = sizeOneBlock * 1.3;
+// }
+// else {
+//   document.querySelector('.game_field_wrap_bottom').classList.remove('resize_bottom');
+//   document.querySelector('canvas').classList.remove('resize_canvas');
+//   resizeBlock = sizeOneBlock * 0;
+// }
+
+// }, true);
+
+
 
 let levelMas;
 
@@ -605,9 +619,35 @@ else {
 
 
 let levelNum = 1;
-fieldLevel.textContent = levelNum;
+
 
 let enemyTypes;
+
+
+let info_btns_image;
+
+let info_level_text;
+let info_time_text;
+let info_bombs_text;
+let info_power_text;
+let info_detonator_text;
+
+let fieldLevel = game.newTextObject({
+  x: 0,
+  y: 0,
+  text: "1",
+  size: 30,
+  color: "black",
+});;
+let info_time;
+let info_bombs;
+let info_power;
+let info_detonator;
+
+
+fieldLevel.text = levelNum;
+
+
 
 let whiteBlocks = [];
 
@@ -627,7 +667,7 @@ function addBomb(num) {
   return {
     num: num,
     bomb: game.newAnimationObject({
-      animation: tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3),
+      animation: tiles.newImage("assets/tiles/bomb.png").getAnimation(0, 0, 16, 16, 3),
       x: 0,
       y: 0,
       w: sizeOneBlock,
@@ -801,7 +841,7 @@ function init() {
   gameStarted = false;
   gamePaused = false;
 
-  fieldLevel.textContent = levelNum;
+  fieldLevel.text = levelNum;
   fieldBombs.textContent = playerCanBombsNum;
   fieldPower.textContent = playerBoomPower;
   playerCanBoom ? fieldManual.textContent = 'Да' : fieldManual.textContent = 'Нет';
@@ -849,6 +889,14 @@ function init() {
     h: sizeOneBlock * level.length,
     countX: 1,
     countY: 1,
+  });
+
+  info_btns_image = game.newImageObject({
+    file: "assets/info-btns.jpg",
+    x: 0,
+    y: level.length * sizeOneBlock + 40,
+    w: 800,
+    h: 50,
   });
 
   prize.w = sizeOneBlock,
@@ -1316,7 +1364,7 @@ function explosionBoom(numBomb) {
     player.bombsMas[numBomb].planting = false;
 
     if (player.bombsMas[numBomb].explosion == true) {
-      player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
+      player.bombsMas[numBomb].bomb.setAnimation(tiles.newImage("assets/tiles/bomb.png").getAnimation(0, 0, 16, 16, 3));
       player.bombsMas[numBomb].explosion = false;
     }
   }
@@ -1457,7 +1505,6 @@ function startGame(level) {
 
   document.querySelector('.level_menu').style.display = 'none';
   document.querySelector('.game_field_wrap').style.display = 'none';
-  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
   document.querySelector('canvas').style.display = 'none';
   document.querySelector('.game_field').style.display = 'block';
   levelNum = level + 1;
@@ -1470,7 +1517,7 @@ function startGame(level) {
       document.querySelector('canvas').style.display = 'block';
       document.querySelector('.level-before-start').style.display = 'none';
       document.querySelector('.game_field_wrap').style.display = 'flex';
-      document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
+
       levelAudio1.stop();
       levelAudio2.play();
 
@@ -1487,7 +1534,7 @@ function startGame(level) {
 function deadMenu() {
   document.querySelector('.level-before-start').style.display = 'flex';
   document.querySelector('.game_field_wrap').style.display = 'none';
-  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
+
   document.querySelector('canvas').style.display = 'none';
   playerCanBoom = false;
   playerWallpass = false;
@@ -1515,7 +1562,7 @@ function deadMenu() {
 function winMenu() {
   document.querySelector('.level-before-start').style.display = 'flex';
   document.querySelector('.game_field_wrap').style.display = 'none';
-  document.querySelector('.game_field_wrap_bottom').style.display = 'none';
+
   document.querySelector('canvas').style.display = 'none';
   document.querySelector('.win_menu').style.display = 'flex';
 }
@@ -1552,7 +1599,7 @@ function eventHandler() {
         if (visibleGame) {
           document.querySelector('canvas').style.display = 'block';
           document.querySelector('.game_field_wrap').style.display = 'flex';
-          document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
+
           levelAudio1.stop();
           levelAudio2.play();
           init();
@@ -1593,7 +1640,7 @@ game.newLoop('myGame', function () {
       document.querySelector('.pause-field').style.display = 'none';
       document.querySelector('canvas').style.display = 'block';
       document.querySelector('.game_field_wrap').style.display = 'flex';
-      document.querySelector('.game_field_wrap_bottom').style.display = 'flex';
+
 
     }
     else {
@@ -1611,7 +1658,7 @@ game.newLoop('myGame', function () {
         document.querySelector('.pause-field').style.display = 'flex';
         document.querySelector('canvas').style.display = 'none';
         document.querySelector('.game_field_wrap').style.display = 'none';
-        document.querySelector('.game_field_wrap_bottom').style.display = 'none';
+
       }
       else {
 
@@ -1648,7 +1695,7 @@ game.newLoop('myGame', function () {
     pjs.camera.move(pjs.vector.point(-playerSpeed, 0));
   }
 
-  if (player.y > (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) + 5 && pjs.camera.getStaticBox().h + pjs.camera.getStaticBox().y < level.length * sizeOneBlock) {
+  if (player.y > (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) + 5 && pjs.camera.getStaticBox().h + pjs.camera.getStaticBox().y < level.length * sizeOneBlock + resizeBlock) {
     pjs.camera.move(pjs.vector.point(0, playerSpeed));
   }
   else if (player.y < (pjs.camera.getStaticBox().h / 2 + pjs.camera.getStaticBox().y) - 5 && pjs.camera.getStaticBox().y > 0) {
@@ -1656,7 +1703,11 @@ game.newLoop('myGame', function () {
   }
 
 
+
   backgroundObj.draw();
+  info_btns_image.draw();
+  fieldLevel.draw();
+  console.log(info_btns_image.position.x);
 
   for (var i = 0; i < level.length; i++) {
     for (var j = 0; j < level[i].length; j++) {
@@ -2006,7 +2057,7 @@ game.newLoop('myGame', function () {
         player.canBombMas[0].bomb.setPosition(pjs.vector.point(player.nowX * sizeOneBlock, player.nowY * sizeOneBlock));
 
         blocksBomb.push(player.canBombMas[0].bomb);
-        player.canBombMas[0].bomb.setAnimation(tiles.newImage("assets/big_dyna.png").getAnimation(470, 16 * 0, 16, 16, 3));
+        player.canBombMas[0].bomb.setAnimation(tiles.newImage("assets/tiles/bomb.png").getAnimation(0, 0, 16, 16, 3));
         level[Math.round(player.canBombMas[0].bomb.y / sizeOneBlock)][Math.round(player.canBombMas[0].bomb.x / sizeOneBlock)].bomb = true;
 
         player.canBombMas[0].bombX = player.nowX * sizeOneBlock;
